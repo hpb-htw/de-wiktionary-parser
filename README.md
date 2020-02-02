@@ -13,19 +13,19 @@ before it ready to be distributed. Therefore it is mostly used by developer.
 Syntax:
 
 ```
-de-wiktionary-parser <dump.xml> > <output>.csv
+npm lib/index.js <dump.xml> <separator> > <output>.csv
 ```
 
 Example
 
 ```
-de-wiktionary-parser dewiktionary-20191020-pages-articles.xml > rawdata.csv
+npm lib/index.js dewiktionary-20191020-pages-articles.xml <separator> > rawdata.csv
 ```
 
 To make a `gz` file (easier to distribute)
 
 ```
-de-wiktionary-parser dewiktionary-20191020-pages-articles.xml | gzip -f - > rawdata.csv.gz
+npm lib/index.js dewiktionary-20191020-pages-articles.xml <separator> | gzip -f - > rawdata.csv.gz
 ```
 
 ## Description of output CSV file
@@ -36,9 +36,9 @@ Example output:
 # origin file dewiktionary-20191020-pages-articles.xml
 # version of de-wiktionary-parser 1.0.0
 
-id;title;text
-123456;hallo;"{......}"
-654321;sonne;"{......}"
+id<separator>title<separator>text
+123456<separator>hallo<separator>"{......}"
+654321<separator>sonne<separator>"{......}"
 ```
 
 (TODO)

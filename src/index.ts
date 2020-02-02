@@ -2,27 +2,23 @@
 import * as path from "path";
 import {importDic, Entry } from "./wiktionary";
 
-const smallDumpXML = {
-    path:  "../../big-file/small-dewiktionary-20191020-pages-articles.xml",
-    nsZeroPageCount: 6
-};
-
-const bigDumpXML = {
-    path: "../../big-file/dewiktionary-20191020-pages-articles.xml"
-};
 
 const SEPARATOR = "<separator>";
 
 let count = 0;
 
-function syncStdOutInsertEntriesFn (entries: Entry[]) : number {
-    for(let e of entries) {
-        console.log(`${e["id"]}${SEPARATOR}${e["title"]}${SEPARATOR}${e["text"]}`);
-    }    
-    let inserted = entries.length;
-    count += inserted;
-    console.error(`Count ${count} entries inserted to console`);
-    return inserted;
+
+function makeInsertEntriesFn(separator:string) : (entries:Entry []) => number {
+    let sep = separator;
+    return (entries:Entry [] ):number => {
+        for(let e of entries) {
+            console.log(`${e["id"]}${sep}${e["title"]}${sep}${e["text"]}`);
+        }   
+        let inserted = entries.length;
+        count += inserted;
+        console.error(`inserted ${count} new entries to console`);
+        return inserted;
+    };
 }
 
 function noOpFilterFN (index:number, entry: Entry) {
@@ -33,7 +29,14 @@ function verify (): Promise<number> {
     return new Promise(() =>count);
 }
 
-let xmlPath = path.join(__dirname, bigDumpXML.path);
+// main routine
+let argv = process.argv.slice(2);
+if(argv.length !== 2) {
+    throw new Error("Expected XML Dump file and column separator");
+}
+let xmlPath = path.resolve(argv[0]);
+let syncStdOutInsertEntriesFn = makeInsertEntriesFn(argv[1]);
+
 importDic(xmlPath, noOpFilterFN, syncStdOutInsertEntriesFn)
     .then( (countGermanWords) => {
         console.error({ countGermanWords });
@@ -43,10 +46,7 @@ importDic(xmlPath, noOpFilterFN, syncStdOutInsertEntriesFn)
     })
     .then((verifyCount) => {
         console.error({ verifyCount });
-    })
-    /*.then(() => {
-        backend.done();
-    })*/
+    })    
     .catch((ex) => {
         console.error(ex);
     });
