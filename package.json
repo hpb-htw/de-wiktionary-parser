@@ -1,0 +1,39 @@
+{
+		"name": "de-wiktionary-parser",
+		"version": "1.0.0",
+		"description": "parse XML wiki dump to importable file",
+		"main": "./lib/index.js",
+		"bin": {
+				"de-wiktionary-parser": "./lib/index.js"
+		},
+		"scripts": {
+				"compile": "tsc -p ./",
+				"clean": "rm -rf lib",
+				"watch": "tsc -watch -p ./",
+				"run": "npm run compile ; node lib/index.js",
+				"refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
+				"test": "jest --config jestconfig.json",
+				"lint": "tslint -p tsconfig.json"
+		},
+		"author": "hpb HTW",
+		"license": "ISC",
+		"repository": {
+				"type": "git",
+				"url": "git://notset.host/path"
+		},
+		"devDependencies": {
+				"@types/glob": "^7.1.1",
+				"@types/jest": "^24.0.25",
+				"@types/node": "^12.11.7",
+				"jest": "^24.9.0",
+				"ts-jest": "^24.2.0",
+				"ts-node": "^8.5.4",
+				"tslint": "^5.20.1",
+				"typescript": "^3.6.4"
+		},
+		"dependencies": {
+				"@types/event-stream": "^3.3.34",
+				"event-stream": "^4.0.1",
+				"xml-stream": "^0.4.5"
+		}
+}
