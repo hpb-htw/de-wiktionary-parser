@@ -2,7 +2,10 @@
 const XMLStream = require("xml-stream");
 import * as fs from "fs";
 
+import {isGermanWord} from "./de_wiki_aux";
 
+
+const BUFFER_SIZE = 100;
 
 //TODO: create a typedef package and move this declaration into it, 
 //      so that other projects can use this declaration to communicate with each others.
@@ -26,14 +29,13 @@ export type Entry = {
  * Result of this function is a Promise. See Unit test for Usage.
  * 
  */
-export async function parseWikiXml(dumpFile: string, collectNewEntry: (entry: Entry) => Promise<any>):Promise<number> {
-    console.log(`call parseWiki`);
+export function parseWikiXml(dumpFile: string, collectNewEntry: (entry: Entry) => any):Promise<number> {    
     let xmlFile = fs.createReadStream(dumpFile);
     let count = 0;
     let promisses = new Promise<number>((resolve, reject) => {
         let xml = new XMLStream(xmlFile);
         xml.preserve('text', true);
-        xml.on("endElement: page", async (page: any) => {           
+        xml.on("endElement: page", (page: any) => {           
             let ns = page["ns"];
             if (ns === '0') {
                 ++count;
@@ -42,7 +44,7 @@ export async function parseWikiXml(dumpFile: string, collectNewEntry: (entry: En
                 let originText = page["revision"]["text"]["$children"];
                 try {
                     let text = joinText(originText);                    
-                    await collectNewEntry({
+                    collectNewEntry({
                         id: id,
                         title: title,
                         text: text
@@ -59,22 +61,49 @@ export async function parseWikiXml(dumpFile: string, collectNewEntry: (entry: En
     return promisses;
 }
 
-function joinText(text: string[]): string {
-    return text.map((line) => escape(line)).join("");
+function joinText(text: string[]): string {    
+    return text.join("");
 }
 
-// Escapes text for XML.
-function escape(value: string) {
-    return value.replace(/"|&|'|<|>/g, function (entity) {
-        return entities[entity];
-    });
+export function importDic( 
+        xmlPath: string, 
+        filterEntryFn: (index:number, entry:Entry)=>boolean,
+        insertEntriesFn:  (en: Entry[]) => number 
+) : Promise<number> {
+    let buffer: Entry[] = [];
+    let countGermanWords = 0;
+    let savedEntries = 0;
+    let effectiveFilterFn = filterEntryFn?filterEntryFn : (index:number, entry:Entry) => true;
+    function collectNewEntry (entry: Entry) {
+        if ( isGermanWord( entry["title"], entry["text"] )) {
+            ++countGermanWords;
+            if( effectiveFilterFn(countGermanWords, entry) ){
+                let stringifyText = JSON.stringify(entry.text);
+                entry.text = stringifyText;
+                buffer.push(entry);                
+                if (buffer.length === BUFFER_SIZE) {                
+                    let cache: Entry[] = buffer;                
+                    buffer = [];
+                    let r = insertEntriesFn(cache);                      
+                    savedEntries += r;
+                    console.error( {countGermanWords, savedEntries, r});
+                }
+            }
+        } else {
+            console.error( `ignore word ${entry["title"]}`);
+        }
+    }
+    console.error(`enter`);
+    return parseWikiXml(xmlPath, collectNewEntry)
+        .then((countResultFromParseWikiDump) => {
+            console.error({ countGermanWords, countResultFromParseWikiDump });
+            if (buffer.length > 0) {
+                return insertEntriesFn(buffer);
+            } else {
+                return 0;
+            }
+        }).then((lastChunk) => {
+            console.error({ countGermanWords, savedEntries, lastChunk });
+            return savedEntries + lastChunk;
+        });
 }
-
-// XML entities.
-const entities: { [index: string]: string } = {
-    '"': '&quot;',
-    '&': '&amp;',
-    '\'': '&apos;',
-    '<': '&lt;',
-    '>': '&gt;'
-};

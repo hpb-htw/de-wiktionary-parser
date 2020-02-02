@@ -1,5 +1,5 @@
 import * as path from "path";
-import { parseWikiXml, Entry } from "../wiktionary";
+import {parseWikiXml, importDic, Entry } from "../wiktionary";
 
 const bigDumpXML = "../../big-file/dewiktionary-20191020-pages-articles.xml";
 //const smallDumpXML = "../../../big-file/small-dewiktionary-20191020-pages-articles.xml";
@@ -23,21 +23,22 @@ describe('wikipedia', () => {
     test('parse xml dump', async () => {
         let xmlPath = path.join(__dirname, smallDumpXML.path);
         let result: any[] = [];
-        await parseWikiXml(xmlPath, (entry: Entry): Promise<any> => {
+        await parseWikiXml(xmlPath, (entry: Entry): any|undefined => {
             result.push(entry);
-            return NO_OP;
+            return ;
         });
         let entriesCount = result.length;
        expect(entriesCount).toBe(smallDumpXML.nsZeroPageCount);
+       console.log(result);  
     });
 
     
     test('parse page correct', async () => {
         let xmlPath = path.join(__dirname, halloPageDict.path);
         let result: Entry[] = [];
-        await parseWikiXml(xmlPath, (entry: Entry): Promise<any> => {
+        await parseWikiXml(xmlPath, (entry: Entry): any|undefined => {
             result.push(entry);
-            return NO_OP;
+            return ;
         });
         //console.log(result);
         let hallo = result.filter((page) => page.id === 555);
@@ -45,7 +46,8 @@ describe('wikipedia', () => {
         let text = hallo[0].text.split("\n");
         expect(text.length).toBe(halloPageDict.lineOfPage);
         expect(text[0]).toBe(halloPageDict.firstLine);
-        expect(text[halloPageDict.lineOfPage-1]).toBe(halloPageDict.lastLine);
+        expect(text[halloPageDict.lineOfPage-1]).toBe(halloPageDict.lastLine);        
     });
+    
 });
 

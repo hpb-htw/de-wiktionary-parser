@@ -17,4 +17,5 @@ export declare type Entry = {
  * Result of this function is a Promise. See Unit test for Usage.
  *
  */
-export declare function parseWikiXml(dumpFile: string, collectNewEntry: (entry: Entry) => Promise<any>): Promise<number>;
+export declare function parseWikiXml(dumpFile: string, collectNewEntry: (entry: Entry) => any): Promise<number>;
+export declare function importDic(xmlPath: string, filterEntryFn: (index: number, entry: Entry) => boolean, insertEntriesFn: (en: Entry[]) => number): Promise<number>;
