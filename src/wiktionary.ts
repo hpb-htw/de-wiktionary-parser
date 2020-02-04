@@ -7,8 +7,6 @@ import {isGermanWord} from "./de_wiki_aux";
 
 const BUFFER_SIZE = 100;
 
-//TODO: create a typedef package and move this declaration into it, 
-//      so that other projects can use this declaration to communicate with each others.
 export type Entry = {
     /**
      * unique id of the entry in a dictionary

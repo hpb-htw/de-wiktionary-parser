@@ -28,8 +28,7 @@ describe('wikipedia', () => {
             return ;
         });
         let entriesCount = result.length;
-       expect(entriesCount).toBe(smallDumpXML.nsZeroPageCount);
-       console.log(result);  
+       expect(entriesCount).toBe(smallDumpXML.nsZeroPageCount);       
     });
 
     
@@ -49,5 +48,19 @@ describe('wikipedia', () => {
         expect(text[halloPageDict.lineOfPage-1]).toBe(halloPageDict.lastLine);        
     });
     
+    test("import dict", async()=>{
+        let xmlPath = path.join(__dirname, smallDumpXML.path);
+        let filter = (index:number, entry:Entry) => true;
+        let count = 0;
+        let insertEntriesFn = (en:Entry[]) => {
+            let size = en.length;
+            count += size;
+            return size;
+        };
+        await importDic(xmlPath, filter, insertEntriesFn);
+        // 5 Deutsche Einträge und 1 nicht deutcher Eintrag in XML
+        expect(count + 1).toBe(smallDumpXML.nsZeroPageCount);
+    });
+
 });
 

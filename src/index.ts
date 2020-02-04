@@ -40,6 +40,7 @@ let syncStdOutInsertEntriesFn = makeInsertEntriesFn(delimiter);
 
 // print header
 console.log(`id${delimiter}title${delimiter}text`);
+// print contens
 importDic(xmlPath, noOpFilterFN, syncStdOutInsertEntriesFn)
     .then( (countGermanWords) => {
         console.error({ countGermanWords });
