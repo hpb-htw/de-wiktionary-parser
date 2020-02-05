@@ -16,10 +16,10 @@
 				"lint": "tslint -p tsconfig.json"
 		},
 		"author": "hpb HTW",
-		"license": "ISC",
+		"license": "MIT",
 		"repository": {
 				"type": "git",
-				"url": "git://notset.host/path"
+				"url": "https://github.com/hpb-htw/de-wiktionary-parser.git"
 		},
 		"devDependencies": {
 				"@types/glob": "^7.1.1",
