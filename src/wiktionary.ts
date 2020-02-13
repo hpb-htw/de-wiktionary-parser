@@ -84,14 +84,12 @@ export function importDic(
                     buffer = [];
                     let r = insertEntriesFn(cache);                      
                     savedEntries += r;
-                    console.error( {countGermanWords, savedEntries, r});
                 }
             }
         } else {
             console.error( `ignore word ${entry["title"]}`);
         }
     }
-    console.error(`enter`);
     return parseWikiXml(xmlPath, collectNewEntry)
         .then((countResultFromParseWikiDump) => {
             console.error({ countGermanWords, countResultFromParseWikiDump });
