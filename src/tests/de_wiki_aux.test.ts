@@ -1,5 +1,15 @@
-import {isGermanWord, escape, parseDeWikiTextToObject, parseWortart} from "../de_wiki_aux";
-import {Kopf, SubstantivFlexion, WikiPage} from "../de_wiki_lang";
+import * as fs from "fs";
+import * as path from "path";
+
+import {
+    isGermanWord,
+    escape,
+    parseDeWikiTextToObject,
+    consumePartOfSpeech,
+    consumeTitle,
+    consumeSubstantivFlexion, consumeFlexion
+} from "../de_wiki_aux";
+import {WikiPage, Title, SubstantivFlexion} from "../de_wiki_lang";
 
 
 
@@ -20,61 +30,109 @@ describe('de_wiki_aux', () => {
 
 });
 
-function assertHead(wikiPage: WikiPage, expectedHead: Kopf) {
-    let k = wikiPage.kopf;
-    expect( JSON.parse(JSON.stringify(k)) )
-        .toStrictEqual( JSON.parse(JSON.stringify(expectedHead)) );
-}
 
-describe("parse wiki text", ()=>{
-    test("parseWortart", ()=>{
-       let testData = [
-           "=== {{Wortart|Substantiv|Deutsch}}, {{mf}}, {{Wortart|Nachname|Deutsch}} ===",
-           "=== {{Wortart|Substantiv|Deutsch}}, {{f}} ===",
-           "=== {{Wortart|Verb|Deutsch}} ===",
-           "=== {{Wortart|Wortverbindung|Deutsch}}, {{Wortart|Interjektion|Deutsch}} ===",
-           "=== {{Wortart|Abkürzung|Deutsch}}, {{Wortart|Substantiv|Deutsch}}, {{f}} ==="
-       ];
-       let expected = [
-            ["Substantiv", "Nachname"],
-           ["Substantiv"],
-           ["Verb"],
-           ["Wortverbindung", "Interjektion"],
-           ["Abkürzung", "Substantiv"]
-       ];
-       testData.forEach( (data,idx)=>{
-          let pos = parseWortart(data);
-          expect(pos).toStrictEqual(expected[idx]);
-       });
-    });
-    test("parse head", () => {
+
+describe("Single parts of a wiki text", ()=> {
+
+    test("consumeTitle.singen", () => {
         let wikiText =
 `{{Siehe auch|[[Singen]]}}
 == singen ({{Sprache|Deutsch}}) ==
 === {{Wortart|Verb|Deutsch}} ===`;
-        let wikiPage = parseDeWikiTextToObject(wikiText);
-        assertHead(wikiPage, {
-            language:"Deutsch",
-            partOfSpeech:["Verb"],
-            title:"singen"
-        });
+        let [index, title] = consumeTitle(0, wikiText.split("\n"));
+        expect(index).toBe(2);
+        let expectedTitle = {
+            title:"singen",
+            language:"Deutsch"
+        };
+        expectObjectEqual(title, expectedTitle);
+    });
+    test("consumeTitle.ich", () => {
+        let wikiText =
+`{{Siehe auch|[[Ich]], [[ICH]]}}
+{{Wort der Woche|29|2017}}
+== ich ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Personalpronomen|Deutsch}} ===
+
+{{Deutsch Personalpronomen 1}}
+
+{{Anmerkung}}`;
+        let [index, title] = consumeTitle(2, wikiText.split("\n"));
+        expect(index).toBe(1);
+        let expectedTitle = {
+            title:"ich",
+            language:"Deutsch"
+        };
+        expectObjectEqual(title, expectedTitle);
     });
 
 
-
-    function assertFlexion(wikiPage:WikiPage, flexion:SubstantivFlexion) {
-        let f = wikiPage?.mittelTeil?.flexion;
-        expect(f?.genus).toStrictEqual(flexion.genus);
-        expect(f?.nominativ).toStrictEqual(flexion.nominativ);
-        expect(f?.genitiv).toStrictEqual(flexion.genitiv);
-        expect(f?.dativ).toStrictEqual(flexion.dativ);
-        expect(f?.akkusativ).toStrictEqual(flexion.akkusativ);
-    }
-
-    test("parse flexion multi dativ", () => {
+    test("consumeTitle.python", () => {
         let wikiText =
-`
-{{Siehe auch|[[wort]]}}
+            `== Python ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{m}}, {{f}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus 1=m
+|Genus 2=f
+|Nominativ Singular 1=Python
+|Nominativ Singular 2=Python
+|Nominativ Plural=Pythons
+|Genitiv Singular 1=Pythons
+|Genitiv Singular 2=Python
+|Genitiv Plural=Pythons
+|Dativ Singular 1=Python
+|Dativ Singular 2=Python
+|Dativ Plural=Pythons
+|Akkusativ Singular 1=Python
+|Akkusativ Singular 2=Python
+|Akkusativ Plural=Pythons
+|Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
+}}`;
+        let [index, title] = consumeTitle(0, wikiText.split("\n"));
+        expect(index).toBe(1);
+        let expectedTitle = {
+            title:"Python",
+            language:"Deutsch"
+        };
+        expectObjectEqual(title, expectedTitle);
+    });
+
+    test("consumePartOfSpeech.multiple_variants", ()=>{
+        let testData = [
+            [
+                "=== {{Wortart|Substantiv|Deutsch}}, {{mf}}, {{Wortart|Nachname|Deutsch}} ==="
+            ],
+            [
+                "=== {{Wortart|Substantiv|Deutsch}}, {{f}} ==="
+            ],
+            [
+                "=== {{Wortart|Verb|Deutsch}} ==="
+            ],
+            [
+                "=== {{Wortart|Wortverbindung|Deutsch}}, {{Wortart|Interjektion|Deutsch}} ==="
+            ],
+            [
+                "=== {{Wortart|Abkürzung|Deutsch}}, {{Wortart|Substantiv|Deutsch}}, {{f}} ==="
+            ]
+        ];
+        let expected = [
+            ["Substantiv", "Nachname"],
+            ["Substantiv"],
+            ["Verb"],
+            ["Wortverbindung", "Interjektion"],
+            ["Abkürzung", "Substantiv"]
+        ];
+        testData.forEach( (data,idx)=>{
+            let [count, pos] = consumePartOfSpeech(0,data);
+            expect(count).toBe(1);
+            expect(pos.pos).toStrictEqual(expected[idx]);
+        });
+    });
+
+    test("consumeSubstantivFlexion.wort", () => {
+        let wikiText =
+`{{Siehe auch|[[wort]]}}
 {{Wort der Woche|23|2006}}
 == Wort ({{Sprache|Deutsch}}) ==
 === {{Wortart|Substantiv|Deutsch}}, {{n}}, Wörter ===
@@ -93,24 +151,22 @@ describe("parse wiki text", ()=>{
 |Akkusativ Plural=Wörter
 }}
 `;
-        let wikiPage = parseDeWikiTextToObject(wikiText);
-        assertHead(wikiPage, {
-            title: "Wort",
-            partOfSpeech: ["Substantiv"],
-            language: "Deutsch"
-        });
+        let [lastIdx, flexion] = consumeSubstantivFlexion(5, wikiText.split("\n"));
         let expectedFlexion: SubstantivFlexion =  {
-            genus: 'n',
+            genus: ['n'],
             nominativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] },
             genitiv:   { singular: [ 'Worts', 'Wortes' ], plural: [ 'Wörter' ] },
             dativ:     { singular: [ 'Wort', 'Worte' ],   plural: [ 'Wörtern' ] },
             akkusativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] }
         };
-        assertFlexion(wikiPage, expectedFlexion);
+        expect(lastIdx).toBe(13);
 
+        expectObjectEqual(flexion, expectedFlexion);
     });
 
-    test("flexion no singular", ()=>{
+
+
+    test("consumeSubstantivFlexion.Ferien", ()=>{
         let wikitext =
 `== Ferien ({{Sprache|Deutsch}}) ==
 === {{Wortart|Substantiv|Deutsch}} ===
@@ -127,15 +183,157 @@ describe("parse wiki text", ()=>{
 |Akkusativ Plural=Ferien
 }}
 `;
-        let wikiPage = parseDeWikiTextToObject(wikitext);
+        let [count, flexion]= consumeSubstantivFlexion(2,wikitext.split("\n"));
         let expectedFlexion = {
-            genus: '0',
+            genus: ['0'],
             nominativ: { singular: [ '—' ], plural: [ 'Ferien' ] },
             genitiv:   { singular: [ '—' ], plural: [ 'Ferien' ] },
             dativ:     { singular: [ '—' ], plural: [ 'Ferien' ] },
             akkusativ: { singular: [ '—' ], plural: [ 'Ferien' ] }
         };
-        console.dir(expectedFlexion);
-        assertFlexion(wikiPage, expectedFlexion);
+        expect(count).toBe(12);
+        expect( JSON.parse(JSON.stringify(flexion)) )
+            .toStrictEqual(JSON.parse(JSON.stringify(expectedFlexion)));
+        // other test
+        [count, flexion]= consumeSubstantivFlexion(3,wikitext.split("\n"));
+        expect(count).toBe(11);
+        expectObjectEqual(flexion, expectedFlexion);
+    });
+
+
+    test("consumeSubstantivFlexion.python", ()=>{
+        let wikitext =
+            `== Python ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{m}}, {{f}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus 1=m
+|Genus 2=f
+|Nominativ Singular 1=Python
+|Nominativ Singular 2=Python
+|Nominativ Plural=Pythons
+|Genitiv Singular 1=Pythons
+|Genitiv Singular 2=Python
+|Genitiv Plural=Pythons
+|Dativ Singular 1=Python
+|Dativ Singular 2=Python
+|Dativ Plural=Pythons
+|Akkusativ Singular 1=Python
+|Akkusativ Singular 2=Python
+|Akkusativ Plural=Pythons
+|Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
+}}`;
+        let [count, flexion]= consumeSubstantivFlexion(0,wikitext.split("\n"));
+        let expectedFlexion = {
+            genus: ['m', 'f'],
+            nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            genitiv:   { singular: [ 'Pythons','Python' ], plural: [ 'Pythons' ] },
+            dativ:     { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            akkusativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] }
+        };
+        expect(count).toBe(20);
+        expectObjectEqual(flexion, expectedFlexion);
+    });
+
+    test("consumeFlexion.python (beginIdx = 0)", ()=>{
+        let wikitext =
+            `== Python ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{m}}, {{f}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus 1=m
+|Genus 2=f
+|Nominativ Singular 1=Python
+|Nominativ Singular 2=Python
+|Nominativ Plural=Pythons
+|Genitiv Singular 1=Pythons
+|Genitiv Singular 2=Python
+|Genitiv Plural=Pythons
+|Dativ Singular 1=Python
+|Dativ Singular 2=Python
+|Dativ Plural=Pythons
+|Akkusativ Singular 1=Python
+|Akkusativ Singular 2=Python
+|Akkusativ Plural=Pythons
+|Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
+}}`;
+        let [count, flexion]= consumeFlexion(0, wikitext.split("\n"));
+        let expectedFlexion = {
+            genus: ['m', 'f'],
+            nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            genitiv:   { singular: [ 'Pythons','Python' ], plural: [ 'Pythons' ] },
+            dativ:     { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            akkusativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] }
+        };
+        expect(count).toBe(20);
+        expectObjectEqual(flexion, expectedFlexion);
+    });
+
+    test("consumeFlexion.python (beginIdx = 2)", ()=>{
+        let wikitext =
+            `== Python ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{m}}, {{f}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus 1=m
+|Genus 2=f
+|Nominativ Singular 1=Python
+|Nominativ Singular 2=Python
+|Nominativ Plural=Pythons
+|Genitiv Singular 1=Pythons
+|Genitiv Singular 2=Python
+|Genitiv Plural=Pythons
+|Dativ Singular 1=Python
+|Dativ Singular 2=Python
+|Dativ Plural=Pythons
+|Akkusativ Singular 1=Python
+|Akkusativ Singular 2=Python
+|Akkusativ Plural=Pythons
+|Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
+}}`;
+        let [count, flexion]= consumeFlexion(2, wikitext.split("\n"));
+        let expectedFlexion = {
+            genus: ['m', 'f'],
+            nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            genitiv:   { singular: [ 'Pythons','Python' ], plural: [ 'Pythons' ] },
+            dativ:     { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            akkusativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] }
+        };
+        expect(count).toBe(18);
+        expectObjectEqual(flexion, expectedFlexion);
     });
 });
+
+/**
+ * implicit condition: a wiki text contains at least one page.
+ * */
+describe("parseDeWikiTextToObject : Parsing a complete wiki text", () =>{
+    test("Get title of page", () =>{
+        let wikitext = readWikiTextFile('outmost-struct');
+        let wikiPage = parseDeWikiTextToObject(wikitext);
+        expect(wikiPage).toHaveLength(2);
+    });
+});
+
+
+
+function expectObjectEqual(object:any, expectObj:any): void {
+    expect( JSON.parse(JSON.stringify(object)) )
+        .toStrictEqual(JSON.parse(JSON.stringify(expectObj)));
+}
+
+function readWikiTextFile(wikiname:string):string {
+    let pathName = path.resolve(__dirname, `wikitext/${wikiname}.txt`);
+    return fs.readFileSync(pathName, 'utf8');
+}
+
+
+
+
+
+
+
+
+
+
+

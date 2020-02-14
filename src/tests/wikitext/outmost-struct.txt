@@ -1,0 +1,10 @@
+{{Blabla|ignore me}}
+== Blabla ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{n}} ===
+
+=== {{Wortart|Substantiv|Deutsch}}, {{f}}, {{Wortart|Vorname|Deutsch}} ===
+
+== Blabla ({{Sprache|English}}) ==
+=== {{Wortart|Substantiv|English}}, {{m}} ===
+
+=== {{Wortart|Substantiv|English}}, {{n}}, {{Wortart|Familiename|English}} ===

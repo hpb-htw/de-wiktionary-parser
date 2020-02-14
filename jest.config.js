@@ -13,7 +13,9 @@ module.exports =  {
         "json",
         "node"
     ],
+/*
     "collectCoverage": true,
     "coverageReporters": ["text","json", "lcov"],
     "coverageDirectory": "coverage"
+*/
 };

@@ -3,28 +3,36 @@ export enum Lang {
     de = "Deutsch"
 }
 
-
+/**
+ * One wiki text contain one or more pages  a page is a text from begin --or when it stats at the midle of a
+ * multiple pages text-- from a line begin with `== ` to the line before the next line, which also begin
+ * with `== `.
+ *
+ * The line with `== ` is the title of the page.
+ * A Page contain one or more body. In most cases it has only *one* body. A Body begins with the line with Triple Equal
+ * (`=== `) and ends with the line before the next line beginning with Triple Equal. Line beginning with Triple Equal
+ * are partOfSpeech.
+ * */
 export class WikiPage {
-    kopf: Kopf;
-    mittelTeil?: MittelTeil;
-    endTeil: EndTeil|undefined = undefined;
-    constructor(kopf:Kopf) {
-        this.kopf = kopf;
-    }
-}
-
-export class Kopf {
-    title: string;
-    language: string;
-    partOfSpeech: string[];
-    constructor(title:string, language:string, pos:string[]=[]) {
+    title: Title;                  // everything from begin to the line begining with `== ` (Double Equal sign)
+    body: Body[] = [];             // everything from `=== ` to the line before the next line geginning with ` ===`
+    constructor(title:Title) {
         this.title = title;
-        this.language = language;
-        this.partOfSpeech = pos;
     }
 }
 
-export class MittelTeil {
+export class Title {
+    title:string;
+    language:string;
+    constructor(title:string, language:string) {
+        this.title=title;
+        this.language = language;
+    }
+}
+
+export class Body {
+
+    partofSpeech: PartOfSpeech;
 
     flexion?: SubstantivFlexion;
 
@@ -95,7 +103,17 @@ export class MittelTeil {
     //   {{Wortbildungen}}
     //   {{Entlehnungen}}
     //   {{Lemmaverweis}}
+
+    constructor(pos:PartOfSpeech) {
+        this.partofSpeech = pos;
+    }
 }
+
+export class PartOfSpeech {
+    pos: string[] = [];
+    addition:string[] = []; // Not implemented for now
+}
+
 
 export interface Kasus {
     singular:string[];
@@ -113,7 +131,7 @@ export class SubstantivFlexion {
     static  SINGULAR = "Singular";
     static PLURAL = "Plural";
     // Daten
-    genus:string = "";
+    genus:string[] = [];
     nominativ : Kasus = {singular:[], plural: []};
     genitiv : Kasus  = {singular:[], plural: []};
     dativ : Kasus = {singular:[], plural: []};
