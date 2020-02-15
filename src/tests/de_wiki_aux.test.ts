@@ -308,17 +308,29 @@ describe("Single parts of a wiki text", ()=> {
  * implicit condition: a wiki text contains at least one page.
  * */
 describe("parseDeWikiTextToObject : Parsing a complete wiki text", () =>{
+    test("Get all blocks of body", () =>{
+        let wikitext = readWikiTextFile('rosa');
+        let wikiPage = parseDeWikiTextToObject(wikitext);
+        expect(wikiPage).toHaveLength(1);
+    });
+
     test("Get all body of wiki page", () =>{
         let wikitext = readWikiTextFile('outmost-struct');
         let wikiPage = parseDeWikiTextToObject(wikitext);
-        let firstPage = wikiPage[0];
-        expect(firstPage.body).toHaveLength(2);
+        expect(wikiPage[0].body).toHaveLength(2);
+        expect(wikiPage[1].body).toHaveLength(2);
     });
 
-    test("Get all pages of wiki text", () =>{
+    test("Get all pages of wiki text : outmost-struct", () =>{
         let wikitext = readWikiTextFile('outmost-struct');
         let wikiPage = parseDeWikiTextToObject(wikitext);
         expect(wikiPage).toHaveLength(2);
+    });
+
+    test("Get all pages of wiki text : ich", () =>{
+        let wikitext = readWikiTextFile('ich');
+        let wikiPage = parseDeWikiTextToObject(wikitext);
+        expect(wikiPage).toHaveLength(6);
     });
 });
 

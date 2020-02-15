@@ -67,19 +67,48 @@ function consumePage(beginIdx:number, wikiLines:string[]):[number, WikiPage] {
     return [countPageLine, page];
 }
 
-/** consume all line from a line beginning with `=== {{Wordart|...|...}} ===`*/
+/**
+ * consume all line from a line beginning with `=== {{Wordart|...|...}} ===`
+ *
+ * */
 function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] {
     let lineIdx = beginIdx;
     let [countPoSLength, pos] = consumePartOfSpeech(lineIdx, wikiLines);
     lineIdx += countPoSLength - 1;
     let body = new Body(pos);
-    /*let [countFlexionLength, flexion] = consumeFlexion(lineIdx, wikiLines);
-    if (flexion !== undefined) {
-        body.flexion = flexion;
+    let skipEmptyLine = skipEmptyLines(lineIdx, wikiLines);
+    lineIdx += skipEmptyLine - 1; // jump to next line after the last empty line
+
+    let currentLine = wikiLines[lineIdx];
+    let nextLine = wikiLines[lineIdx + 1];
+    let block:string[] = [];
+    do {
+        if (currentLine !== undefined) {
+            currentLine = currentLine.trim();
+            if (currentLine !== "") {
+                if (!currentLine.startsWith("=== ")) {
+                    block.push(currentLine);
+                } else {
+                    lineIdx += 1;
+                    currentLine = wikiLines[lineIdx];
+                    nextLine = wikiLines[lineIdx + 1];
+                    continue;
+                }
+            } else if (block.length > 0) {
+                // TODO: block is complete => process block
+                let bTitle = block[0];
+                console.log(bTitle);
+                block = [];
+            }
+        }
+        lineIdx += 1;
+        currentLine = wikiLines[lineIdx];
+        nextLine = wikiLines[lineIdx + 1];
+    } while( !(nextLine === undefined || nextLine.startsWith("== ") || currentLine === undefined || currentLine.startsWith("=== ")) );
+    if (currentLine !== undefined && currentLine.startsWith("=== ")) {
+        lineIdx -= 1;
     }
-    lineIdx += countFlexionLength;
-    */
-    let countBodyLength = 1 + lineIdx - beginIdx;
+    let countBodyLength =1 + lineIdx - beginIdx;
     return [countBodyLength, body];
 }
 
