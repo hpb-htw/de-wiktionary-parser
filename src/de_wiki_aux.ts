@@ -33,29 +33,55 @@ export function parseDeWikiTextToObject(wikiText: string): WikiPage[] {
     let pages:WikiPage[] = [];
     while (lineIdx < WIKI_LENGTH) {
         let currentLine = lines[lineIdx];
-        console.log(`36 ${lineIdx} *** ${currentLine}`);
-        while (currentLine !== undefined && !currentLine.startsWith("== ") ) {
-            lineIdx+=1;
-            currentLine = lines[lineIdx];
+        do {
             if (currentLine !== undefined  && currentLine.startsWith("== ")) {
                 let [countPageLength, page] = consumePage(lineIdx, lines);
-                lineIdx += countPageLength ;
+                lineIdx += countPageLength - 1;
                 pages.push(page);
                 break;
             }
-        }
+            lineIdx+=1;
+            currentLine = lines[lineIdx];
+        }while (currentLine !== undefined /*&& !currentLine.startsWith("== ")*/ );
         lineIdx+=1;
     }
     return pages;
 }
 
-/* consume all line from a line begin with `== Title {{Sprache|...}} ==` */
+/* consume all lines from a line, which begins with `== Title {{Sprache|...}} ==` */
 function consumePage(beginIdx:number, wikiLines:string[]):[number, WikiPage] {
     let [countTitleLine, title] = consumeTitle(beginIdx, wikiLines);
     let page = new WikiPage(title);
-    return [countTitleLine, page];
+    let lineIdx = beginIdx + countTitleLine ;
+    let currentLine = wikiLines[lineIdx];
+    do {
+        if(currentLine !== undefined && currentLine.startsWith("=== ")) {
+            let [countBodyLength, body] = consumeBody(lineIdx, wikiLines);
+            page.body.push(body);
+            lineIdx += countBodyLength -1;
+        }
+        lineIdx+=1;
+        currentLine = wikiLines[lineIdx];
+    } while(currentLine !== undefined && !currentLine.startsWith("== "));
+    let countPageLine = lineIdx - beginIdx; // Donot plus 1 here, because == was checked in while
+    return [countPageLine, page];
 }
 
+/** consume all line from a line beginning with `=== {{Wordart|...|...}} ===`*/
+function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] {
+    let lineIdx = beginIdx;
+    let [countPoSLength, pos] = consumePartOfSpeech(lineIdx, wikiLines);
+    lineIdx += countPoSLength - 1;
+    let body = new Body(pos);
+    /*let [countFlexionLength, flexion] = consumeFlexion(lineIdx, wikiLines);
+    if (flexion !== undefined) {
+        body.flexion = flexion;
+    }
+    lineIdx += countFlexionLength;
+    */
+    let countBodyLength = 1 + lineIdx - beginIdx;
+    return [countBodyLength, body];
+}
 
 /**
  * @return  * number:  The number of the line which are consumed, count from beginIdx (include) to the
@@ -156,7 +182,7 @@ function skipEmptyLines(beginIdx: number, wikiLines: string[]): number {
         skippedLineIdx += 1;
         currentLine = wikiLines[skippedLineIdx].trim();
     }
-    return skippedLineIdx - beginIdx;
+    return 1 + skippedLineIdx - beginIdx;
 }
 
 /**

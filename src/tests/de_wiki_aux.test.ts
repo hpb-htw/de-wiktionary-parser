@@ -308,7 +308,14 @@ describe("Single parts of a wiki text", ()=> {
  * implicit condition: a wiki text contains at least one page.
  * */
 describe("parseDeWikiTextToObject : Parsing a complete wiki text", () =>{
-    test("Get title of page", () =>{
+    test("Get all body of wiki page", () =>{
+        let wikitext = readWikiTextFile('outmost-struct');
+        let wikiPage = parseDeWikiTextToObject(wikitext);
+        let firstPage = wikiPage[0];
+        expect(firstPage.body).toHaveLength(2);
+    });
+
+    test("Get all pages of wiki text", () =>{
         let wikitext = readWikiTextFile('outmost-struct');
         let wikiPage = parseDeWikiTextToObject(wikitext);
         expect(wikiPage).toHaveLength(2);
