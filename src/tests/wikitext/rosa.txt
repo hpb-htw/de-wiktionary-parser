@@ -1,0 +1,129 @@
+== Rosa ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{n}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus=n
+|Nominativ Singular=Rosa
+|Nominativ Plural=Rosas
+|Genitiv Singular=Rosas
+|Genitiv Plural=Rosas
+|Dativ Singular=Rosa
+|Dativ Plural=Rosas
+|Akkusativ Singular=Rosa
+|Akkusativ Plural=Rosas
+|Bild 1= Adom color.jpg|thumb|1|Varianten der Farbe ''Rosa''
+}}
+
+{{Worttrennung}}
+:Ro·sa, {{Pl.}} Ro·sas
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|ˈʁoːza}}
+:{{Hörbeispiele}} {{Audio|De-Rosa.ogg}}
+:{{Reime}} {{Reim|oːza|Deutsch}}
+
+{{Bedeutungen}}
+:[1] Name von [[rosa]] [[Farbton|Farbtönen]] als [[Mischfarbe]], [[Malfarbe]], [[Streichfarbe]]
+
+{{Herkunft}}
+:[[Substantivierung]] des Adjektivs ''[[rosa]]'' durch [[Konversion]]
+
+{{Synonyme}}
+:[1] [[Pink]]
+
+{{Gegenwörter}}
+:[1] [[Weiß]]; [[Blau]], [[Braun]], [[Gelb]], [[Grau]], [[Grün]], [[Magenta]], [[Orange]], [[Rot]], [[Schwarz]], [[Türkis]], [[Violett]], [[Zyan]]
+
+{{Oberbegriffe}}
+:[1] [[Grundfarbe]], [[Mischfarbe]], [[Farbe]]
+
+{{Beispiele}}
+:[1] Der Himmel über Alpen erglühte in tiefem ''Rosa.''
+:[1] Babette ist doch der Farbtopf mit ''Rosa'' von der Leiter gefallen.
+:[1] „Sie konnte sich gut an dieses ''Rosa'' erinnern.“<ref>{{Literatur | Autor= Chika Unigwe | Titel= Schwarze Schwestern |TitelErg= Roman| Auflage= |Verlag= Tropen| Ort= Stuttgart| Jahr= 2010 | ISBN= 978-3-608-50109-4 | Seiten=117.}} Originalausgabe: Niederländisch 2007. </ref>
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|}}
+*{{fr}}: [1] {{Ü|fr|}}
+*{{it}}: [1] {{Ü|it|}}
+|Ü-rechts=
+*{{pt}}: [1] {{Ü|pt|rosa#Substantivo2|rosa}} {{m}}
+*{{es}}: [1] {{Ü|es|}}
+*{{vi}}: [1] {{Ü|vi|hồng}}
+}}
+
+{{Referenzen}}
+:[1] {{Wikipedia|Rosa (Farbe)|Rosa}}
+:[1] {{Ref-DWDS|Rosa}}
+:[1] {{Ref-Canoo|Rosa}}
+
+{{Quellen}}
+
+=== {{Wortart|Substantiv|Deutsch}}, {{f}}, {{Wortart|Vorname|Deutsch}} ===
+
+{{Deutsch Vorname Übersicht f
+|Nominativ Singular=Rosa
+|Nominativ Plural 1=Rosas
+|Nominativ Plural 2=Rosen
+|Genitiv Singular=Rosas
+|Genitiv Plural 1=Rosas
+|Genitiv Plural 2=Rosen
+|Dativ Singular=Rosa
+|Dativ Plural 1=Rosas
+|Dativ Plural 2=Rosen
+|Akkusativ Singular=Rosa
+|Akkusativ Plural 1=Rosas
+|Akkusativ Plural 2=Rosen
+}}
+
+{{Worttrennung}}
+:Ro·sa, ''Plural 1'': Ro·sas, ''Plural 2'': Ro·sen
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|ˈʁoːza}}
+:{{Hörbeispiele}} {{Audio|De-Rosa.ogg|Rosa}}
+:{{Reime}} {{Reim|oːza|Deutsch}}
+
+{{Bedeutungen}}
+:[1] weiblicher [[Vorname]]
+
+{{Abkürzungen}}
+:[1] [[R.]]
+
+{{Herkunft}}
+:[1] abgeleitet vom [[lateinisch]]en {{Ü|la|rosa}} ([[Rose]]), daneben auch als Kurzform von [[Rosalinde]], [[Rosamunde]] und [[Roswitha]] gebräuchlich
+
+{{Kurzformen}}
+:[1] [[Ros]]
+
+{{Koseformen}}
+:[1] [[Rosi]], [[Rosl]], [[Rosel]], [[Rösel]]
+
+{{Namensvarianten}}
+:[1] [[Rosalie]], [[Rosalia]], [[Rosaria]], [[Roselita]]
+
+{{Bekannte Namensträger}}
+:[1] [[w:Rosa Bloch-Bollag|Rosa Bloch-Bollag]], [[w:Rosa Luxemburg|Rosa Luxemburg]]
+
+{{Beispiele}}
+:[1] Ich komme gleich zu dir, ''Rosa.''
+
+{{Wortbildungen}}
+:[1] [[Rosalind]], [[Rosalinda]], [[Rosalinde]], [[Rosamaria]], [[Rosangela]], [[Rosanna]], [[Rosmargret]]
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|Rose}}
+*{{fr}}: [1] {{Ü|fr|Rose}}
+|Ü-rechts=
+*{{ga}}: [1] {{Ü|ga|Róis}}
+*{{it}}: [1] {{Ü|it|Rosa}}
+}}
+
+{{Referenzen}}
+:[1] {{Wikipedia|Rosa (Vorname)}}
+:[1] {{Ref-UniLeipzig|Rosa}}
+:[1] {{Lit-Burkart: Vornamen}}, „Rosa“, Seite 354
+
+{{Ähnlichkeiten 1|[[Rose]], [[rosa]], [[rosé]]}}

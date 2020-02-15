@@ -1,6 +1,6 @@
 import {
     WikiPage, Body,
-    SubstantivFlexion, Kasus, Title, PartOfSpeech
+    SubstantivFlexion, Kasus, Title, PartOfSpeech, WikiBlockName, Flexion, VornameFlexion, UEBERSETZUNGS_TABELL
 } from "./de_wiki_lang";
 
 // Escapes text for XML.
@@ -68,8 +68,8 @@ function consumePage(beginIdx:number, wikiLines:string[]):[number, WikiPage] {
 }
 
 /**
- * consume all line from a line beginning with `=== {{Wordart|...|...}} ===`
- *
+ * consume all lines from a line beginning with `=== {{Wordart|...|...}} ===`
+ * to the line just before the next line, which begins with `=== {{Word|...|...}} ===`
  * */
 function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] {
     let lineIdx = beginIdx;
@@ -82,12 +82,15 @@ function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] {
     let currentLine = wikiLines[lineIdx];
     let nextLine = wikiLines[lineIdx + 1];
     let block:string[] = [];
+    let blockPosition = 0;
     do {
         if (currentLine !== undefined) {
             currentLine = currentLine.trim();
             if (currentLine !== "") {
-                if (!currentLine.startsWith("=== ")) {
+                if (! (currentLine.startsWith("=== ") || currentLine.startsWith("==== ") )) {
                     block.push(currentLine);
+                } else if (currentLine.startsWith("==== ")) { // because of "Übersetzung"
+                    console.error(`Verdammt format ${currentLine}`);
                 } else {
                     lineIdx += 1;
                     currentLine = wikiLines[lineIdx];
@@ -97,7 +100,9 @@ function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] {
             } else if (block.length > 0) {
                 // TODO: block is complete => process block
                 let bTitle = block[0];
-                console.log(bTitle);
+                console.error(bTitle);
+                consumeBlock(body, block, blockPosition);
+                blockPosition += 1;
                 block = [];
             }
         }
@@ -110,6 +115,79 @@ function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] {
     }
     let countBodyLength =1 + lineIdx - beginIdx;
     return [countBodyLength, body];
+}
+
+function consumeBlock(body:Body, block:string[], blockPosition:number) {
+    let title:string|undefined = block[0];
+    while (title !== undefined && title === "") {
+        title = block.shift();
+    }
+    if(title === undefined){
+        throw new BadWikiSyntax(`Programming error, a block cannot contain only empty strings`);
+    }
+    if (title === UEBERSETZUNGS_TABELL) {
+        title = WikiBlockName.Uebungsetzungen;
+        block[0] = title;
+        delete block[block.length - 1]; // remove the last "}}"
+    }
+    if (title.startsWith("{{") && !title.endsWith("}}")) {
+        let [_, flexion] = consumeFlexion(0, block);
+        body.flexion = flexion;
+    } else if (title === WikiBlockName.Lesungen){
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Anmerkung ) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Alternative_Schreibweisen) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Nicht_mehr_gueltige_Schreibweisen ) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Veraltete_Schreibweisen) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Nebenformen) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Worttrennung) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.in_arabischer_Schrift) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.in_kyrillischer_Schrift) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.in_lateinischer_Schrift) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Strichreihenfolge) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Vokalisierung) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Umschrift) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Aussprache) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Grammatische_Merkmale) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Bedeutungen) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Abkuerzungen) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Symbole) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Herkunft) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Wortfamilie) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Synonyme) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Sinnverwandte_Woerter) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Sinnverwandte_Zeichen) {
+        consumeUnknownBlock(body, block);
+    } else if (title === WikiBlockName.Gegenwoerter) {
+        consumeUnknownBlock(body, block);
+    } else { // TODO: extend this part
+        consumeUnknownBlock(body, block);
+    }
+}
+
+function consumeUnknownBlock(body:Body, block:string[]) {
+    console.error(`No consumer for block '${block[0]}' (${block.length} lines) for now`);
 }
 
 /**
@@ -221,15 +299,15 @@ function skipEmptyLines(beginIdx: number, wikiLines: string[]): number {
  *              from the line with index `beginIdx` (include) to the line with content `}}` (include)
  *
  * */
-export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, SubstantivFlexion|undefined] {
+export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, Flexion|undefined] {
     let [lineIdx, line] = [beginIdx, wikiLines[beginIdx]];
-    while( !line.startsWith("{{") ) {
+    while (!line.startsWith("{{")) {
         lineIdx += 1;
         line = wikiLines[lineIdx];
     }
     let countConsumedLines = lineIdx - beginIdx;
-    if (line.indexOf(SubstantivFlexion.title) >= 0) {
-        let[countFlexionLine, flexion] = consumeSubstantivFlexion(lineIdx, wikiLines);
+    if (SubstantivFlexion.testFlextion(line)) {
+        let [countFlexionLine, flexion] = consumeSubstantivFlexion(lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
     } else {
         throw new BadWikiSyntax(`Unknown Flexion ${line}`);
@@ -271,47 +349,48 @@ export function consumeSubstantivFlexion(lineIdx: number, wikiLines: string[]): 
         }
         if (inFlexion && line === "}}") {
             inFlexion = false;
-            flexikon = parseFlexion(flexionCache.title, flexionCache.lines);
+            flexikon = parseSubtantivFlexion(flexionCache.title, flexionCache.lines);
             break;
         }
+    }
+    if(flexionCache.title.includes(SubstantivFlexion.vorname)) {
+        let parts = flexionCache.title.split(/\s+/);
+        let genus = parts[parts.length-1];
+        flexikon?.genus.push(genus);
     }
     return [consumedLineIdx - lineIdx, flexikon];
 }
 
 
-function parseFlexion(title: string, lines: string[]): SubstantivFlexion {
-    if (title === SubstantivFlexion.title) {
-        let f = new SubstantivFlexion();
-        for (let line of lines) {
-            let [key, value] = line.split("=");
-            let [kasus, numerus] = key.trim().split(/\s+/);
-            let flexionKasus: Kasus;
-            if (kasus.startsWith(SubstantivFlexion.GENUS)) {
-                f.genus.push(value);
-                continue;
-            } else if (kasus.startsWith(SubstantivFlexion.NOMINATIV)) {
-                flexionKasus = f.nominativ;
-            } else if (kasus.startsWith(SubstantivFlexion.GENITIVE)) {
-                flexionKasus = f.genitiv;
-            } else if (kasus.startsWith(SubstantivFlexion.DATIV)) {
-                flexionKasus = f.dativ;
-            } else if (kasus.startsWith(SubstantivFlexion.AKKUSATIV)) {
-                flexionKasus = f.akkusativ;
-            }else if (kasus.startsWith("Bild") ){
-                continue;
-            } else {
-                throw new BadWikiSyntax(`Unknown Kasus '${kasus}'`);
-            }
-            if (numerus.startsWith(SubstantivFlexion.SINGULAR)) {
-                flexionKasus.singular.push(value);
-            } else if (numerus.startsWith(SubstantivFlexion.PLURAL)) {
-                flexionKasus.plural.push(value);
-            }
+function parseSubtantivFlexion(title: string, lines: string[]): SubstantivFlexion {
+    let f = new SubstantivFlexion();
+    for (let line of lines) {
+        let [key, value] = line.split("=");
+        let [kasus, numerus] = key.trim().split(/\s+/);
+        let flexionKasus: Kasus;
+        if (kasus.startsWith(SubstantivFlexion.GENUS)) {
+            f.genus.push(value);
+            continue;
+        } else if (kasus.startsWith(SubstantivFlexion.NOMINATIV)) {
+            flexionKasus = f.nominativ;
+        } else if (kasus.startsWith(SubstantivFlexion.GENITIVE)) {
+            flexionKasus = f.genitiv;
+        } else if (kasus.startsWith(SubstantivFlexion.DATIV)) {
+            flexionKasus = f.dativ;
+        } else if (kasus.startsWith(SubstantivFlexion.AKKUSATIV)) {
+            flexionKasus = f.akkusativ;
+        }else if (kasus.startsWith("Bild") ){
+            continue;
+        } else {
+            throw new BadWikiSyntax(`Unknown Kasus '${kasus}'`);
         }
-        return f;
-    } else {
-        throw new BadWikiSyntax(`Unknown flexion '${title}'`);
+        if (numerus.startsWith(SubstantivFlexion.SINGULAR)) {
+            flexionKasus.singular.push(value);
+        } else if (numerus.startsWith(SubstantivFlexion.PLURAL)) {
+            flexionKasus.plural.push(value);
+        }
     }
+    return f;
 }
 
 

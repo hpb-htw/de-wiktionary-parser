@@ -312,6 +312,8 @@ describe("parseDeWikiTextToObject : Parsing a complete wiki text", () =>{
         let wikitext = readWikiTextFile('rosa');
         let wikiPage = parseDeWikiTextToObject(wikitext);
         expect(wikiPage).toHaveLength(1);
+        let vorname = wikiPage[0].body[1];
+        console.log(vorname);
     });
 
     test("Get all body of wiki page", () =>{

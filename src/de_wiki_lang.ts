@@ -3,6 +3,69 @@ export enum Lang {
     de = "Deutsch"
 }
 
+export const UEBERSETZUNGS_TABELL = "{{Ü-Tabelle|Ü-links=";
+
+export namespace WikiBlockName {
+    export const Lesungen = "{{Lesungen}}",
+        Anmerkung = "{{Anmerkung}}",
+        Alternative_Schreibweisen="{{Alternative Schreibweisen}}",
+        Nicht_mehr_gueltige_Schreibweisen="{{Nicht mehr gültige Schreibweisen}}",
+        Veraltete_Schreibweisen = "{{Veraltete Schreibweisen}}",
+        Nebenformen = "{{Nebenformen}}",
+        Worttrennung = "{{Worttrennung}}",
+        in_arabischer_Schrift= "{{in arabischer Schrift}}",
+        in_kyrillischer_Schrift = "{{in kyrillischer Schrift}}",
+        in_lateinischer_Schrift = "{{in lateinischer Schrift}}",
+        Strichreihenfolge= "{{Strichreihenfolge}}",
+        Vokalisierung= "{{Vokalisierung}}",
+        Umschrift= "{{Umschrift}}",
+        Aussprache= "{{Aussprache}}",
+        Grammatische_Merkmale= "{{Grammatische Merkmale}}",
+        Bedeutungen = "{{Bedeutungen}}",
+        Abkuerzungen = "{{Abkürzungen}}",
+        Symbole = "{{Symbole}}",
+        Herkunft= "{{Herkunft}}",
+        Wortfamilie = "{{Wortfamilie}}",
+        Synonyme= "{{Synonyme}}",
+
+        Sinnverwandte_Woerter = "{{Sinnverwandte Wörter}}",
+        Sinnverwandte_Zeichen = "{{Sinnverwandte Zeichen}}",
+        Sinnverwandte_Redewendungen = "{{Sinnverwandte Redewendungen}}",
+
+        Gegenwoerter = "{{Gegenwörter}}",
+        Weibliche_Wortformen = "{{Weibliche Wortformen}}",
+        Maennliche_Wortformen = "{{Männliche Wortformen}}",
+        Verkleinerungsformen= "{{Verkleinerungsformen}}",
+        Vergroeßerungsformen= "{{Vergrößerungsformen}}",
+        Oberbegriffe= "{{Oberbegriffe}}",
+        Unterbegriffe= "{{Unterbegriffe}}",
+
+        Verbandsbegriffe= "{{Verbandsbegriffe}}",
+        Holonyme= "{{Holonyme}}",
+
+        Teilbegriffe= "{{Teilbegriffe}}",
+        Meronyme= "{{Meronyme}}",
+
+        Kurzformen= "{{Kurzformen}}",
+        Koseformen= "{{Koseformen}}",
+        Namensvarianten= "{{Namensvarianten}}",
+        Weibliche_Namensvarianten= "{{Weibliche Namensvarianten}}",
+        Maennliche_Namensvarianten= "{{Männliche Namensvarianten}}",
+        Bekannte_Namenstraeger= "{{Bekannte Namensträger}}",
+        Beispiele= "{{Beispiele}}",
+        Redewendungen= "{{Redewendungen}}",
+        Sprichwoerter= "{{Sprichwörter}}",
+        Charakteristische_Wortkombinationen= "{{Charakteristische Wortkombinationen}}",
+        Wortbildungen= "{{Wortbildungen}}",
+        Entlehnungen= "{{Entlehnungen}}",
+        Lemmaverweis= "{{Lemmaverweis}}",
+
+        Aehnlichkeiten = "{{Ähnlichkeiten}}",
+        Aehnlichkeiten_1= "{{Ähnlichkeiten 1}}",
+        Aehnlichkeiten_2= "{{Ähnlichkeiten 2}}";
+    // Exceptional: Übersetzung
+    export const Uebungsetzungen = "{{Übersetzungen}}";
+}
 /**
  * One wiki text contain one or more pages  a page is a text from begin --or when it stats at the midle of a
  * multiple pages text-- from a line begin with `== ` to the line before the next line, which also begin
@@ -34,7 +97,7 @@ export class Body {
 
     partofSpeech: PartOfSpeech;
 
-    flexion?: SubstantivFlexion;
+    flexion?: Flexion;
 
     //   {{Lesungen}} (Platzierung zwischen der Überschrift der Ebene 2 und der darauf folgenden Überschrift der Ebene 3; alle nachfolgenden Textbausteine stehen unterhalb beider Überschriften)
 
@@ -107,6 +170,7 @@ export class Body {
     constructor(pos:PartOfSpeech) {
         this.partofSpeech = pos;
     }
+
 }
 
 export class PartOfSpeech {
@@ -114,13 +178,20 @@ export class PartOfSpeech {
     addition:string[] = []; // Not implemented for now
 }
 
-
+export class Flexion {
+    // intend to be empty
+}
 export interface Kasus {
     singular:string[];
     plural:string[];
 }
-export class SubstantivFlexion {
-    static title:string = "Deutsch Substantiv Übersicht";
+export class SubstantivFlexion extends Flexion {
+    static substantiv:string = "Deutsch Substantiv Übersicht";
+    static vorname: string = "Deutsch Vorname Übersicht";
+    static posibleTitle:string[] = [
+        SubstantivFlexion.substantiv,
+        SubstantivFlexion.vorname
+    ];
     // Kasus
     static GENUS = "Genus";
     static NOMINATIV = "Nominativ";
@@ -136,9 +207,20 @@ export class SubstantivFlexion {
     genitiv : Kasus  = {singular:[], plural: []};
     dativ : Kasus = {singular:[], plural: []};
     akkusativ: Kasus = {singular:[], plural: []};
+
+    static testFlextion(title:string):boolean {
+        for(let subtitle of this.posibleTitle) {
+            if (title.includes(subtitle)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
-
+export class VornameFlexion extends SubstantivFlexion {
+    static title:string = "Deutsch Vorname Übersicht";
+}
 
 export type HyphenType = "_" | "Pl." | "kSg." | "kPl." | "Prät." | "Part." | "Komp." | "Sup." | "kSt.";
 export interface Hyphen {
