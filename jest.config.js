@@ -4,7 +4,8 @@ module.exports =  {
     },
     transformIgnorePatterns: ['^.+\\.js$'],
     //"testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    testRegex: "(/src/tests/.*|(\\.|/)(test|spec))\\.(tsx?)$",
+    //testRegex: "(/src/tests/.*|(\\.|/)test)\\.(tsx?)$",
+    testRegex: "(/src/tests/.*\\.test)\\.(ts)$",
     "moduleFileExtensions": [
         "ts",
         "tsx",

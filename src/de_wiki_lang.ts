@@ -303,9 +303,10 @@ export class PersonalpronomenFlexion extends Flexion {
     }
 }
 
-export interface Hyphen {
-    type_ : string;
-    hyphen: string[];
+export class Hyphen {
+    form : string = "";
+    additionalInformation: string = "";
+    syllable: string[] = [];
 }
 
 export class Pronunciation {
