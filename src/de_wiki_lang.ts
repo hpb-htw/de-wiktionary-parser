@@ -66,6 +66,60 @@ export namespace WikiBlockName {
     // Exceptional: Übersetzung
     export const Uebungsetzungen = "{{Übersetzungen}}";
 }
+
+// this can be used as map table or as a set to check if a simple template exists
+// the values of map are just explanation about the key, one can use other text for generate view of wiki entry
+export const WikiSimpleTemplate = {
+    "{{Akk.}}":"{{Akk.}}" ,
+    "{{Dat.}}":"{{Dat.}}" ,
+    "{{Du.}}":"{{Du.}}" ,
+    "{{Fem.}}":"{{Fem.}}" ,
+    "{{Gen.}}":"{{Gen.}}" ,
+
+    "{{IPA}}":"{{IPA}}" ,
+    "{{Imp.}}":"{{Imp.}}" ,
+    "{{Impf.}}":"{{Impf.}}" ,
+    "{{Komp.1}}":"{{Komp.1}}" ,
+    "{{Komp.2}}":"{{Komp.2}}" ,
+    "{{Komp.}}":"{{Komp.}}" ,
+    "{{Mask.}}":"{{Mask.}}" ,
+    "{{Neutr.}}":"{{Neutr.}}" ,
+    "{{PPerf.}}":"{{PPerf.}}" ,
+    "{{PPräs.}}":"{{PPräs.}}" ,
+    "{{Part.}}":"{{Part.}}" ,
+
+    "{{Pl.1}}":"{{Pl.1}}" ,
+    "{{Pl.2}}":"{{Pl.2}}" ,
+    "{{Pl.3}}":"{{Pl.3}}" ,
+    "{{Pl.4}}":"{{Pl.4}}" ,
+    "{{Pl.}}":"{{Pl.}}" ,
+    "{{Pl}}":"{{Pl}}" ,
+    "{{Pos.}}":"{{Pos.}}" ,
+    "{{Präs.}}":"{{Präs.}}" ,
+    "{{Prät.}}":"{{Prät.}}" ,
+    "{{Sg.1}}":"{{Sg.1}}" ,
+    "{{Sg.2}}":"{{Sg.2}}" ,
+    "{{Sp.}}":"{{Sp.}}" ,
+    "{{Sup.1}}":"{{Sup.1}}" ,
+    "{{Sup.2}}":"{{Sup.2}}" ,
+    "{{Sup.}}":"{{Sup.}}" ,
+
+    "{{attr.}}":"{{attr.}}" ,
+    "{{f}}":"{{f}}" ,
+    "{{kP.}}":"{{kP.}}" ,
+    "{{kPl.}}":"{{kPl.}}" ,
+    "{{kPl..}}":"{{kPl..}}" ,
+    "{{kPl}}":"{{kPl}}" ,
+    "{{kSg.}}":"{{kSg.}}" ,
+    "{{kSt.}}":"{{kSt.}}" ,
+    "{{m}}":"{{m}}" ,
+    "{{part.}}":"{{part.}}" ,
+
+    "{{ugs.}}":"{{ugs.}}" ,
+    "{{österr.}}":"{{österr.}}" ,
+};
+
+
 /**
  * One wiki text contain one or more pages  a page is a text from begin --or when it stats at the midle of a
  * multiple pages text-- from a line begin with `== ` to the line before the next line, which also begin
@@ -178,6 +232,16 @@ export class PartOfSpeech {
     addition:string[] = []; // Not implemented for now
 }
 
+/**
+ * these flexions need an argument ???
+ * */
+export const FlexionTemplate:string[] = [
+    // Possessiv Pronomen
+    "{{Deutsch Possessivpronomen|mein}}",
+    "{{Deutsch Possessivpronomen|sein}}"
+];
+
+
 export class Flexion {
     // intend to be empty
 }
@@ -208,7 +272,7 @@ export class SubstantivFlexion extends Flexion {
     dativ : Kasus = {singular:[], plural: []};
     akkusativ: Kasus = {singular:[], plural: []};
 
-    static testFlextion(title:string):boolean {
+    static testFlexion(title:string):boolean {
         for(let subtitle of this.posibleTitle) {
             if (title.includes(subtitle)) {
                 return true;
@@ -219,12 +283,28 @@ export class SubstantivFlexion extends Flexion {
 }
 
 export class VornameFlexion extends SubstantivFlexion {
-    static title:string = "Deutsch Vorname Übersicht";
+    static title:string = SubstantivFlexion.vorname;
 }
 
-export type HyphenType = "_" | "Pl." | "kSg." | "kPl." | "Prät." | "Part." | "Komp." | "Sup." | "kSt.";
+export class PersonalpronomenFlexion extends Flexion {
+
+    wikiTemplate :string;
+    constructor(wikiTemplate:string) {
+        super();
+        this.wikiTemplate = wikiTemplate;
+    }
+
+    static personalpromomen:string[] = [
+        "{{Deutsch Personalpronomen 1}}",
+        "{{Deutsch Personalpronomen 3}}"
+    ];
+    static testFlexion(title:string):boolean {
+        return PersonalpronomenFlexion.personalpromomen.includes(title.trim());
+    }
+}
+
 export interface Hyphen {
-    type_ : HyphenType;
+    type_ : string;
     hyphen: string[];
 }
 
@@ -268,6 +348,15 @@ export class Example {
         this.translate = translate;
     }
 }
+
+
+/**
+ * Flexion templates which have fixed content. This is just a merge from all Flexion
+ * with fixed template; for now is only Personal Pronomen
+ *
+ * */
+export const FlexionFixTemplate:string[] =
+    PersonalpronomenFlexion.personalpromomen;
 
 export interface EndTeil {
     //TODO

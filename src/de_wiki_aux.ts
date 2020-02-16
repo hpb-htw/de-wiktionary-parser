@@ -1,6 +1,15 @@
 import {
-    WikiPage, Body,
-    SubstantivFlexion, Kasus, Title, PartOfSpeech, WikiBlockName, Flexion, VornameFlexion, UEBERSETZUNGS_TABELL
+    WikiPage,
+    Body,
+    SubstantivFlexion,
+    Kasus,
+    Title,
+    PartOfSpeech,
+    WikiBlockName,
+    Flexion,
+    VornameFlexion,
+    UEBERSETZUNGS_TABELL,
+    FlexionFixTemplate, PersonalpronomenFlexion, FlexionTemplate
 } from "./de_wiki_lang";
 
 // Escapes text for XML.
@@ -130,7 +139,7 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
         block[0] = title;
         delete block[block.length - 1]; // remove the last "}}"
     }
-    if (title.startsWith("{{") && !title.endsWith("}}")) {
+    if ( isFlexion(title) ) {
         let [_, flexion] = consumeFlexion(0, block);
         body.flexion = flexion;
     } else if (title === WikiBlockName.Lesungen){
@@ -146,7 +155,7 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
     } else if (title === WikiBlockName.Nebenformen) {
         consumeUnknownBlock(body, block);
     } else if (title === WikiBlockName.Worttrennung) {
-        consumeUnknownBlock(body, block);
+        consumeWorttrennung(body, block);
     } else if (title === WikiBlockName.in_arabischer_Schrift) {
         consumeUnknownBlock(body, block);
     } else if (title === WikiBlockName.in_kyrillischer_Schrift) {
@@ -184,6 +193,26 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
     } else { // TODO: extend this part
         consumeUnknownBlock(body, block);
     }
+}
+
+function isFlexion(blockTitle:string):boolean {
+    if (FlexionFixTemplate.includes(blockTitle)) {
+        return true;
+    }
+    if (FlexionTemplate.includes(blockTitle)) {
+        return true;
+    }
+    if (blockTitle.startsWith("{{") && !blockTitle.endsWith("}}")) {
+        return true;
+    }
+    if (blockTitle.startsWith("{{") && blockTitle.endsWith("}}")) {
+        // TODO: do the fvking step here to check if `{{Anmerkungen|zur Verwendung}}`
+        // may be syntactical other than `{{Deutsch Possessivpronomen|sein}}` and what
+        // about `{{Deutsch Personalpronomen 1}}` ?
+        // for now write a console.error()
+        console.log(`Cannot determinate if '${blockTitle}' introduces a flexion! Attempt not a flexion` );
+    }
+    return false;
 }
 
 function consumeUnknownBlock(body:Body, block:string[]) {
@@ -306,13 +335,17 @@ export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, 
         line = wikiLines[lineIdx];
     }
     let countConsumedLines = lineIdx - beginIdx;
-    if (SubstantivFlexion.testFlextion(line)) {
+    if (SubstantivFlexion.testFlexion(line)) {
         let [countFlexionLine, flexion] = consumeSubstantivFlexion(lineIdx, wikiLines);
+        return [countConsumedLines + countFlexionLine, flexion];
+    } else if(PersonalpronomenFlexion.testFlexion(line)) {
+        let [countFlexionLine, flexion] = consumePersonalPronomen(lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
     } else {
         throw new BadWikiSyntax(`Unknown Flexion ${line}`);
     }
 }
+
 
 
 /**
@@ -393,6 +426,14 @@ function parseSubtantivFlexion(title: string, lines: string[]): SubstantivFlexio
     return f;
 }
 
+export function consumePersonalPronomen(beginIdx: number, wikiLines:string[]):[number, PersonalpronomenFlexion] {
+    let pFlexion = new PersonalpronomenFlexion(wikiLines[0]);
+    return [1, pFlexion];
+}
+
+export function consumeWorttrennung(body:Body, block:string[]) {
+
+}
 
 export class BadWikiSyntax extends Error {
     constructor(message: string) {
