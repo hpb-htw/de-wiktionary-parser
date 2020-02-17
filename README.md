@@ -19,13 +19,13 @@ npm lib/index.js <dump.xml> <separator> > <output>.csv
 Example
 
 ```
-npm lib/index.js dewiktionary-20191020-pages-articles.xml <separator> > rawdata.csv
+node lib/index.js dewiktionary-20191020-pages-articles.xml <separator> > rawdata.csv
 ```
 
 To make a `gz` file (easier to distribute)
 
 ```
-npm lib/index.js dewiktionary-20191020-pages-articles.xml <separator> | gzip -f - > rawdata.csv.gz
+node lib/index.js dewiktionary-20191020-pages-articles.xml "<separator>" | gzip -f - > rawdata.csv.gz
 ```
 
 ## Description of output CSV file

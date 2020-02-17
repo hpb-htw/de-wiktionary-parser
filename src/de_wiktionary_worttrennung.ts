@@ -39,7 +39,7 @@ import {Body, Hyphen} from "./de_wiki_lang";
  * {{Worttrennung}}
  * :Ei·sen·bal·kon, {{Pl.1}} Ei·sen·bal·kons, ''besonders süddeutsch, österreichisch und schweizerisch:'' {{Pl.2}} Ei·sen·bal·ko·ne
  * ```
- * (this will fail)
+ *
  * */
 export function consumeWorttrennung(body:Body, block:string[]) {
     for(let idx = 1; idx < block.length; ++idx) {
@@ -59,8 +59,9 @@ export namespace worttrennung {
      * */
     export function parseWorttrenungLine(line: string): Hyphen[] {
         // drop : at begin then split to parts
-        let hyphenTexts = splitLine(line.slice(1));
-        let hyphens = hyphenTexts.map( part => parseHyphenPart(part) ); // each possible hyphens are separated by a , or ;
+        let hyphenTexts = tokenizeLine(line.slice(1));
+        let hyphens = hyphenTexts.map(text => text.trim())
+            .map( part => parseHyphenPart(part) ); // each possible hyphens are separated by a , or ;
         return hyphens;
     }
 
@@ -71,24 +72,93 @@ export namespace worttrennung {
         return comaSeparatedSplit;
     }
 
-    function splitLine(line:string):string[] {
+    export function tokenizeLine(line:string):string[] {
         let splitted:string[] = [];
         let cached:string = "";
-        let stack:string[] = []; // mark fvking '' or ( or what ever I don't know for now
+        // mark fvking ''...'' or (...) or '''...''' or '''''...''''' or what ever I don't know for now!
+        let expectedMatchParenthesisStack:string[] = [];
         for(let i = 0; i < line.length; ++i) {
             let char = line[i];
-            if (char === "'") { // eat the next tick as long as possible
+            if (char === "'") { // see a tick so eat the next tick as long as possible
                 let nextChar = line[i+1];
                 while (nextChar !== undefined && nextChar === "'") {
-                    i = i+1; // jump to next position
                     char += nextChar; // append a new tick to char
-                    nextChar = line[i+1];
+                    i = i + 1; // has eaten a char, so move on one position
+                    nextChar = line[i + 1 ];
+                    if (nextChar === "'") {
+                        i = i + 1; // jump to next position
+                    }
+                }
+            } else if (char === '<') { // see a html tag begin so eat the next char to end of tag (sign >)
+                let nextChar = line[i + 1];
+                while (nextChar !== undefined && nextChar !== '>') {
+                    i = i + 1;
+                    char += nextChar;
+                    nextChar = line[i];
                 }
             }
-            cached += char;
-            // TODO:
+            if ( isSeparator(char) ) {
+                if (expectedMatchParenthesisStack.length === 0) {
+                    splitted.push(cached);
+                    cached = "";
+                } else { // if separator in a markup it loses it is treated as normal char
+                    cached += char;
+                }
+            } else {
+                if (isMarkupOpen(char, expectedMatchParenthesisStack )) {
+                    expectedMatchParenthesisStack.push(char);
+                } else if (isMarkupClose(char, expectedMatchParenthesisStack) ) {
+                    expectedMatchParenthesisStack.pop();
+                }
+                cached += char;
+            }
+        }
+        if (cached !== '') {
+            splitted.push(cached);
         }
         return splitted;
+    }
+
+    function isSeparator(char:string) {
+        return (char === ',') || (char === ';');
+    }
+
+    const ITALIC_TOKEN = "''",
+        BOLD_TOKEN = "'''",
+        ITALIC_BOLD_TOKEN = "'''''",
+        TAG_OPEN_TOKEN = /<([^(>/)]+)>/,
+        TAG_CLOSE_TOKEN = /<\/([^(>/)]+)>/;
+    /**
+     * we simplify the syntax and take an assumption, that neither '' nor ''' nor ''''' are placed twice next to each other.
+     * */
+    export function isMarkupOpen(char:string, stack:string[]):boolean {
+        let size = stack.length;
+        let isAmbiguous = char === ITALIC_TOKEN || char === BOLD_TOKEN || char === ITALIC_BOLD_TOKEN;
+        if (size === 0) { // stack is empty, so check if char is one of '' , ''', ''''' or a html tag
+            return isAmbiguous || TAG_OPEN_TOKEN.test(char);
+        } else {
+            let lastToken = stack[size - 1];
+            if (isAmbiguous) { // char is one of ambiguous tokens, so if last token in stack is the same as char, its not an open token
+                return lastToken !== char;
+            } else  { //
+                return TAG_OPEN_TOKEN.test(char); // we don't check if HTML tokens match
+            }
+        }
+    }
+
+    export function isMarkupClose(char:string, stack:string[]) :boolean {
+        let size = stack.length;
+        let isAmbiguous = char === ITALIC_TOKEN || char === BOLD_TOKEN || char === ITALIC_BOLD_TOKEN;
+        if (size === 0) {
+            return false; // cannot close an empty stack
+        } else {
+            let lastToken = stack[size - 1];
+            if (isAmbiguous) {
+                return lastToken === char;
+            } else {
+                return TAG_CLOSE_TOKEN.test(char);  // we don't check if HTML tokens match
+            }
+        }
     }
 
     export function parseHyphenPart(text: string): Hyphen {

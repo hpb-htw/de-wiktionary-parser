@@ -28,8 +28,10 @@ describe("parseDeWikiTextToObject : Parsing a complete wiki text", () =>{
     });
 
     test("Get all pages of wiki text : ich", () =>{
+        let selectLanguages = ["Deutsch", "Limburgisch", "Mittelenglisch",
+            "Mittelhochdeutsch", "Polnisch", "Slowakisch"];
         let wikitext = readWikiTextFile('ich');
-        let wikiPage = parseDeWikiTextToObject(wikitext);
+        let wikiPage = parseDeWikiTextToObject(wikitext, selectLanguages);
         expect(wikiPage).toHaveLength(6);
     });
 });

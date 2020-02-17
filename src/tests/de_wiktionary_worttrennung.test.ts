@@ -3,6 +3,9 @@ import {Body, Hyphen} from "../de_wiki_lang";
 import {consumeWorttrennung, worttrennung} from "../de_wiktionary_worttrennung";
 import parseHyphenPart = worttrennung.parseHyphenPart;
 import parseWorttrenungLine = worttrennung.parseWorttrenungLine;
+import tokenizeLine = worttrennung.tokenizeLine;
+import isMarkupOpen = worttrennung.isMarkupOpen;
+import isMarkupClose = worttrennung.isMarkupClose;
 
 describe("test consumeWorttrennung", () =>{
     test("consumeWorttrennung.sein (Possessivpronomen)", () => {
@@ -54,6 +57,26 @@ describe("test consumeWorttrennung", () =>{
         let unsAkk = hyphens[8].syllable;
         expect(unsAkk).toStrictEqual(["uns"]);
     });
+
+    test("consumeWorttrennung.Eisenbalkon", () => {
+        let wikitext =
+            `{{Worttrennung}}
+:Ei·sen·bal·kon, {{Pl.1}} Ei·sen·bal·kons, ''besonders süddeutsch, österreichisch und schweizerisch:'' {{Pl.2}} Ei·sen·bal·ko·ne`;
+        let body:Body = new Body({
+            pos: ["Substantiv"],
+            addition: []
+        });
+        consumeWorttrennung(body, wikitext.split("\n"));
+        let hyphens = body.hyphen;
+        expect(hyphens).toHaveLength(wikitext.split(/[,;]/).length - 1);
+        let eisenbalkon = hyphens[0].syllable;
+        expect(eisenbalkon).toStrictEqual(["Ei", "sen", "bal", "kon"]);
+        let eisenbalkons = hyphens[1].syllable;
+        expect(eisenbalkons).toStrictEqual(["Ei", "sen", "bal", "kons"]);
+        let eisenbalkone = hyphens[2].syllable;
+        expect(eisenbalkone).toStrictEqual(["Ei", "sen", "bal", "ko", "ne"]);
+    });
+
 });
 
 describe("test parseWorttrenungLine", () =>{
@@ -97,3 +120,96 @@ describe("test parseHyphenPart", () =>{
         expect(h.additionalInformation).toStrictEqual(["''besonders süddeutsch, österreichisch und schweizerisch:''"]);
     });
 });
+
+describe("Test Tokenize Wiki markup",  () => {
+    test("tokenizeLine line with markup", () => {
+        let line = ":Ei·sen·bal·kon, {{Pl.1}} Ei·sen·bal·kons, ''besonders süddeutsch, österreichisch und schweizerisch:'' {{Pl.2}} Ei·sen·bal·ko·ne";
+        let tokens = tokenizeLine(line);
+        expect(tokens).toHaveLength(3);
+    });
+
+    test("isMarkupOpen with empty stack", () => {
+       let stack:string[] = [];
+       let testChars = ["''", "''", "'''''", "<small>", "<sup>", "<sub>"];
+       for (let i = 0; i < testChars.length; ++i) {
+           let open = isMarkupOpen(testChars[i], stack);
+           expect(open).toStrictEqual(true);
+       }
+    });
+
+    test("isMarkupOpen with empty stack, do not match HTML close tags", () => {
+        let stack:string[] = [];
+        let testChars = ["</small>", "</sup>", "</sub>"];
+        for (let i = 0; i < testChars.length; ++i) {
+            let open = isMarkupOpen(testChars[i], stack);
+            expect(open).toStrictEqual(false);
+        }
+    });
+
+    test("isMarkupOpen with stack, which contains same token as char", () => {
+        let testChars = ["''", "''", "'''''"];
+        for (let i = 0; i < testChars.length; ++i) {
+            let stack = [testChars[i]];
+            let open = isMarkupOpen(testChars[i], stack);
+            expect(open).toStrictEqual(false);
+        }
+    });
+
+    test("isMarkupOpen with stack, which contains differ token than char", () => {
+        let testChars = ["''", "''", "'''''"];
+        let testTokens = ["'''", "'''''", "''"];
+        for (let i = 0; i < testChars.length; ++i) {
+            let stack = [testTokens[i]];
+            let open = isMarkupOpen(testChars[i], stack);
+            expect(open).toStrictEqual(true);
+        }
+    });
+
+    ///
+    test("isMarkupClose with empty stack", () => {
+        let stack:string[] = [];
+        let testChars = ["''", "''", "'''''", "<small>", "<sup>", "<sub>"];
+        for (let i = 0; i < testChars.length; ++i) {
+            let open = isMarkupClose(testChars[i], stack);
+            expect(open).toStrictEqual(false);
+        }
+    });
+
+    test("isMarkupClose with stack, which contains same token as char", () => {
+        let testChars = ["''", "''", "'''''"];
+        for (let i = 0; i < testChars.length; ++i) {
+            let stack = [testChars[i]];
+            let open = isMarkupClose(testChars[i], stack);
+            expect(open).toStrictEqual(true);
+        }
+    });
+
+    test("isMarkupClose with stack, which contains html", () => {
+        let stackTest:string[] = ["<small>", "<sub>", "<sub>"];
+        let testChars = ["</small>", "</sup>", "</sub>"];
+        for (let i = 0; i < testChars.length; ++i) {
+            let stack:string [] = [stackTest[i]];
+            let open = isMarkupOpen(testChars[i], stack);
+            expect(open).toStrictEqual(false);
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

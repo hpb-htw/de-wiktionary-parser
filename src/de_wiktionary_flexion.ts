@@ -4,9 +4,9 @@ import {
     FlexionTemplate,
     Kasus,
     PersonalpronomenFlexion,
-    SubstantivFlexion
+    SubstantivFlexion, VornameFlexion
 } from "./de_wiki_lang";
-import {BadWikiSyntax} from "./de_wiki_aux";
+import {BAD_FLEXION, BadWikiSyntax, statisticEventEmitter} from "./de_wiki_aux";
 
 /**
  * test if a single line string introduce a flexion block.
@@ -19,15 +19,17 @@ export function isFlexion(blockTitle:string):boolean {
         return true;
     }
     if (blockTitle.startsWith("{{") && !blockTitle.endsWith("}}")) {
-        return true;
+        statisticEventEmitter.emit(BAD_FLEXION, blockTitle);
     }
+    /*
     if (blockTitle.startsWith("{{") && blockTitle.endsWith("}}")) {
         // TODO: do the fvking step here to check if `{{Anmerkungen|zur Verwendung}}`
         // may be syntactical other than `{{Deutsch Possessivpronomen|sein}}` and what
         // about `{{Deutsch Personalpronomen 1}}` ?
-        // for now write a console.error()
-        console.log(`Cannot determinate if '${blockTitle}' introduces a flexion! Attempt not a flexion` );
+        // for now just ignore it
+        // statisticEventEmitter.emit(BAD_FLEXION, blockTitle);
     }
+    */
     return false;
 }
 
@@ -49,6 +51,9 @@ export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, 
     if (SubstantivFlexion.testFlexion(line)) {
         let [countFlexionLine, flexion] = consumeSubstantivFlexion(lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
+    } else if (VornameFlexion.testFlexion(line)) {
+        let [countFlexionLine, flexion] = consumeVornameFlexion(lineIdx, wikiLines);
+        return  [countConsumedLines + countFlexionLine, flexion];
     } else if(PersonalpronomenFlexion.testFlexion(line)) {
         let [countFlexionLine, flexion] = consumePersonalPronomen(lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
@@ -97,36 +102,32 @@ export function consumeSubstantivFlexion(lineIdx: number, wikiLines: string[]): 
             break;
         }
     }
-    if(flexionCache.title.includes(SubstantivFlexion.vorname)) {
-        let parts = flexionCache.title.split(/\s+/);
-        let genus = parts[parts.length-1];
-        flexikon?.genus.push(genus);
-    }
     return [consumedLineIdx - lineIdx, flexikon];
 }
 
 
 function parseSubtantivFlexion(title: string, lines: string[]): SubstantivFlexion {
-    let f = new SubstantivFlexion();
+    let flexion = new SubstantivFlexion();
     for (let line of lines) {
         let [key, value] = line.split("=");
         let [kasus, numerus] = key.trim().split(/\s+/);
         let flexionKasus: Kasus;
         if (kasus.startsWith(SubstantivFlexion.GENUS)) {
-            f.genus.push(value);
+            flexion.genus.push(value);
             continue;
         } else if (kasus.startsWith(SubstantivFlexion.NOMINATIV)) {
-            flexionKasus = f.nominativ;
+            flexionKasus = flexion.nominativ;
         } else if (kasus.startsWith(SubstantivFlexion.GENITIVE)) {
-            flexionKasus = f.genitiv;
+            flexionKasus = flexion.genitiv;
         } else if (kasus.startsWith(SubstantivFlexion.DATIV)) {
-            flexionKasus = f.dativ;
+            flexionKasus = flexion.dativ;
         } else if (kasus.startsWith(SubstantivFlexion.AKKUSATIV)) {
-            flexionKasus = f.akkusativ;
-        }else if (kasus.startsWith("Bild") ){
+            flexionKasus = flexion.akkusativ;
+        }else if ( isIgnorableKasus(kasus) ){
             continue;
         } else {
-            throw new BadWikiSyntax(`Unknown Kasus '${kasus}'`);
+            let lastLines = lines.slice(-5).join('\n');
+            throw new BadWikiSyntax(`Unknown Kasus '${kasus}' title: ${title} lines: ${lastLines}`);
         }
         if (numerus.startsWith(SubstantivFlexion.SINGULAR)) {
             flexionKasus.singular.push(value);
@@ -134,7 +135,16 @@ function parseSubtantivFlexion(title: string, lines: string[]): SubstantivFlexio
             flexionKasus.plural.push(value);
         }
     }
-    return f;
+    return flexion;
+}
+
+function isIgnorableKasus(kasus:string) {
+    return (kasus.startsWith("Bild")) || (kasus.startsWith("mini|1|"));
+}
+
+/** test data: see Rosa and Achim */
+function consumeVornameFlexion(lineIdx: number, lines:string[]): [number, VornameFlexion] {
+    throw new BadWikiSyntax(`Not support Vorname Flexion for now, title: ${lines[1]}`);
 }
 
 /*TODO*/

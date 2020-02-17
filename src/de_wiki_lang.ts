@@ -231,17 +231,6 @@ export class PartOfSpeech {
     pos: string[] = [];
     addition:string[] = []; // Not implemented for now
 }
-
-/**
- * these flexions need an argument ???
- * */
-export const FlexionTemplate:string[] = [
-    // Possessiv Pronomen
-    "{{Deutsch Possessivpronomen|mein}}",
-    "{{Deutsch Possessivpronomen|sein}}"
-];
-
-
 export class Flexion {
     // intend to be empty
 }
@@ -251,10 +240,14 @@ export interface Kasus {
 }
 export class SubstantivFlexion extends Flexion {
     static substantiv:string = "Deutsch Substantiv Übersicht";
-    static vorname: string = "Deutsch Vorname Übersicht";
-    static posibleTitle:string[] = [
+    static substantiv_sch:string = "Deutsch Substantiv Übersicht -sch";
+
+    static nachname: string = "Deutsch Nachname Übersicht";
+
+    static possibleTitle:string[] = [
         SubstantivFlexion.substantiv,
-        SubstantivFlexion.vorname
+        //SubstantivFlexion.substantiv_sch
+        SubstantivFlexion.nachname
     ];
     // Kasus
     static GENUS = "Genus";
@@ -273,7 +266,7 @@ export class SubstantivFlexion extends Flexion {
     akkusativ: Kasus = {singular:[], plural: []};
 
     static testFlexion(title:string):boolean {
-        for(let subtitle of this.posibleTitle) {
+        for(let subtitle of SubstantivFlexion.possibleTitle) {
             if (title.includes(subtitle)) {
                 return true;
             }
@@ -283,7 +276,10 @@ export class SubstantivFlexion extends Flexion {
 }
 
 export class VornameFlexion extends SubstantivFlexion {
-    static title:string = SubstantivFlexion.vorname;
+    static title:string = "Deutsch Vorname Übersicht";
+    static testFlexion(title:string): boolean {
+        return title.includes(VornameFlexion.title);
+    }
 }
 
 export class PersonalpronomenFlexion extends Flexion {
@@ -358,6 +354,26 @@ export class Example {
  * */
 export const FlexionFixTemplate:string[] =
     PersonalpronomenFlexion.personalpromomen;
+
+/**
+ * these flexions need an argument ???
+ * */
+export const FlexionTemplate:string[] = [
+    // Possessiv Pronomen
+    "{{Deutsch Possessivpronomen|mein}}",
+    "{{Deutsch Possessivpronomen|sein}}",
+    "{{" + SubstantivFlexion.substantiv,
+    "{{" + SubstantivFlexion.substantiv_sch,
+    "{{" + VornameFlexion.title + " f",
+    "{{" + VornameFlexion.title + " m",
+    "{{" + SubstantivFlexion.nachname,
+
+    //(TODO:)
+    // "{{Deutsch Verb Übersicht",
+    // "{{Deutsch Adjektiv Übersicht",
+    // "{{Deutsch Toponym Übersicht",
+    // ""
+];
 
 export interface EndTeil {
     //TODO

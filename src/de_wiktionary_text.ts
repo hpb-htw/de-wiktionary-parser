@@ -5,10 +5,23 @@ import {
     WikiPage
 } from "./de_wiki_lang";
 import {consumeWorttrennung} from "./de_wiktionary_worttrennung";
-import {BadWikiSyntax} from "./de_wiki_aux";
+import {BadWikiSyntax, INGORE_WORD, NO_CONSUME_FOR_BLOCK, statisticEventEmitter} from "./de_wiki_aux";
 import {consumeFlexion, isFlexion} from "./de_wiktionary_flexion";
 
-export function parseDeWikiTextToObject(wikiText: string): WikiPage[] {
+export function parseDeWikiTextToObject(wikiText: string, selectLanguages:string[]=["Deutsch"]): WikiPage[] {
+    //const GERMAN_WORD_INDICATOR = "({{Sprache|Deutsch}})";
+    let indicators:string[] = [];
+    for(let language of selectLanguages) {
+        indicators.push( `({{Sprache|${language}}})` );
+    }
+    function isSelectedLanguage(title:string):boolean {
+        for(let indicator of indicators) {
+            if (title.includes(indicator)) {
+                return true;
+            }
+        }
+        return false;
+    }
     let lines = wikiText.split("\n");
     const WIKI_LENGTH = lines.length;
     let lineIdx = 0;
@@ -17,16 +30,21 @@ export function parseDeWikiTextToObject(wikiText: string): WikiPage[] {
         let currentLine = lines[lineIdx];
         do {
             if (currentLine !== undefined  && currentLine.startsWith("== ")) {
-                let [countPageLength, page] = consumePage(lineIdx, lines);
-                lineIdx += countPageLength - 1;
-                pages.push(page);
-                break;
+                if ( isSelectedLanguage(currentLine) ) {
+                    let [countPageLength, page] = consumePage(lineIdx, lines);
+                    lineIdx += countPageLength - 1;
+                    pages.push(page);
+                    break;
+                } else {
+                    statisticEventEmitter.emit(INGORE_WORD, currentLine);
+                }
             }
             lineIdx+=1;
             currentLine = lines[lineIdx];
         }while (currentLine !== undefined /*&& !currentLine.startsWith("== ")*/ );
         lineIdx+=1;
     }
+
     return pages;
 }
 
@@ -72,7 +90,7 @@ export function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] 
                 if (! (currentLine.startsWith("=== ") || currentLine.startsWith("==== ") )) {
                     block.push(currentLine);
                 } else if (currentLine.startsWith("==== ")) { // because of "Übersetzung"
-                    console.error(`Verdammt format ${currentLine}`);
+                    //console.error(`Verdammt format ${currentLine}`);
                 } else {
                     lineIdx += 1;
                     currentLine = wikiLines[lineIdx];
@@ -82,7 +100,6 @@ export function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] 
             } else if (block.length > 0) {
                 // TODO: block is complete => process block
                 let bTitle = block[0];
-                console.error(bTitle);
                 consumeBlock(body, block, blockPosition);
                 blockPosition += 1;
                 block = [];
@@ -170,7 +187,7 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
 
 
 function consumeUnknownBlock(body:Body, block:string[]) {
-    console.error(`No consumer for block '${block[0]}' (${block.length} lines) for now`);
+    statisticEventEmitter.emit(NO_CONSUME_FOR_BLOCK, block[0]);
 }
 
 /**

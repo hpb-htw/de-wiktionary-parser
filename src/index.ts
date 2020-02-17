@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 import * as path from "path";
-import {importDic, Entry } from "./wiktionary";
+import {importDic, Entry, getStatistic} from "./wiktionary";
 
 
 const SEPARATOR = "<separator>";
@@ -12,6 +12,7 @@ function makeInsertEntriesFn(delimiter:string) : (entries:Entry []) => number {
     let sep = delimiter;
     return (entries:Entry [] ):number => {
         for(let e of entries) {
+            // write result to stdout, all other thing is written into std error
             console.log(`${e["id"]}${sep}${e["title"]}${sep}${e["text"]}`);
         }   
         let inserted = entries.length;
@@ -43,14 +44,17 @@ console.log(`id${delimiter}title${delimiter}text`);
 // print contens
 importDic(xmlPath, noOpFilterFN, syncStdOutInsertEntriesFn)
     .then( (countGermanWords) => {
-        console.error({ countGermanWords });
+        console.error({fileName: "index.ts", countGermanWords });
+        console.error(getStatistic(10) );
+        return countGermanWords;
     })
-    .then( () => {
+    /*.then( () => {
         return verify();
     })
     .then((verifyCount) => {
-        console.error({ verifyCount });
-    })    
+        console.error({fileName: "index.ts", verifyCount });
+        console.error(getStatistic() );
+    })*/
     .catch((ex) => {
         console.error(ex);
     });
