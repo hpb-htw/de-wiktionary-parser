@@ -45,7 +45,7 @@ console.log(`id${delimiter}title${delimiter}text`);
 importDic(xmlPath, noOpFilterFN, syncStdOutInsertEntriesFn)
     .then( (countGermanWords) => {
         console.error({fileName: "index.ts", countGermanWords });
-        console.error(getStatistic(10) );
+        console.error(getStatistic(15) );
         return countGermanWords;
     })
     /*.then( () => {

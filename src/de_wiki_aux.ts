@@ -38,6 +38,9 @@ export function isGermanWord(title: string, text: string) {
     return text.includes(GERMAN_WORD_INDICATOR.replace("${title}", title));
 }
 
+export function removeHTMLComment(htmlText:string) {
+    return htmlText.replace(/<!--[\s\S]*?-->/g, "");
+}
 
 export class BadWikiSyntax extends Error {
     constructor(message: string) {

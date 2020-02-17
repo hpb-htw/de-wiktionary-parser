@@ -1,76 +1,12 @@
-import {consumeFlexion, consumeSubstantivFlexion} from "../de_wiktionary_flexion";
+import {consumeFlexion, consumeSubstantivFlexion, consumeVornameFlexion} from "../de_wiktionary_flexion";
 import {SubstantivFlexion} from "../de_wiki_lang";
 import {expectObjectEqual} from "./object_expect";
 
 describe("test flexion", () => {
 
-    test("consumeSubstantivFlexion.wort", () => {
-        let wikiText =
-            `{{Siehe auch|[[wort]]}}
-{{Wort der Woche|23|2006}}
-== Wort ({{Sprache|Deutsch}}) ==
-=== {{Wortart|Substantiv|Deutsch}}, {{n}}, Wörter ===
 
-{{Deutsch Substantiv Übersicht
-|Genus=n
-|Nominativ Singular=Wort
-|Nominativ Plural=Wörter
-|Genitiv Singular=Worts
-|Genitiv Singular*=Wortes
-|Genitiv Plural=Wörter
-|Dativ Singular=Wort
-|Dativ Singular*=Worte
-|Dativ Plural=Wörtern
-|Akkusativ Singular=Wort
-|Akkusativ Plural=Wörter
-}}
-`;
-        let [lastIdx, flexion] = consumeSubstantivFlexion(5, wikiText.split("\n"));
-        let expectedFlexion: SubstantivFlexion =  {
-            genus: ['n'],
-            nominativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] },
-            genitiv:   { singular: [ 'Worts', 'Wortes' ], plural: [ 'Wörter' ] },
-            dativ:     { singular: [ 'Wort', 'Worte' ],   plural: [ 'Wörtern' ] },
-            akkusativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] }
-        };
-        expect(lastIdx).toBe(13);
 
-        expectObjectEqual(flexion, expectedFlexion);
-    });
 
-    test("consumeSubstantivFlexion.python", ()=>{
-        let wikitext =
-            `== Python ({{Sprache|Deutsch}}) ==
-=== {{Wortart|Substantiv|Deutsch}}, {{m}}, {{f}} ===
-
-{{Deutsch Substantiv Übersicht
-|Genus 1=m
-|Genus 2=f
-|Nominativ Singular 1=Python
-|Nominativ Singular 2=Python
-|Nominativ Plural=Pythons
-|Genitiv Singular 1=Pythons
-|Genitiv Singular 2=Python
-|Genitiv Plural=Pythons
-|Dativ Singular 1=Python
-|Dativ Singular 2=Python
-|Dativ Plural=Pythons
-|Akkusativ Singular 1=Python
-|Akkusativ Singular 2=Python
-|Akkusativ Plural=Pythons
-|Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
-}}`;
-        let [count, flexion]= consumeSubstantivFlexion(0,wikitext.split("\n"));
-        let expectedFlexion = {
-            genus: ['m', 'f'],
-            nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
-            genitiv:   { singular: [ 'Pythons','Python' ], plural: [ 'Pythons' ] },
-            dativ:     { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
-            akkusativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] }
-        };
-        expect(count).toBe(20);
-        expectObjectEqual(flexion, expectedFlexion);
-    });
 
     test("consumeFlexion.python (beginIdx = 0)", ()=>{
         let wikitext =
@@ -141,6 +77,47 @@ describe("test flexion", () => {
     });
 
 
+
+});
+
+
+
+describe("Substantiv Flexion", ()=>{
+
+    test("consumeSubstantivFlexion.wort", () => {
+        let wikiText =
+            `{{Siehe auch|[[wort]]}}
+{{Wort der Woche|23|2006}}
+== Wort ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{n}}, Wörter ===
+
+{{Deutsch Substantiv Übersicht
+|Genus=n
+|Nominativ Singular=Wort
+|Nominativ Plural=Wörter
+|Genitiv Singular=Worts
+|Genitiv Singular*=Wortes
+|Genitiv Plural=Wörter
+|Dativ Singular=Wort
+|Dativ Singular*=Worte
+|Dativ Plural=Wörtern
+|Akkusativ Singular=Wort
+|Akkusativ Plural=Wörter
+}}
+`;
+        let [lastIdx, flexion] = consumeSubstantivFlexion(5, wikiText.split("\n"));
+        let expectedFlexion: SubstantivFlexion =  {
+            genus: ['n'],
+            nominativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] },
+            genitiv:   { singular: [ 'Worts', 'Wortes' ], plural: [ 'Wörter' ] },
+            dativ:     { singular: [ 'Wort', 'Worte' ],   plural: [ 'Wörtern' ] },
+            akkusativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] }
+        };
+        expect(lastIdx).toBe(13);
+
+        expectObjectEqual(flexion, expectedFlexion);
+    });
+
     test("consumeSubstantivFlexion.Ferien", ()=>{
         let wikitext =
             `== Ferien ({{Sprache|Deutsch}}) ==
@@ -174,4 +151,117 @@ describe("test flexion", () => {
         expect(count).toBe(11);
         expectObjectEqual(flexion, expectedFlexion);
     });
+
+    test("consumeSubstantivFlexion.python", ()=>{
+        let wikitext =
+            `== Python ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{m}}, {{f}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus 1=m
+|Genus 2=f
+|Nominativ Singular 1=Python
+|Nominativ Singular 2=Python
+|Nominativ Plural=Pythons
+|Genitiv Singular 1=Pythons
+|Genitiv Singular 2=Python
+|Genitiv Plural=Pythons
+|Dativ Singular 1=Python
+|Dativ Singular 2=Python
+|Dativ Plural=Pythons
+|Akkusativ Singular 1=Python
+|Akkusativ Singular 2=Python
+|Akkusativ Plural=Pythons
+|Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
+}}`;
+        let [count, flexion]= consumeSubstantivFlexion(0,wikitext.split("\n"));
+        let expectedFlexion = {
+            genus: ['m', 'f'],
+            nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            genitiv:   { singular: [ 'Pythons','Python' ], plural: [ 'Pythons' ] },
+            dativ:     { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
+            akkusativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] }
+        };
+        expect(count).toBe(20);
+        expectObjectEqual(flexion, expectedFlexion);
+    });
+
+
+
 });
+
+
+describe("Vorname Flexion", () =>{
+
+    test("consumeVornameFlexion.Rosa",()=>{
+        let text =
+`{{Deutsch Vorname Übersicht f
+|Nominativ Singular=Rosa
+|Nominativ Plural 1=Rosas
+|Nominativ Plural 2=Rosen
+|Genitiv Singular=Rosas
+|Genitiv Plural 1=Rosas
+|Genitiv Plural 2=Rosen
+|Dativ Singular=Rosa
+|Dativ Plural 1=Rosas
+|Dativ Plural 2=Rosen
+|Akkusativ Singular=Rosa
+|Akkusativ Plural 1=Rosas
+|Akkusativ Plural 2=Rosen
+}}`;
+
+        let expectedFlexion = {
+            genus: ['f'],
+            nominativ: { singular: [ 'Rosa' ], plural: [ 'Rosas', 'Rosen' ] },
+            genitiv:   { singular: [ 'Rosas'], plural: [ 'Rosas', 'Rosen' ] },
+            dativ:     { singular: [ 'Rosa'],  plural: [ 'Rosas', 'Rosen'] },
+            akkusativ: { singular: [ 'Rosa'],  plural: [ 'Rosas', 'Rosen' ] }
+        };
+
+        let [lineCount, flexion] = consumeVornameFlexion(0, text.split('\n'));
+        expect(lineCount).toBe(14);
+        expectObjectEqual(flexion, expectedFlexion);
+
+    });
+
+    test("consumeVornameFlexion.Achim",()=>{
+        let text =
+`{{Deutsch Vorname Übersicht m
+|Plural=Achims
+}}`;
+
+        let expectedFlexion = {
+            genus: ['m'],
+            nominativ: { singular: [ ], plural: [  ] },
+            genitiv:   { singular: [ ], plural: [ ] },
+            dativ:     { singular: [ ],  plural: [ ] },
+            akkusativ: { singular: [ ],  plural: [ ] }
+        };
+
+        let [lineCount, flexion] = consumeVornameFlexion(0, text.split('\n'));
+        expect(lineCount).toBe(3);
+        expectObjectEqual(flexion, expectedFlexion);
+
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

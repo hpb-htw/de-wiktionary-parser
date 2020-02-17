@@ -242,12 +242,12 @@ export class SubstantivFlexion extends Flexion {
     static substantiv:string = "Deutsch Substantiv Übersicht";
     static substantiv_sch:string = "Deutsch Substantiv Übersicht -sch";
 
-    static nachname: string = "Deutsch Nachname Übersicht";
+    //static nachname: string = "Deutsch Nachname Übersicht";
 
     static possibleTitle:string[] = [
         SubstantivFlexion.substantiv,
         //SubstantivFlexion.substantiv_sch
-        SubstantivFlexion.nachname
+        //SubstantivFlexion.nachname
     ];
     // Kasus
     static GENUS = "Genus";
@@ -276,6 +276,7 @@ export class SubstantivFlexion extends Flexion {
 }
 
 export class VornameFlexion extends SubstantivFlexion {
+    static wiktionaryRef:string = "https://de.wiktionary.org/wiki/Hilfe:Vor-_und_Nachnamen/Grammatik_der_deutschen_Namen";
     static title:string = "Deutsch Vorname Übersicht";
     static testFlexion(title:string): boolean {
         return title.includes(VornameFlexion.title);
@@ -361,12 +362,14 @@ export const FlexionFixTemplate:string[] =
 export const FlexionTemplate:string[] = [
     // Possessiv Pronomen
     "{{Deutsch Possessivpronomen|mein}}",
+    "{{Deutsch Possessivpronomen|dein}}",
     "{{Deutsch Possessivpronomen|sein}}",
+    "{{Deutsch Possessivpronomen|…}}", // what the hell
     "{{" + SubstantivFlexion.substantiv,
     "{{" + SubstantivFlexion.substantiv_sch,
     "{{" + VornameFlexion.title + " f",
     "{{" + VornameFlexion.title + " m",
-    "{{" + SubstantivFlexion.nachname,
+    //"{{" + SubstantivFlexion.nachname,
 
     //(TODO:)
     // "{{Deutsch Verb Übersicht",

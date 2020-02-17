@@ -5,7 +5,13 @@ import {
     WikiPage
 } from "./de_wiki_lang";
 import {consumeWorttrennung} from "./de_wiktionary_worttrennung";
-import {BadWikiSyntax, INGORE_WORD, NO_CONSUME_FOR_BLOCK, statisticEventEmitter} from "./de_wiki_aux";
+import {
+    BadWikiSyntax,
+    INGORE_WORD,
+    NO_CONSUME_FOR_BLOCK,
+    removeHTMLComment,
+    statisticEventEmitter
+} from "./de_wiki_aux";
 import {consumeFlexion, isFlexion} from "./de_wiktionary_flexion";
 
 export function parseDeWikiTextToObject(wikiText: string, selectLanguages:string[]=["Deutsch"]): WikiPage[] {
@@ -22,7 +28,7 @@ export function parseDeWikiTextToObject(wikiText: string, selectLanguages:string
         }
         return false;
     }
-    let lines = wikiText.split("\n");
+    let lines = removeHTMLComment(wikiText).split("\n");
     const WIKI_LENGTH = lines.length;
     let lineIdx = 0;
     let pages:WikiPage[] = [];
@@ -204,6 +210,7 @@ export function consumeTitle(beginIdx: number, wikiLines: string[]): [number, Ti
     }
     let title: Title | undefined = undefined;
     if (lineIdx >= beginIdx) {
+        line = line.trim();
         if (line.startsWith("== ") && line.endsWith(" ==")) {
             let titleParts =stripEqualMark(line).split(/\s+/);
             let text = titleParts[0];
@@ -211,7 +218,7 @@ export function consumeTitle(beginIdx: number, wikiLines: string[]): [number, Ti
             let language = titleParts[1].slice(3, size - 3).split('|')[1];
             title = new Title(text, language);
         } else {
-            throw new BadWikiSyntax(`Title line must be embraced by '== ' and ' =='`);
+            throw new BadWikiSyntax(`Title line must be embraced by '== ' and ' ==', got '${line}'`);
         }
     } else {
         throw new BadWikiSyntax(`A Wikipage must contain a title, which the line embraced by double equal sign.`);

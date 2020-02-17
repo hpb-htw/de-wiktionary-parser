@@ -76,6 +76,12 @@ export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, 
  *                                      line `}}` (include).
  * */
 export function consumeSubstantivFlexion(lineIdx: number, wikiLines: string[]): [number, SubstantivFlexion | undefined] {
+    let [lineCount, cache] = collectSubstantivlikeFlexionToCache(lineIdx, wikiLines);
+    let flexikon = parseSubtantivFlexion(cache.title, cache.lines);
+    return [lineCount, flexikon];
+}
+
+function collectSubstantivlikeFlexionToCache(lineIdx: number, wikiLines: string[]): [number, {title:string, lines:string[]}] {
     const WIKI_LENGTH = wikiLines.length;
     let consumedLineIdx = lineIdx;
     let flexionCache: { title: string, lines: string[] } = {
@@ -83,7 +89,7 @@ export function consumeSubstantivFlexion(lineIdx: number, wikiLines: string[]): 
         lines: []
     };
     let inFlexion = false;
-    let flexikon: SubstantivFlexion | undefined = undefined;
+
     while (consumedLineIdx < WIKI_LENGTH) {
         let line = wikiLines[consumedLineIdx].trim();
         consumedLineIdx += 1;
@@ -98,24 +104,32 @@ export function consumeSubstantivFlexion(lineIdx: number, wikiLines: string[]): 
         }
         if (inFlexion && line === "}}") {
             inFlexion = false;
-            flexikon = parseSubtantivFlexion(flexionCache.title, flexionCache.lines);
             break;
         }
     }
-    return [consumedLineIdx - lineIdx, flexikon];
+    return [consumedLineIdx - lineIdx, flexionCache];
 }
-
 
 function parseSubtantivFlexion(title: string, lines: string[]): SubstantivFlexion {
     let flexion = new SubstantivFlexion();
-    for (let line of lines) {
+    for(let line of lines) {
         let [key, value] = line.split("=");
         let [kasus, numerus] = key.trim().split(/\s+/);
         let flexionKasus: Kasus;
         if (kasus.startsWith(SubstantivFlexion.GENUS)) {
             flexion.genus.push(value);
-            continue;
-        } else if (kasus.startsWith(SubstantivFlexion.NOMINATIV)) {
+        }
+    }
+    feedDetailedKasusToFlexion(title, lines, flexion);
+    return flexion;
+}
+
+function feedDetailedKasusToFlexion(title:string, listOfKasus:string[], flexion:SubstantivFlexion) {
+    for (let line of listOfKasus) {
+        let [key, value] = line.split("=");
+        let [kasus, numerus] = key.trim().split(/\s+/);
+        let flexionKasus: Kasus;
+        if (kasus.startsWith(SubstantivFlexion.NOMINATIV)) {
             flexionKasus = flexion.nominativ;
         } else if (kasus.startsWith(SubstantivFlexion.GENITIVE)) {
             flexionKasus = flexion.genitiv;
@@ -126,7 +140,7 @@ function parseSubtantivFlexion(title: string, lines: string[]): SubstantivFlexio
         }else if ( isIgnorableKasus(kasus) ){
             continue;
         } else {
-            let lastLines = lines.slice(-5).join('\n');
+            let lastLines = listOfKasus.slice(-5).join('\n');
             throw new BadWikiSyntax(`Unknown Kasus '${kasus}' title: ${title} lines: ${lastLines}`);
         }
         if (numerus.startsWith(SubstantivFlexion.SINGULAR)) {
@@ -135,16 +149,38 @@ function parseSubtantivFlexion(title: string, lines: string[]): SubstantivFlexio
             flexionKasus.plural.push(value);
         }
     }
-    return flexion;
 }
 
+
 function isIgnorableKasus(kasus:string) {
-    return (kasus.startsWith("Bild")) || (kasus.startsWith("mini|1|"));
+    return (kasus.startsWith(SubstantivFlexion.GENUS)) ||
+            (kasus.startsWith("Bild")) ||
+            (kasus.startsWith("mini|1|")) ||
+            (kasus=="}}") ||
+            (kasus.search(/\d+px/) >= 0);
 }
 
 /** test data: see Rosa and Achim */
-function consumeVornameFlexion(lineIdx: number, lines:string[]): [number, VornameFlexion] {
-    throw new BadWikiSyntax(`Not support Vorname Flexion for now, title: ${lines[1]}`);
+export function consumeVornameFlexion(lineIdx: number, wikiLines:string[]): [number, VornameFlexion] {
+    let [lineCount, cache] = collectSubstantivlikeFlexionToCache(lineIdx, wikiLines);
+    let flexikon = parseVornameFlexion(cache.title, cache.lines);
+    return [lineCount, flexikon];
+
+
+}
+
+function parseVornameFlexion(title:string, lines:string[]):VornameFlexion {
+    let flexion:VornameFlexion = new VornameFlexion();
+    let genus = title.split(/\s+/).slice(-1)[0];
+    // there are only two type: either f for feminin or m for maskulin. But to keep code extensible let genus be an array
+    flexion.genus.push(genus);
+    try {
+        feedDetailedKasusToFlexion(title, lines, flexion);
+    }catch (e) {
+        // Vorname doesn't have detailed flexion list. Use other way to fill Kasus
+        statisticEventEmitter.emit(BAD_FLEXION, lines.slice(-5).join("\n"));
+    }
+    return flexion;
 }
 
 /*TODO*/
@@ -152,3 +188,6 @@ export function consumePersonalPronomen(beginIdx: number, wikiLines:string[]):[n
     let pFlexion = new PersonalpronomenFlexion(wikiLines[0]);
     return [1, pFlexion];
 }
+
+
+
