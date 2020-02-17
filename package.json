@@ -7,13 +7,13 @@
 				"de-wiktionary-parser": "./lib/index.js"
 		},
 		"scripts": {
-			"compile": "tsc -p ./",
-			"clean": "rm -rf lib",
-			"watch": "tsc -watch -p ./",
-			"run": "npm run compile ; node lib/index.js",
-			"refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
-			"test": "jest --config jest.config.js",
-			"lint": "tslint -p tsconfig.json"
+				"compile": "tsc -p ./",
+				"clean": "rm -rf lib",
+				"watch": "tsc -watch -p ./",
+				"run": "npm run compile ; node lib/index.js",
+				"refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
+				"test": "jest --config jest.config.js",
+				"lint": "tslint -p tsconfig.json"
 		},
 		"author": "hpb HTW",
 		"license": "MIT",

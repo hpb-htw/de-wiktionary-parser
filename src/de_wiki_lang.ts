@@ -305,7 +305,7 @@ export class PersonalpronomenFlexion extends Flexion {
 
 export class Hyphen {
     form : string = "";
-    additionalInformation: string = "";
+    additionalInformation: string[] = [];
     syllable: string[] = [];
 }
 

@@ -26,3 +26,4 @@ export class BadWikiSyntax extends Error {
         super(message);
     }
 }
+

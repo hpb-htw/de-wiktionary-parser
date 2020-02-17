@@ -123,12 +123,5 @@ describe("Single parts of a wiki text", ()=> {
             expect(pos.pos).toStrictEqual(expected[idx]);
         });
     });
-
-
-
-
-
-
-
 });
 
