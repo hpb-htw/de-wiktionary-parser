@@ -1,12 +1,13 @@
 import {
+    Body,
     Flexion,
     FlexionFixTemplate,
     FlexionTemplate,
     Kasus,
     PersonalpronomenFlexion,
-    SubstantivFlexion, VornameFlexion
+    SubstantivFlexion, VerbFlexion, VornameFlexion
 } from "./de_wiki_lang";
-import {BAD_FLEXION, BadWikiSyntax, statisticEventEmitter} from "./de_wiki_aux";
+import {BAD_FLEXION, BadWikiSyntax, GENERAL_ERROR, statisticEventEmitter} from "./de_wiki_aux";
 
 /**
  * test if a single line string introduce a flexion block.
@@ -37,11 +38,13 @@ export function isFlexion(blockTitle:string):boolean {
 /**
  * @param beginIdx   Begin-Index to seek the next line beginning with `{{`
  * @param wikiLines  Content of the wiki text, each line is an element of the parameter.
+ * @param body the body, to which this flexion belongs.
+ *
  * @return [number, ...] number: number of consumed line, that it how many lines are consumed
  *              from the line with index `beginIdx` (include) to the line with content `}}` (include)
  *
  * */
-export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, Flexion|undefined] {
+export function consumeFlexion(body:Body, beginIdx:number, wikiLines: string[]) : [number, Flexion|undefined] {
     let [lineIdx, line] = [beginIdx, wikiLines[beginIdx]];
     while (!line.startsWith("{{")) {
         lineIdx += 1;
@@ -52,10 +55,13 @@ export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, 
         let [countFlexionLine, flexion] = consumeSubstantivFlexion(lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
     } else if (VornameFlexion.testFlexion(line)) {
-        let [countFlexionLine, flexion] = consumeVornameFlexion(lineIdx, wikiLines);
+        let [countFlexionLine, flexion] = consumeVornameFlexion(body.lemma,lineIdx, wikiLines);
         return  [countConsumedLines + countFlexionLine, flexion];
     } else if(PersonalpronomenFlexion.testFlexion(line)) {
-        let [countFlexionLine, flexion] = consumePersonalPronomen(lineIdx, wikiLines);
+        let [countFlexionLine, flexion] = consumePersonalPronomen(body.lemma, lineIdx, wikiLines);
+        return [countConsumedLines + countFlexionLine, flexion];
+    } else if (VerbFlexion.testFlexion(line)) {
+        let [countFlexionLine, flexion] = consumeVerbFlexion(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
     } else {
         throw new BadWikiSyntax(`Unknown Flexion ${line}`);
@@ -76,12 +82,12 @@ export function consumeFlexion(beginIdx:number, wikiLines: string[]) : [number, 
  *                                      line `}}` (include).
  * */
 export function consumeSubstantivFlexion(lineIdx: number, wikiLines: string[]): [number, SubstantivFlexion | undefined] {
-    let [lineCount, cache] = collectSubstantivlikeFlexionToCache(lineIdx, wikiLines);
+    let [lineCount, cache] = collectFlexionToCache(lineIdx, wikiLines);
     let flexikon = parseSubtantivFlexion(cache.title, cache.lines);
     return [lineCount, flexikon];
 }
 
-function collectSubstantivlikeFlexionToCache(lineIdx: number, wikiLines: string[]): [number, {title:string, lines:string[]}] {
+function collectFlexionToCache(lineIdx: number, wikiLines: string[]): [number, {title:string, lines:string[]}] {
     const WIKI_LENGTH = wikiLines.length;
     let consumedLineIdx = lineIdx;
     let flexionCache: { title: string, lines: string[] } = {
@@ -156,20 +162,20 @@ function isIgnorableKasus(kasus:string) {
     return (kasus.startsWith(SubstantivFlexion.GENUS)) ||
             (kasus.startsWith("Bild")) ||
             (kasus.startsWith("mini|1|")) ||
-            (kasus=="}}") ||
+            (kasus==="}}") ||
             (kasus.search(/\d+px/) >= 0);
 }
 
 /** test data: see Rosa and Achim */
-export function consumeVornameFlexion(lineIdx: number, wikiLines:string[]): [number, VornameFlexion] {
-    let [lineCount, cache] = collectSubstantivlikeFlexionToCache(lineIdx, wikiLines);
-    let flexikon = parseVornameFlexion(cache.title, cache.lines);
+export function consumeVornameFlexion(lemma:string, lineIdx: number, wikiLines:string[]): [number, VornameFlexion] {
+    let [lineCount, cache] = collectFlexionToCache(lineIdx, wikiLines);
+    let flexikon = parseVornameFlexion(lemma, cache.title, cache.lines);
     return [lineCount, flexikon];
 
 
 }
 
-function parseVornameFlexion(title:string, lines:string[]):VornameFlexion {
+function parseVornameFlexion(lemma:string ,title:string, lines:string[]):VornameFlexion {
     let flexion:VornameFlexion = new VornameFlexion();
     let genus = title.split(/\s+/).slice(-1)[0];
     // there are only two type: either f for feminin or m for maskulin. But to keep code extensible let genus be an array
@@ -178,16 +184,88 @@ function parseVornameFlexion(title:string, lines:string[]):VornameFlexion {
         feedDetailedKasusToFlexion(title, lines, flexion);
     }catch (e) {
         // Vorname doesn't have detailed flexion list. Use other way to fill Kasus
-        statisticEventEmitter.emit(BAD_FLEXION, lines.slice(-5).join("\n"));
+
+        for (let line of lines) {
+            let [key,value] = line.split("=");
+            if (key === VornameFlexion.PLURAL) {
+                if (value !== undefined) {
+                    value = value.trim();
+                    flexion.nominativ.plural.push(value);
+                    flexion.genitiv.plural.push(value);
+                    flexion.dativ.plural.push(value);
+                    flexion.akkusativ.plural.push(value);
+                    // Singular (not sure)
+                    flexion.nominativ.singular.push(lemma);
+                    flexion.genitiv.singular.push(lemma);
+                    flexion.genitiv.singular.push(lemma + "s"); // << Not sure about it!
+                    flexion.dativ.singular.push(lemma);
+                    flexion.akkusativ.singular.push(lemma);
+                    statisticEventEmitter.emit(BAD_FLEXION, `Not sure about Genitiv Form of ${lemma}`);
+                } else {
+                    statisticEventEmitter.emit(BAD_FLEXION, `Expected a Plural Form for Parameter ${key}, lemma ${lemma}`);
+                }
+            } else {
+                statisticEventEmitter.emit(BAD_FLEXION, `Unknown parameter ${key} of '${lemma}' lines: ${line}`);
+            }
+        }
+
     }
     return flexion;
 }
 
 /*TODO*/
-export function consumePersonalPronomen(beginIdx: number, wikiLines:string[]):[number, PersonalpronomenFlexion] {
+export function consumePersonalPronomen(lemma:string, beginIdx: number, wikiLines:string[]):[number, PersonalpronomenFlexion] {
+    statisticEventEmitter.emit(BAD_FLEXION, `Not support PersonalPronomen for now, lemma: '${lemma}'`);
     let pFlexion = new PersonalpronomenFlexion(wikiLines[0]);
     return [1, pFlexion];
 }
 
+export function consumeVerbFlexion(lemma:string, lineIdx: number, wikiLines:string[]):[number, VerbFlexion] {
+    let [lineCount, cache] = collectFlexionToCache(lineIdx, wikiLines);
+    let flexikon = parseVerbFlexion(lemma,cache.title, cache.lines);
+    return [lineCount, flexikon];
+}
 
+function parseVerbFlexion(lemma:string, title:string, lines:string[]):VerbFlexion {
+    let flexion = new VerbFlexion();
+    for(let line of lines) {
+        let [key, value] = line.split("=");
+        try {
+            value = value ? value.trim() : "";
+        } catch (e) {
+            let errMsg = `msg: ${e.message} title: ${title} lines[0]: ${lines[0]} line: ${line}`;
+            statisticEventEmitter.emit(GENERAL_ERROR, new Error(errMsg));
+        }
+        if (key.startsWith(VerbFlexion.PRAESENS_ICH)) {
+            flexion.praesens.ich.push(value);
+        } else if (key.startsWith(VerbFlexion.PRAESENS_DU)) {
+            flexion.praesens.du.push(value);
+        } else if (key.startsWith(VerbFlexion.PRAESENS_ER_SIE_ES)) {
+            flexion.praesens.er_sie_es.push(value);
+        } else if (key.startsWith(VerbFlexion.PRAETERITUM_ICH)) {
+            flexion.imperfekt.push(value);
+        } else if (key.startsWith(VerbFlexion.KONJUNKTIV_II_ICH)) {
+            flexion.konjunktiv_II.push(value);
+        } else if (key.startsWith(VerbFlexion.IMPERATIV_SINGULAR)) {
+            flexion.imperativ.singular.push(value);
+        } else if (key.startsWith(VerbFlexion.IMPERATIV_PLURAL)) {
+            flexion.imperativ.plural.push(value);
+        } else if (key.startsWith(VerbFlexion.PARTIZIP_II)) {
+            flexion.perfekt.push(value);
+        } else if (key.startsWith(VerbFlexion.HILF_VERB)) {
+            flexion.hilfverb.push(value);
+        } else if (key.startsWith(VerbFlexion.WEITERE_KONJUGATIONEN)) {
+            statisticEventEmitter.emit(BAD_FLEXION, `Not support ${key} of ${lemma}; line: ${line} for now`);
+        } else if (ignoreableVerbFlexionParameter(key)) {
+            continue;
+        }else {
+            statisticEventEmitter.emit(BAD_FLEXION, `Unknown VerbFlexion parameter '${key}' of '${lemma}'; line: ${line}`);
+        }
+    }
+    return flexion;
+}
 
+function ignoreableVerbFlexionParameter(parameter:string):boolean {
+    // borrow function from Substantiv
+    return isIgnorableKasus(parameter) || parameter === "Flexion";
+}

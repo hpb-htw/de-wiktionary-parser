@@ -64,7 +64,7 @@ export namespace WikiBlockName {
         Aehnlichkeiten_1= "{{Ähnlichkeiten 1}}",
         Aehnlichkeiten_2= "{{Ähnlichkeiten 2}}";
     // Exceptional: Übersetzung
-    export const Uebungsetzungen = "{{Übersetzungen}}";
+    export const Uebersetzungen = "{{Übersetzungen}}";
 }
 
 // this can be used as map table or as a set to check if a simple template exists
@@ -121,7 +121,7 @@ export const WikiSimpleTemplate = {
 
 
 /**
- * One wiki text contain one or more pages  a page is a text from begin --or when it stats at the midle of a
+ * One wiki text contain one or more pages. A page is a text from begin --or when it starts at the midle of a
  * multiple pages text-- from a line begin with `== ` to the line before the next line, which also begin
  * with `== `.
  *
@@ -148,6 +148,12 @@ export class Title {
 }
 
 export class Body {
+
+    /**
+     *
+     * copy of Page.title.title, to the page this Body belongs.
+     * */
+    lemma: string;
 
     partofSpeech: PartOfSpeech;
 
@@ -221,7 +227,8 @@ export class Body {
     //   {{Entlehnungen}}
     //   {{Lemmaverweis}}
 
-    constructor(pos:PartOfSpeech) {
+    constructor(lemma:string, pos:PartOfSpeech) {
+        this.lemma = lemma;
         this.partofSpeech = pos;
     }
 
@@ -278,8 +285,81 @@ export class SubstantivFlexion extends Flexion {
 export class VornameFlexion extends SubstantivFlexion {
     static wiktionaryRef:string = "https://de.wiktionary.org/wiki/Hilfe:Vor-_und_Nachnamen/Grammatik_der_deutschen_Namen";
     static title:string = "Deutsch Vorname Übersicht";
+
+    static PLURAL = "Plural";
+
     static testFlexion(title:string): boolean {
         return title.includes(VornameFlexion.title);
+    }
+}
+/**
+ * Doku: https://de.wiktionary.org/wiki/Vorlage:Deutsch_Verb_%C3%9Cbersicht
+ * */
+export class VerbFlexion extends Flexion {
+    static title:string = "Deutsch Verb Übersicht";
+
+    // Tempus:
+    /**
+     * Präsens Zeit Singular von 1. 2. und 3. Person;
+     * (Das Attribut is in Latein um Umlaut in Variable-Name zu vermeinden, ebenso
+     * wie imperfekt statt Präteritum)
+     * */
+    praesens:  {ich: string[], du: string[], er_sie_es: string[]} = {
+        //Präsensform der 1. Person Singular
+        ich:[],
+        //Präsensform der 2. Person Singular
+        du:[],
+        //Präsensform der 3. Person Singular
+        er_sie_es:[]
+    };
+
+    /**
+     * anderem Wort für Präteritum; Präteritumform der 1. oder 3. Person Singular
+     * */
+    imperfekt: string[] = [];
+
+    /**
+     * Partizip II Form/Partizip Perfekt, mehrere Alternative
+     * */
+    perfekt: string[] = [];
+
+    /**
+     * Konjunktiv Präteritum der 1. oder 3. Person Singular
+     * */
+    konjunktiv_II:string[] = [];
+
+    /**
+     * Imperativ der 2. Person Singular und Plural
+     * */
+    imperativ: {
+        singular:  string[],
+        plural:    string[]
+    } = {
+        singular:[],
+        plural:[]
+    };
+
+    /**
+     * Angabe des Hilfsverbs
+     * */
+    hilfverb:string[] = [];
+
+    weitereKonjugationen:string = "";
+
+    static PRAESENS_ICH = "Präsens_ich";
+    static PRAESENS_DU = "Präsens_du";
+    static PRAESENS_ER_SIE_ES = "Präsens_er, sie, es";
+    //
+    static PRAETERITUM_ICH = "Präteritum_ich";
+    static KONJUNKTIV_II_ICH = "Konjunktiv II_ich";
+    static IMPERATIV_SINGULAR = "Imperativ Singular";
+    static IMPERATIV_PLURAL = "Imperativ Plural";
+    static PARTIZIP_II = "Partizip II";
+    static HILF_VERB = "Hilfsverb";
+    static WEITERE_KONJUGATIONEN = "Weitere_Konjugationen";
+
+    static testFlexion(title:string): boolean {
+        return title.includes((VerbFlexion.title));
     }
 }
 
@@ -299,6 +379,9 @@ export class PersonalpronomenFlexion extends Flexion {
         return PersonalpronomenFlexion.personalpromomen.includes(title.trim());
     }
 }
+
+
+
 
 export class Hyphen {
     form : string = "";
@@ -372,7 +455,7 @@ export const FlexionTemplate:string[] = [
     //"{{" + SubstantivFlexion.nachname,
 
     //(TODO:)
-    // "{{Deutsch Verb Übersicht",
+    "{{" + VerbFlexion.title,
     // "{{Deutsch Adjektiv Übersicht",
     // "{{Deutsch Toponym Übersicht",
     // ""

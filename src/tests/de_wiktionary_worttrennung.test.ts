@@ -12,7 +12,7 @@ describe("test consumeWorttrennung", () =>{
         let wikitext =
             `{{Worttrennung}}
 :sein, {{Pl.}} sei·ne <small>(mehrere besessene Objekte)</small>, ihr <small>(mehrere Besitzer)</small>`;
-        let body:Body = new Body({
+        let body:Body = new Body("sein",{
             pos: ["Possessivpronomen"],
             addition: []
         });
@@ -31,7 +31,7 @@ describe("test consumeWorttrennung", () =>{
         let wikitext =
             `{{Worttrennung}}
 :ich, {{Gen.}} mei·ner, {{va.|:}} mein, {{Dat.}} mir, {{Akk.}} mich; {{Pl.}} wir, {{Gen.}} un·ser, {{Dat.}} uns, {{Akk.}} uns`;
-        let body:Body = new Body({
+        let body:Body = new Body("ich", {
             pos: ["Pronomen"],
             addition: []
         });
@@ -62,7 +62,7 @@ describe("test consumeWorttrennung", () =>{
         let wikitext =
             `{{Worttrennung}}
 :Ei·sen·bal·kon, {{Pl.1}} Ei·sen·bal·kons, ''besonders süddeutsch, österreichisch und schweizerisch:'' {{Pl.2}} Ei·sen·bal·ko·ne`;
-        let body:Body = new Body({
+        let body:Body = new Body("Eisenbalkon",{
             pos: ["Substantiv"],
             addition: []
         });

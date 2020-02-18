@@ -62,7 +62,7 @@ function consumePage(beginIdx:number, wikiLines:string[]):[number, WikiPage] {
     let currentLine = wikiLines[lineIdx];
     do {
         if(currentLine !== undefined && currentLine.startsWith("=== ")) {
-            let [countBodyLength, body] = consumeBody(lineIdx, wikiLines);
+            let [countBodyLength, body] = consumeBody(page,lineIdx, wikiLines);
             page.body.push(body);
             lineIdx += countBodyLength -1;
         }
@@ -77,11 +77,11 @@ function consumePage(beginIdx:number, wikiLines:string[]):[number, WikiPage] {
  * consume all lines from a line beginning with `=== {{Wordart|...|...}} ===`
  * to the line just before the next line, which begins with `=== {{Word|...|...}} ===`
  * */
-export function consumeBody(beginIdx:number, wikiLines:string[]):[number, Body] {
+export function consumeBody(page: WikiPage, beginIdx:number, wikiLines:string[]):[number, Body] {
     let lineIdx = beginIdx;
     let [countPoSLength, pos] = consumePartOfSpeech(lineIdx, wikiLines);
     lineIdx += countPoSLength - 1;
-    let body = new Body(pos);
+    let body = new Body(page.title.title, pos);
     let skipEmptyLine = skipEmptyLines(lineIdx, wikiLines);
     lineIdx += skipEmptyLine - 1; // jump to next line after the last empty line
 
@@ -131,12 +131,12 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
         throw new BadWikiSyntax(`Programming error, a block cannot contain only empty strings`);
     }
     if (title === UEBERSETZUNGS_TABELL) {
-        title = WikiBlockName.Uebungsetzungen;
+        title = WikiBlockName.Uebersetzungen;
         block[0] = title;
         delete block[block.length - 1]; // remove the last "}}"
     }
     if ( isFlexion(title) ) {
-        let [_, flexion] = consumeFlexion(0, block);
+        let [_, flexion] = consumeFlexion(body,0, block);
         body.flexion = flexion;
     } else if (title === WikiBlockName.Lesungen){
         consumeUnknownBlock(body, block);

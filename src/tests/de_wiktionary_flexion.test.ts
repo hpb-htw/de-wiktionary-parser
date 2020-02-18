@@ -1,5 +1,10 @@
-import {consumeFlexion, consumeSubstantivFlexion, consumeVornameFlexion} from "../de_wiktionary_flexion";
-import {SubstantivFlexion} from "../de_wiki_lang";
+import {
+    consumeFlexion,
+    consumeSubstantivFlexion,
+    consumeVerbFlexion,
+    consumeVornameFlexion
+} from "../de_wiktionary_flexion";
+import {Body, SubstantivFlexion} from "../de_wiki_lang";
 import {expectObjectEqual} from "./object_expect";
 
 describe("test flexion", () => {
@@ -30,7 +35,10 @@ describe("test flexion", () => {
 |Akkusativ Plural=Pythons
 |Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
 }}`;
-        let [count, flexion]= consumeFlexion(0, wikitext.split("\n"));
+        let body = new Body("Python", {
+            pos:["Substantiv"], addition:[]
+        });
+        let [count, flexion]= consumeFlexion(body,0, wikitext.split("\n"));
         let expectedFlexion = {
             genus: ['m', 'f'],
             nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
@@ -64,7 +72,10 @@ describe("test flexion", () => {
 |Akkusativ Plural=Pythons
 |Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
 }}`;
-        let [count, flexion]= consumeFlexion(2, wikitext.split("\n"));
+        let body = new Body("Python", {
+            pos:["Substantiv"], addition:[]
+        });
+        let [count, flexion]= consumeFlexion(body,2, wikitext.split("\n"));
         let expectedFlexion = {
             genus: ['m', 'f'],
             nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
@@ -218,7 +229,7 @@ describe("Vorname Flexion", () =>{
             akkusativ: { singular: [ 'Rosa'],  plural: [ 'Rosas', 'Rosen' ] }
         };
 
-        let [lineCount, flexion] = consumeVornameFlexion(0, text.split('\n'));
+        let [lineCount, flexion] = consumeVornameFlexion("Rosa",0, text.split('\n'));
         expect(lineCount).toBe(14);
         expectObjectEqual(flexion, expectedFlexion);
 
@@ -232,22 +243,63 @@ describe("Vorname Flexion", () =>{
 
         let expectedFlexion = {
             genus: ['m'],
-            nominativ: { singular: [ ], plural: [  ] },
-            genitiv:   { singular: [ ], plural: [ ] },
-            dativ:     { singular: [ ],  plural: [ ] },
-            akkusativ: { singular: [ ],  plural: [ ] }
+            nominativ: { singular: [ "Achim" ], plural: [ "Achims" ] },
+            genitiv:   { singular: ["Achim", "Achims" ], plural: [ "Achims" ] },
+            dativ:     { singular: [ "Achim" ],  plural: [ "Achims" ] },
+            akkusativ: { singular: [ "Achim" ],  plural: [ "Achims" ] }
         };
 
-        let [lineCount, flexion] = consumeVornameFlexion(0, text.split('\n'));
+        let [lineCount, flexion] = consumeVornameFlexion("Achim",0, text.split('\n'));
         expect(lineCount).toBe(3);
         expectObjectEqual(flexion, expectedFlexion);
 
     });
-
 });
 
 
+describe("Verb Flexion", () => {
+    test("consumeVerbFlexion.fahren", () => {
+        let text =
+`{{Deutsch Verb Übersicht
+|Präsens_ich=fahre
+|Präsens_du=fährst
+|Präsens_er, sie, es=fährt
+|Präteritum_ich=fuhr
+|Partizip II=gefahren
+|Konjunktiv II_ich=führe
+|Imperativ Singular=fahr
+|Imperativ Singular*=fahre
+|Imperativ Plural=fahrt
+|Hilfsverb=sein
+|Hilfsverb*=haben
+}}`.split('\n');
+        let expected = {
+            // Tempus
+            // Singular, 1. 2. and 3. Person
+            "praesens": {
+                ich: ["fahre"],
+                du: ["fährst"],
+                er_sie_es:[ "fährt"]
+            },
+            "imperfekt": ["fuhr"],
+            "perfekt":   ["gefahren"],
 
+            //Modus
+            "konjunktiv_II": ["führe"],
+
+            "imperativ":{
+                "singular":  ["fahr","fahre"],
+                "plural":    ["fahrt"]
+            },
+
+            "hilfverb": ["sein", "haben"],
+            "weitereKonjugationen": ""
+        };
+        let [countLine, flexion] = consumeVerbFlexion("fahren",0, text);
+        expectObjectEqual(flexion, expected);
+        expect(countLine).toBe(text.length);
+    });
+});
 
 
 
