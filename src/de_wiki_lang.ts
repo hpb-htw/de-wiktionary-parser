@@ -356,6 +356,7 @@ export class VerbFlexion extends Flexion {
     static IMPERATIV_PLURAL = "Imperativ Plural";
     static PARTIZIP_II = "Partizip II";
     static HILF_VERB = "Hilfsverb";
+
     static WEITERE_KONJUGATIONEN = "Weitere_Konjugationen";
 
     static testFlexion(title:string): boolean {
@@ -371,10 +372,13 @@ export class AdjektivFlexion extends Flexion {
     komparativ:string[] = [];
     superlativ:string[] = [];
 
+    moreForm?:boolean;
+
     //
     static  POSITIV = "Positiv";
     static KOMPARATIV = "Komparativ";
     static SUPERLATIV = "Superlativ";
+    static KEIN_WEITERE_FORMEN = "keine weiteren Formen";
 
     static testFlexion(title:string): boolean {
         return title.includes((AdjektivFlexion.title));
@@ -468,14 +472,14 @@ export const FlexionTemplate:string[] = [
     "{{Deutsch Possessivpronomen|sein}}",
     "{{Deutsch Possessivpronomen|…}}", // what the hell
     "{{" + SubstantivFlexion.substantiv,
-    "{{" + SubstantivFlexion.substantiv_sch,
+    //"{{" + SubstantivFlexion.substantiv_sch,
     "{{" + VornameFlexion.title + " f",
     "{{" + VornameFlexion.title + " m",
     //"{{" + SubstantivFlexion.nachname,
 
     "{{" + VerbFlexion.title,
-    //(TODO:)
     "{{" + AdjektivFlexion.title,
+    //(TODO:)
     // "{{Deutsch Toponym Übersicht",
     // ""
 ];

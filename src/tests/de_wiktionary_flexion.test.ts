@@ -9,11 +9,6 @@ import {Body, SubstantivFlexion} from "../de_wiki_lang";
 import {expectObjectEqual} from "./object_expect";
 
 describe("test flexion", () => {
-
-
-
-
-
     test("consumeFlexion.python (beginIdx = 0)", ()=>{
         let wikitext =
             `== Python ({{Sprache|Deutsch}}) ==
@@ -300,6 +295,49 @@ describe("Verb Flexion", () => {
         expectObjectEqual(flexion, expected);
         expect(countLine).toBe(text.length);
     });
+
+    test("consumeVerbFlexion.reprimieren", () => {
+        let text =
+            `{{Deutsch Verb Übersicht
+|Präsens_ich=reprimiere
+|Präsens_du=reprimierst
+|Präsens_er, sie, es=reprimiert
+|Präteritum_ich=reprimierte
+|Partizip II=reprimiert
+|Konjunktiv II_ich=reprimierte
+|Imperativ Singular=reprimiere
+|Imperativ Singular*=reprimier
+|Imperativ Plural=reprimiert
+|Hilfsverb=haben
+|Weitere_Konjugationen
+}}`.split('\n');
+        let expected = {
+            // Tempus
+            // Singular, 1. 2. and 3. Person
+            "praesens": {
+                ich: ["reprimiere"],
+                du: ["reprimierst"],
+                er_sie_es:[ "reprimiert"]
+            },
+            "imperfekt": ["reprimierte"],
+            "perfekt":   ["reprimiert"],
+
+            //Modus
+            "konjunktiv_II": ["reprimierte"],
+
+            "imperativ":{
+                "singular":  ["reprimiere","reprimier"],
+                "plural":    ["reprimiert"]
+            },
+
+            "hilfverb": ["haben"],
+            "weitereKonjugationen": ""
+        };
+        let [countLine, flexion] = consumeVerbFlexion("reprimieren",0, text);
+        expectObjectEqual(flexion, expected);
+        expect(countLine).toBe(text.length);
+    });
+
 });
 
 

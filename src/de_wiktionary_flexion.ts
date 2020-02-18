@@ -240,36 +240,38 @@ function parseVerbFlexion(lemma:string, title:string, lines:string[]):VerbFlexio
     for(let line of lines) {
         let [key, value] = line.split("=");
         if (!ignoreableVerbFlexionParameter(key)) {
-            value = normalizedValueOfFlexion(lemma, line, value);
-            if (key.startsWith(VerbFlexion.PRAESENS_ICH)) {
-                flexion.praesens.ich.push(value);
-            } else if (key.startsWith(VerbFlexion.PRAESENS_DU)) {
-                flexion.praesens.du.push(value);
-            } else if (key.startsWith(VerbFlexion.PRAESENS_ER_SIE_ES)) {
-                flexion.praesens.er_sie_es.push(value);
-            } else if (key.startsWith(VerbFlexion.PRAETERITUM_ICH)) {
-                flexion.imperfekt.push(value);
-            } else if (key.startsWith(VerbFlexion.KONJUNKTIV_II_ICH)) {
-                flexion.konjunktiv_II.push(value);
-            } else if (key.startsWith(VerbFlexion.IMPERATIV_SINGULAR)) {
-                flexion.imperativ.singular.push(value);
-            } else if (key.startsWith(VerbFlexion.IMPERATIV_PLURAL)) {
-                flexion.imperativ.plural.push(value);
-            } else if (key.startsWith(VerbFlexion.PARTIZIP_II)) {
-                flexion.perfekt.push(value);
-            } else if (key.startsWith(VerbFlexion.HILF_VERB)) {
-                flexion.hilfverb.push(value);
-            } else if (key.startsWith(VerbFlexion.WEITERE_KONJUGATIONEN)) {
+            if (key.startsWith(VerbFlexion.WEITERE_KONJUGATIONEN)) {
                 statisticEventEmitter.emit(BAD_FLEXION, `Not support ${key} of ${lemma}; line: ${line} for now`);
-            } else {
-                statisticEventEmitter.emit(BAD_FLEXION, `Unknown VerbFlexion parameter '${key}' of '${lemma}'; line: ${line}`);
+            }else {
+                value = normalizedValueOfFlexion(lemma, line, key, value);
+                if (key.startsWith(VerbFlexion.PRAESENS_ICH)) {
+                    flexion.praesens.ich.push(value);
+                } else if (key.startsWith(VerbFlexion.PRAESENS_DU)) {
+                    flexion.praesens.du.push(value);
+                } else if (key.startsWith(VerbFlexion.PRAESENS_ER_SIE_ES)) {
+                    flexion.praesens.er_sie_es.push(value);
+                } else if (key.startsWith(VerbFlexion.PRAETERITUM_ICH)) {
+                    flexion.imperfekt.push(value);
+                } else if (key.startsWith(VerbFlexion.KONJUNKTIV_II_ICH)) {
+                    flexion.konjunktiv_II.push(value);
+                } else if (key.startsWith(VerbFlexion.IMPERATIV_SINGULAR)) {
+                    flexion.imperativ.singular.push(value);
+                } else if (key.startsWith(VerbFlexion.IMPERATIV_PLURAL)) {
+                    flexion.imperativ.plural.push(value);
+                } else if (key.startsWith(VerbFlexion.PARTIZIP_II)) {
+                    flexion.perfekt.push(value);
+                } else if (key.startsWith(VerbFlexion.HILF_VERB)) {
+                    flexion.hilfverb.push(value);
+                } else {
+                    statisticEventEmitter.emit(BAD_FLEXION, `Unknown VerbFlexion parameter '${key}' of '${lemma}'; line: ${line}`);
+                }
             }
         }
     }
     return flexion;
 }
 
-function normalizedValueOfFlexion(lemma:string, line:string, value:string):string {
+function normalizedValueOfFlexion(lemma:string, line:string, key:string, value:string):string {
     try {
         value = value.trim();
     } catch (e) {
@@ -296,15 +298,23 @@ function parseAdjektivFlexion(lemma:string, title:string, lines:string[]):Adjekt
     let flexion = new AdjektivFlexion();
     for(let line of lines) {
         let [key, value] = line.split("=");
-        if (!ignoreableAdjektivFlexionParameter(key)){
-            value = normalizedValueOfFlexion(lemma, line, value);
+        if (!ignoreableAdjektivFlexionParameter(key)) {
+            value = normalizedValueOfFlexion(lemma, line, key, value);
             if (key.startsWith(AdjektivFlexion.POSITIV)) {
                 flexion.positiv.push(value);
             } else if (key.startsWith(AdjektivFlexion.KOMPARATIV)) {
                 flexion.komparativ.push(value);
             } else if (key.startsWith(AdjektivFlexion.SUPERLATIV)) {
                 flexion.superlativ.push(value);
-            } else {
+            } else if (key.startsWith(AdjektivFlexion.KEIN_WEITERE_FORMEN)) {
+                if (value === "ja") {
+                    flexion.moreForm = true;
+                } else if (value === "nein") {
+                    flexion.moreForm = false;
+                } else {
+                    statisticEventEmitter.emit(BAD_FLEXION, `Unknown value ${value} of AdjektivFlexion parameter ${key}, lemma: ${lemma}`);
+                }
+            }else {
                 statisticEventEmitter.emit(BAD_FLEXION, `Unknown AdjektivFlexion parameter '${key}' of ${lemma}`);
             }
         }
