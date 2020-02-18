@@ -1,4 +1,5 @@
 import {
+    consumeAdjektivFlexion,
     consumeFlexion,
     consumeSubstantivFlexion,
     consumeVerbFlexion,
@@ -302,7 +303,46 @@ describe("Verb Flexion", () => {
 });
 
 
+describe("Adjektiv Flexion", ()=>{
+    test("consumeAdjektivFlexion.teuer", ()=>{
+        let text =
+`{{Deutsch Adjektiv Übersicht
+|Positiv=teuer
+|Komparativ=teurer
+|Superlativ=teuersten
+}}`.split('\n');
 
+        let expected = {
+            "positiv": ["teuer"],
+            "komparativ": ["teurer"],
+            "superlativ": ["teuersten"]
+        };
+
+        let [countLine, flexion] = consumeAdjektivFlexion("teuer", 0, text);
+        expect(countLine).toBe(text.length);
+        expectObjectEqual(flexion, expected);
+    });
+
+    test("consumeAdjektivFlexion.einbruchsicher", ()=>{
+        let text =
+            `{{Deutsch Adjektiv Übersicht
+|Positiv=einbruchsicher
+|Komparativ=einbruchsicherer
+|Komparativ*=einbruchsichrer
+|Superlativ=einbruchsichersten
+}}`.split('\n');
+
+        let expected = {
+            "positiv": ["einbruchsicher"],
+            "komparativ": ["einbruchsicherer", "einbruchsichrer"],
+            "superlativ": ["einbruchsichersten"]
+        };
+
+        let [countLine,  flexion] = consumeAdjektivFlexion("einbruchsicher", 0, text);
+        expect(countLine).toBe(text.length);
+        expectObjectEqual(flexion, expected);
+    });
+});
 
 
 

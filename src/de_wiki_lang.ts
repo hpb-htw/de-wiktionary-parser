@@ -363,6 +363,25 @@ export class VerbFlexion extends Flexion {
     }
 }
 
+export class AdjektivFlexion extends Flexion {
+    static title = "Deutsch Adjektiv Übersicht";
+    static notComparableSign = "—";
+
+    positiv:string[] = []; // there is only one form of positiv, keeping it in an array make converting tasks easier
+    komparativ:string[] = [];
+    superlativ:string[] = [];
+
+    //
+    static  POSITIV = "Positiv";
+    static KOMPARATIV = "Komparativ";
+    static SUPERLATIV = "Superlativ";
+
+    static testFlexion(title:string): boolean {
+        return title.includes((AdjektivFlexion.title));
+    }
+}
+
+
 export class PersonalpronomenFlexion extends Flexion {
 
     wikiTemplate :string;
@@ -454,9 +473,9 @@ export const FlexionTemplate:string[] = [
     "{{" + VornameFlexion.title + " m",
     //"{{" + SubstantivFlexion.nachname,
 
-    //(TODO:)
     "{{" + VerbFlexion.title,
-    // "{{Deutsch Adjektiv Übersicht",
+    //(TODO:)
+    "{{" + AdjektivFlexion.title,
     // "{{Deutsch Toponym Übersicht",
     // ""
 ];

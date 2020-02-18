@@ -1,4 +1,5 @@
 import {
+    AdjektivFlexion,
     Body,
     Flexion,
     FlexionFixTemplate,
@@ -19,6 +20,11 @@ export function isFlexion(blockTitle:string):boolean {
     if (FlexionTemplate.includes(blockTitle)) {
         return true;
     }
+    // if output of main programm shows something like a Flexion, for example
+    // [Symbol(badFlexion)]: {
+    // '{{Deutsch Adjektiv Übersicht': 11448,
+    // ....
+    // look here first
     if (blockTitle.startsWith("{{") && !blockTitle.endsWith("}}")) {
         statisticEventEmitter.emit(BAD_FLEXION, blockTitle);
     }
@@ -62,6 +68,9 @@ export function consumeFlexion(body:Body, beginIdx:number, wikiLines: string[]) 
         return [countConsumedLines + countFlexionLine, flexion];
     } else if (VerbFlexion.testFlexion(line)) {
         let [countFlexionLine, flexion] = consumeVerbFlexion(body.lemma, lineIdx, wikiLines);
+        return [countConsumedLines + countFlexionLine, flexion];
+    } else if (AdjektivFlexion.testFlexion(line)) {
+        let [countFlexionLine, flexion] = consumeAdjektivFlexion(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
     } else {
         throw new BadWikiSyntax(`Unknown Flexion ${line}`);
@@ -166,7 +175,7 @@ function isIgnorableKasus(kasus:string) {
             (kasus.search(/\d+px/) >= 0);
 }
 
-/** test data: see Rosa and Achim */
+/** test data: see Lemma Rosa and Achim */
 export function consumeVornameFlexion(lemma:string, lineIdx: number, wikiLines:string[]): [number, VornameFlexion] {
     let [lineCount, cache] = collectFlexionToCache(lineIdx, wikiLines);
     let flexikon = parseVornameFlexion(lemma, cache.title, cache.lines);
@@ -230,42 +239,81 @@ function parseVerbFlexion(lemma:string, title:string, lines:string[]):VerbFlexio
     let flexion = new VerbFlexion();
     for(let line of lines) {
         let [key, value] = line.split("=");
-        try {
-            value = value ? value.trim() : "";
-        } catch (e) {
-            let errMsg = `msg: ${e.message} title: ${title} lines[0]: ${lines[0]} line: ${line}`;
-            statisticEventEmitter.emit(GENERAL_ERROR, new Error(errMsg));
-        }
-        if (key.startsWith(VerbFlexion.PRAESENS_ICH)) {
-            flexion.praesens.ich.push(value);
-        } else if (key.startsWith(VerbFlexion.PRAESENS_DU)) {
-            flexion.praesens.du.push(value);
-        } else if (key.startsWith(VerbFlexion.PRAESENS_ER_SIE_ES)) {
-            flexion.praesens.er_sie_es.push(value);
-        } else if (key.startsWith(VerbFlexion.PRAETERITUM_ICH)) {
-            flexion.imperfekt.push(value);
-        } else if (key.startsWith(VerbFlexion.KONJUNKTIV_II_ICH)) {
-            flexion.konjunktiv_II.push(value);
-        } else if (key.startsWith(VerbFlexion.IMPERATIV_SINGULAR)) {
-            flexion.imperativ.singular.push(value);
-        } else if (key.startsWith(VerbFlexion.IMPERATIV_PLURAL)) {
-            flexion.imperativ.plural.push(value);
-        } else if (key.startsWith(VerbFlexion.PARTIZIP_II)) {
-            flexion.perfekt.push(value);
-        } else if (key.startsWith(VerbFlexion.HILF_VERB)) {
-            flexion.hilfverb.push(value);
-        } else if (key.startsWith(VerbFlexion.WEITERE_KONJUGATIONEN)) {
-            statisticEventEmitter.emit(BAD_FLEXION, `Not support ${key} of ${lemma}; line: ${line} for now`);
-        } else if (ignoreableVerbFlexionParameter(key)) {
-            continue;
-        }else {
-            statisticEventEmitter.emit(BAD_FLEXION, `Unknown VerbFlexion parameter '${key}' of '${lemma}'; line: ${line}`);
+        if (!ignoreableVerbFlexionParameter(key)) {
+            value = normalizedValueOfFlexion(lemma, line, value);
+            if (key.startsWith(VerbFlexion.PRAESENS_ICH)) {
+                flexion.praesens.ich.push(value);
+            } else if (key.startsWith(VerbFlexion.PRAESENS_DU)) {
+                flexion.praesens.du.push(value);
+            } else if (key.startsWith(VerbFlexion.PRAESENS_ER_SIE_ES)) {
+                flexion.praesens.er_sie_es.push(value);
+            } else if (key.startsWith(VerbFlexion.PRAETERITUM_ICH)) {
+                flexion.imperfekt.push(value);
+            } else if (key.startsWith(VerbFlexion.KONJUNKTIV_II_ICH)) {
+                flexion.konjunktiv_II.push(value);
+            } else if (key.startsWith(VerbFlexion.IMPERATIV_SINGULAR)) {
+                flexion.imperativ.singular.push(value);
+            } else if (key.startsWith(VerbFlexion.IMPERATIV_PLURAL)) {
+                flexion.imperativ.plural.push(value);
+            } else if (key.startsWith(VerbFlexion.PARTIZIP_II)) {
+                flexion.perfekt.push(value);
+            } else if (key.startsWith(VerbFlexion.HILF_VERB)) {
+                flexion.hilfverb.push(value);
+            } else if (key.startsWith(VerbFlexion.WEITERE_KONJUGATIONEN)) {
+                statisticEventEmitter.emit(BAD_FLEXION, `Not support ${key} of ${lemma}; line: ${line} for now`);
+            } else {
+                statisticEventEmitter.emit(BAD_FLEXION, `Unknown VerbFlexion parameter '${key}' of '${lemma}'; line: ${line}`);
+            }
         }
     }
     return flexion;
 }
 
+function normalizedValueOfFlexion(lemma:string, line:string, value:string):string {
+    try {
+        value = value.trim();
+    } catch (e) {
+        value = "";
+        let errMsg = `msg: ${e.message} lemma: '${lemma}' line: ${line}`;
+        statisticEventEmitter.emit(GENERAL_ERROR, new Error(errMsg));
+    }
+    return value;
+}
+
 function ignoreableVerbFlexionParameter(parameter:string):boolean {
     // borrow function from Substantiv
     return isIgnorableKasus(parameter) || parameter === "Flexion";
+}
+
+
+export function consumeAdjektivFlexion(lemma:string, lineIdx: number, wikiLines:string[]): [number, AdjektivFlexion]  {
+    let [lineCount, cache] = collectFlexionToCache(lineIdx, wikiLines);
+    let flexikon = parseAdjektivFlexion(lemma,cache.title, cache.lines);
+    return [lineCount, flexikon];
+}
+
+function parseAdjektivFlexion(lemma:string, title:string, lines:string[]):AdjektivFlexion {
+    let flexion = new AdjektivFlexion();
+    for(let line of lines) {
+        let [key, value] = line.split("=");
+        if (!ignoreableAdjektivFlexionParameter(key)){
+            value = normalizedValueOfFlexion(lemma, line, value);
+            if (key.startsWith(AdjektivFlexion.POSITIV)) {
+                flexion.positiv.push(value);
+            } else if (key.startsWith(AdjektivFlexion.KOMPARATIV)) {
+                flexion.komparativ.push(value);
+            } else if (key.startsWith(AdjektivFlexion.SUPERLATIV)) {
+                flexion.superlativ.push(value);
+            } else {
+                statisticEventEmitter.emit(BAD_FLEXION, `Unknown AdjektivFlexion parameter '${key}' of ${lemma}`);
+            }
+        }
+    }
+    return flexion;
+}
+
+function ignoreableAdjektivFlexionParameter(parameter:string):boolean {
+    // borrow function from Substantiv
+    return isIgnorableKasus(parameter) ||
+        (parameter.search(/thumb\|\d+\|/) >= 0) ;
 }
