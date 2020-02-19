@@ -48,7 +48,7 @@ describe("Single parts of a wiki text", ()=> {
         let [index, title] = consumeTitle(0, wikiText.split("\n"));
         expect(index).toBe(2);
         let expectedTitle = {
-            title:"singen",
+            lemma:"singen",
             language:"Deutsch"
         };
         expectObjectEqual(title, expectedTitle);
@@ -66,7 +66,7 @@ describe("Single parts of a wiki text", ()=> {
         let [index, title] = consumeTitle(2, wikiText.split("\n"));
         expect(index).toBe(1);
         let expectedTitle = {
-            title:"ich",
+            lemma:"ich",
             language:"Deutsch"
         };
         expectObjectEqual(title, expectedTitle);
@@ -98,7 +98,7 @@ describe("Single parts of a wiki text", ()=> {
         let [index, title] = consumeTitle(0, wikiText.split("\n"));
         expect(index).toBe(1);
         let expectedTitle = {
-            title:"Python",
+            lemma:"Python",
             language:"Deutsch"
         };
         expectObjectEqual(title, expectedTitle);
@@ -130,7 +130,7 @@ describe("Single parts of a wiki text", ()=> {
             ["Abkürzung", "Substantiv"]
         ];
         testData.forEach( (data,idx)=>{
-            let [count, pos] = consumePartOfSpeech(0,data);
+            let [count, pos] = consumePartOfSpeech("Python",0,data);
             expect(count).toBe(1);
             expect(pos.pos).toStrictEqual(expected[idx]);
         });

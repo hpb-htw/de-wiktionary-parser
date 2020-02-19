@@ -43,8 +43,13 @@ export function removeHTMLComment(htmlText:string) {
 }
 
 export class BadWikiSyntax extends Error {
-    constructor(message: string) {
+    lemma:string;
+    constructor(message: string, lemma:string) {
         super(message);
+        this.lemma = lemma;
     }
 }
 
+export function stripCurly(text: string): string {
+    return text.slice(0, text.length - 2).slice(2);
+}

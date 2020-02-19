@@ -1,6 +1,6 @@
 import {
     isGermanWord,
-    escape, removeHTMLComment,
+    escape, removeHTMLComment, stripCurly,
 } from "../de_wiki_aux";
 
 describe('de_wiki_aux', () => {
@@ -55,6 +55,13 @@ describe('de_wiki_aux', () => {
 |Akkusativ Plural=—
 }}`);
     });
+
+    test("stripp Curly", () => {
+        let text = "{{Siehe auch|[[polen]]}}";
+        let stripped = stripCurly(text);
+        expect(stripped).toBe("Siehe auch|[[polen]]");
+    });
+
 
 });
 

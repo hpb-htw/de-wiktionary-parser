@@ -13,13 +13,14 @@ before it ready to be distributed. Therefore it is mostly used by developer.
 Syntax:
 
 ```
-npm lib/index.js <dump.xml> <separator> > <output>.csv
+node lib/index.js <dump.xml> <separator> > <output>.csv
 ```
 
-Example
+Example: to create a CSV file `rawdata.csv` with use the string `<separator>` as separator-token,
+we can use this command:
 
 ```
-node lib/index.js dewiktionary-20191020-pages-articles.xml <separator> > rawdata.csv
+node lib/index.js dewiktionary-20191020-pages-articles.xml "<separator>" > rawdata.csv
 ```
 
 To make a `gz` file (easier to distribute)

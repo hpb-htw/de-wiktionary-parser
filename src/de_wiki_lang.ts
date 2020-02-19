@@ -1,9 +1,13 @@
+import {ProseFormatter} from "tslint/lib/formatters";
+
 export enum Lang {
     en = "Englisch",
     de = "Deutsch"
 }
 
 export const UEBERSETZUNGS_TABELL = "{{Ü-Tabelle|Ü-links=";
+export const NOT_APPLICABLE_SIGN = "—";
+export const WIKI_BASE_URL = "https://de.wiktionary.org/wiki/";
 
 export namespace WikiBlockName {
     export const Lesungen = "{{Lesungen}}",
@@ -36,7 +40,7 @@ export namespace WikiBlockName {
         Weibliche_Wortformen = "{{Weibliche Wortformen}}",
         Maennliche_Wortformen = "{{Männliche Wortformen}}",
         Verkleinerungsformen= "{{Verkleinerungsformen}}",
-        Vergroeßerungsformen= "{{Vergrößerungsformen}}",
+        Vergroesserungsformen= "{{Vergrößerungsformen}}",
         Oberbegriffe= "{{Oberbegriffe}}",
         Unterbegriffe= "{{Unterbegriffe}}",
 
@@ -139,10 +143,10 @@ export class WikiPage {
 }
 
 export class Title {
-    title:string;
+    lemma:string;
     language:string;
     constructor(title:string, language:string) {
-        this.title=title;
+        this.lemma=title;
         this.language = language;
     }
 }
@@ -241,6 +245,8 @@ export class PartOfSpeech {
 export class Flexion {
     // intend to be empty
 }
+
+
 export interface Kasus {
     singular:string[];
     plural:string[];
@@ -282,6 +288,7 @@ export class SubstantivFlexion extends Flexion {
     }
 }
 
+
 export class VornameFlexion extends SubstantivFlexion {
     static wiktionaryRef:string = "https://de.wiktionary.org/wiki/Hilfe:Vor-_und_Nachnamen/Grammatik_der_deutschen_Namen";
     static title:string = "Deutsch Vorname Übersicht";
@@ -292,6 +299,155 @@ export class VornameFlexion extends SubstantivFlexion {
         return title.includes(VornameFlexion.title);
     }
 }
+
+export class ToponymFlexion extends Flexion {
+
+    genus:string[] = ["n"];
+    link:string = WIKI_BASE_URL;
+
+    constructor(lemma:string) {
+        super();
+        this.link = WIKI_BASE_URL + lemma;
+    }
+
+
+    static title = "Deutsch Toponym Übersicht";
+    static testFlexion(titleLine:string): boolean {
+        return titleLine.trim().includes(ToponymFlexion.title);
+    }
+}
+
+
+export enum GrammaticalPerson {
+    maunal = 0,
+    ich = 1,
+    du =2,
+    er_sie_es = 3,
+}
+export class PersonalpronomenFlexion extends Flexion {
+
+    /**
+     * original wiki template
+     * */
+    nominativ : Kasus = {singular:[], plural: []};
+    genitiv : Kasus  = {singular:[], plural: []};
+    dativ : Kasus = {singular:[], plural: []};
+    akkusativ: Kasus = {singular:[], plural: []};
+
+    constructor(person:number) {
+        super();
+        let kasus : {
+            nominativ:Kasus, genitiv:Kasus, dativ:Kasus, akkusativ:Kasus
+        }|undefined;
+        switch (person) {
+            case GrammaticalPerson.ich: {
+                kasus = PersonalpronomenFlexion.ichPerson;
+            } break;
+            case GrammaticalPerson.du:{
+                kasus = PersonalpronomenFlexion.duPerson;
+            } break;
+            case GrammaticalPerson.er_sie_es:{
+                kasus = PersonalpronomenFlexion.er_sie_esPerson;
+            } default: {
+                // Nothing to do
+            }
+        }
+        if(kasus !== undefined) {
+            this.nominativ = kasus.nominativ;
+            this.genitiv = kasus.genitiv;
+            this.dativ = kasus.dativ;
+            this.akkusativ = kasus.akkusativ;
+        }
+    }
+
+    static ichPerson: {
+        nominativ:Kasus,
+        genitiv:Kasus,
+        dativ:Kasus,
+        akkusativ:Kasus
+    } = {
+        nominativ: {
+            singular: ["ich"],
+            plural: ["wir"]
+        },
+        genitiv : {
+            singular: ["meiner"],
+            plural: ["unser"]
+        },
+        dativ: {
+            singular: ["mir"],
+            plural: ["uns"]
+        },
+        akkusativ : {
+            singular: ["mich"],
+            plural: ["uns"]
+        }
+    };
+
+    static duPerson: {
+        nominativ:Kasus,
+        genitiv:Kasus,
+        dativ:Kasus,
+        akkusativ:Kasus
+    } =  {
+        nominativ: {
+            singular: ["du"],
+            plural: ["ihr"]
+        },
+        genitiv : {
+            singular: ["deiner"],
+            plural: ["euer"]
+        },
+        dativ: {
+            singular: ["dir"],
+            plural: ["euch"]
+        },
+        akkusativ : {
+            singular: ["dich"],
+            plural: ["euch"]
+        }
+    };
+
+    static er_sie_esPerson : {
+        nominativ:Kasus,
+        genitiv:Kasus,
+        dativ:Kasus,
+        akkusativ:Kasus
+    } =  {
+        nominativ: {
+            singular: ["er",    "sie",    "es"],
+            plural:   ["sie"]
+        },
+        genitiv : {
+            singular: ["seiner", "ihrer", "seiner"],
+            plural:   ["ihrer"]
+        },
+        dativ: {
+            singular: ["ihm",    "ihr",   "ihm"],
+            plural:   ["ihnen"]
+        },
+        akkusativ : {
+            singular: ["ihn",     "sie",    "es"],
+            plural:   ["sie"]
+        }
+    };
+    static fixPersonalpromomen:string[] = [
+        "{{Deutsch Personalpronomen 1}}",
+        "{{Deutsch Personalpronomen 2}}",
+        "{{Deutsch Personalpronomen 3}}"
+    ];
+
+    static title = "Deutsch Pronomen Übersicht";
+
+    static testFlexion(title:string):boolean {
+        return PersonalpronomenFlexion.fixPersonalpromomen.includes(title.trim()) ||
+            title.trim().includes(PersonalpronomenFlexion.title);
+    }
+}
+
+
+
+
 /**
  * Doku: https://de.wiktionary.org/wiki/Vorlage:Deutsch_Verb_%C3%9Cbersicht
  * */
@@ -366,7 +522,7 @@ export class VerbFlexion extends Flexion {
 
 export class AdjektivFlexion extends Flexion {
     static title = "Deutsch Adjektiv Übersicht";
-    static notComparableSign = "—";
+
 
     positiv:string[] = []; // there is only one form of positiv, keeping it in an array make converting tasks easier
     komparativ:string[] = [];
@@ -384,26 +540,6 @@ export class AdjektivFlexion extends Flexion {
         return title.includes((AdjektivFlexion.title));
     }
 }
-
-
-export class PersonalpronomenFlexion extends Flexion {
-
-    wikiTemplate :string;
-    constructor(wikiTemplate:string) {
-        super();
-        this.wikiTemplate = wikiTemplate;
-    }
-
-    static personalpromomen:string[] = [
-        "{{Deutsch Personalpronomen 1}}",
-        "{{Deutsch Personalpronomen 3}}"
-    ];
-    static testFlexion(title:string):boolean {
-        return PersonalpronomenFlexion.personalpromomen.includes(title.trim());
-    }
-}
-
-
 
 
 export class Hyphen {
@@ -460,29 +596,30 @@ export class Example {
  *
  * */
 export const FlexionFixTemplate:string[] =
-    PersonalpronomenFlexion.personalpromomen;
+    PersonalpronomenFlexion.fixPersonalpromomen;
 
 /**
  * these flexions need an argument ???
  * */
-export const FlexionTemplate:string[] = [
+export const FlexionTemplate:string[] = ([
     // Possessiv Pronomen
     "{{Deutsch Possessivpronomen|mein}}",
     "{{Deutsch Possessivpronomen|dein}}",
     "{{Deutsch Possessivpronomen|sein}}",
     "{{Deutsch Possessivpronomen|…}}", // what the hell
     "{{" + SubstantivFlexion.substantiv,
-    //"{{" + SubstantivFlexion.substantiv_sch,
+    "{{" + PersonalpronomenFlexion.title,
+    //"{{" + SubstantivFlexion.substantiv_sch, //<< TODO
     "{{" + VornameFlexion.title + " f",
     "{{" + VornameFlexion.title + " m",
     //"{{" + SubstantivFlexion.nachname,
 
     "{{" + VerbFlexion.title,
     "{{" + AdjektivFlexion.title,
+    "{{" + ToponymFlexion.title,
     //(TODO:)
-    // "{{Deutsch Toponym Übersicht",
     // ""
-];
+]).concat(PersonalpronomenFlexion.fixPersonalpromomen);
 
 export interface EndTeil {
     //TODO

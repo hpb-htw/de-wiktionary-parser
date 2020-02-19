@@ -10,7 +10,7 @@ import {
     INGORE_WORD,
     NO_CONSUME_FOR_BLOCK,
     removeHTMLComment,
-    statisticEventEmitter
+    statisticEventEmitter, stripCurly
 } from "./de_wiki_aux";
 import {consumeFlexion, isFlexion} from "./de_wiktionary_flexion";
 
@@ -79,9 +79,9 @@ function consumePage(beginIdx:number, wikiLines:string[]):[number, WikiPage] {
  * */
 export function consumeBody(page: WikiPage, beginIdx:number, wikiLines:string[]):[number, Body] {
     let lineIdx = beginIdx;
-    let [countPoSLength, pos] = consumePartOfSpeech(lineIdx, wikiLines);
+    let [countPoSLength, pos] = consumePartOfSpeech(page.title.lemma, lineIdx, wikiLines);
     lineIdx += countPoSLength - 1;
-    let body = new Body(page.title.title, pos);
+    let body = new Body(page.title.lemma, pos);
     let skipEmptyLine = skipEmptyLines(lineIdx, wikiLines);
     lineIdx += skipEmptyLine - 1; // jump to next line after the last empty line
 
@@ -128,14 +128,14 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
         title = block.shift();
     }
     if(title === undefined){
-        throw new BadWikiSyntax(`Programming error, a block cannot contain only empty strings`);
+        throw new BadWikiSyntax(`Programming error, a block cannot contain only empty strings`, body.lemma);
     }
     if (title === UEBERSETZUNGS_TABELL) {
         title = WikiBlockName.Uebersetzungen;
         block[0] = title;
         delete block[block.length - 1]; // remove the last "}}"
     }
-    if ( isFlexion(title) ) {
+    if ( isFlexion(body, title) ) {
         let [_, flexion] = consumeFlexion(body,0, block);
         body.flexion = flexion;
     } else if (title === WikiBlockName.Lesungen){
@@ -193,7 +193,7 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
 
 
 function consumeUnknownBlock(body:Body, block:string[]) {
-    statisticEventEmitter.emit(NO_CONSUME_FOR_BLOCK, block[0]);
+    statisticEventEmitter.emit(NO_CONSUME_FOR_BLOCK, block[0], body.lemma);
 }
 
 /**
@@ -218,10 +218,10 @@ export function consumeTitle(beginIdx: number, wikiLines: string[]): [number, Ti
             let language = titleParts[1].slice(3, size - 3).split('|')[1];
             title = new Title(text, language);
         } else {
-            throw new BadWikiSyntax(`Title line must be embraced by '== ' and ' ==', got '${line}'`);
+            throw new BadWikiSyntax(`Title line must be embraced by '== ' and ' ==', got '${line}'`, "(Cannot parse lemma)");
         }
     } else {
-        throw new BadWikiSyntax(`A Wikipage must contain a title, which the line embraced by double equal sign.`);
+        throw new BadWikiSyntax(`A Wikipage must contain a title, which the line embraced by double equal sign.`, "(Cannot parse lemma)");
     }
     return [1+ lineIdx - beginIdx, title];
 }
@@ -235,7 +235,7 @@ export function consumeTitle(beginIdx: number, wikiLines: string[]): [number, Ti
  *                               (exclude).
  *
  * */
-export function consumePartOfSpeech(beginIdx: number, wikiLines: string[]): [number, PartOfSpeech] {
+export function consumePartOfSpeech(lemma:string, beginIdx: number, wikiLines: string[]): [number, PartOfSpeech] {
     const WIKI_LENGTH = wikiLines.length;
     let lineIdx = beginIdx;
     let headLine = wikiLines[lineIdx];
@@ -249,7 +249,7 @@ export function consumePartOfSpeech(beginIdx: number, wikiLines: string[]): [num
         pos.pos = parseWortart(headLine);
         return [countHeadLength+1, pos];
     } else {
-        throw new BadWikiSyntax(`Cannot find a line with pattern '=== {{Wordart|...|...}} ===`);
+        throw new BadWikiSyntax(`Cannot find a line with pattern '=== {{Wordart|...|...}} ===`, lemma);
     }
 }
 
@@ -279,9 +279,7 @@ function stripEqualMark(headLine: string): string {
     return headLine.slice(countMark, headLine.length - countMark);
 }
 
-function stripCurly(text: string): string {
-    return text.slice(0, text.length - 2).slice(2);
-}
+
 
 function wikiWordartToWordArt(wikitext: string): string {
     let parts = wikitext.split("|");

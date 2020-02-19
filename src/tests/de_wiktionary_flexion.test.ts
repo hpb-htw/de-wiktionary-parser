@@ -1,12 +1,13 @@
 import {
     consumeAdjektivFlexion,
-    consumeFlexion,
+    consumeFlexion, consumePersonalPronomen,
     consumeSubstantivFlexion,
     consumeVerbFlexion,
     consumeVornameFlexion
 } from "../de_wiktionary_flexion";
 import {Body, SubstantivFlexion} from "../de_wiki_lang";
 import {expectObjectEqual} from "./object_expect";
+import {BadWikiSyntax} from "../de_wiki_aux";
 
 describe("test flexion", () => {
     test("consumeFlexion.python (beginIdx = 0)", ()=>{
@@ -91,7 +92,7 @@ describe("test flexion", () => {
 
 describe("Substantiv Flexion", ()=>{
 
-    test("consumeSubstantivFlexion.wort", () => {
+    test("consumeSubstantivFlexion.Wort", () => {
         let wikiText =
             `{{Siehe auch|[[wort]]}}
 {{Wort der Woche|23|2006}}
@@ -112,7 +113,7 @@ describe("Substantiv Flexion", ()=>{
 |Akkusativ Plural=Wörter
 }}
 `;
-        let [lastIdx, flexion] = consumeSubstantivFlexion(5, wikiText.split("\n"));
+        let [lastIdx, flexion] = consumeSubstantivFlexion("Wort",5, wikiText.split("\n"));
         let expectedFlexion: SubstantivFlexion =  {
             genus: ['n'],
             nominativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] },
@@ -142,19 +143,19 @@ describe("Substantiv Flexion", ()=>{
 |Akkusativ Plural=Ferien
 }}
 `;
-        let [count, flexion]= consumeSubstantivFlexion(2,wikitext.split("\n"));
+        let [count, flexion]= consumeSubstantivFlexion("Ferien", 2,wikitext.split("\n"));
         let expectedFlexion = {
             genus: ['0'],
-            nominativ: { singular: [ '—' ], plural: [ 'Ferien' ] },
-            genitiv:   { singular: [ '—' ], plural: [ 'Ferien' ] },
-            dativ:     { singular: [ '—' ], plural: [ 'Ferien' ] },
-            akkusativ: { singular: [ '—' ], plural: [ 'Ferien' ] }
+            nominativ: { singular: [], plural: [ 'Ferien' ] },
+            genitiv:   { singular: [], plural: [ 'Ferien' ] },
+            dativ:     { singular: [], plural: [ 'Ferien' ] },
+            akkusativ: { singular: [], plural: [ 'Ferien' ] }
         };
         expect(count).toBe(12);
         expect( JSON.parse(JSON.stringify(flexion)) )
             .toStrictEqual(JSON.parse(JSON.stringify(expectedFlexion)));
         // other test
-        [count, flexion]= consumeSubstantivFlexion(3,wikitext.split("\n"));
+        [count, flexion]= consumeSubstantivFlexion("Ferien",3,wikitext.split("\n"));
         expect(count).toBe(11);
         expectObjectEqual(flexion, expectedFlexion);
     });
@@ -181,7 +182,7 @@ describe("Substantiv Flexion", ()=>{
 |Akkusativ Plural=Pythons
 |Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
 }}`;
-        let [count, flexion]= consumeSubstantivFlexion(0,wikitext.split("\n"));
+        let [count, flexion]= consumeSubstantivFlexion("Python", 0,wikitext.split("\n"));
         let expectedFlexion = {
             genus: ['m', 'f'],
             nominativ: { singular: [ 'Python', 'Python' ], plural: [ 'Pythons' ] },
@@ -250,6 +251,118 @@ describe("Vorname Flexion", () =>{
         expectObjectEqual(flexion, expectedFlexion);
 
     });
+
+    test("consumeVornameFlexion.Angelikus", ()=>{
+        let text =
+`{{Deutsch Vorname Übersicht m
+|Nominativ Plural=Angelikusse
+|Genitiv Plural=Angelikusse
+|Dativ Plural=Angelikussen
+|Akkusativ Angelikusse
+}}`.split('\n');
+
+        const runable = () => {
+            let [lineCount, flexion] = consumeVornameFlexion("Angelikus", 0, text);
+        };
+        expect(runable).toThrow(Error); // Cannot use customized exception !!!
+    });
+
+});
+
+describe("PersonalPronomen", () => {
+    test("ich-Person", () => {
+        let text =
+            `{{Deutsch Personalpronomen 1}}`.split("\n");
+        let expected = {
+            nominativ: {
+                singular: ["ich"],
+                plural: ["wir"]
+            },
+            genitiv: {
+                singular: ["meiner"],
+                plural: ["unser"]
+            },
+            dativ: {
+                singular: ["mir"],
+                plural: ["uns"]
+            },
+            akkusativ: {
+                singular: ["mich"],
+                plural: ["uns"]
+            }
+        };
+        let [countLine, flexion] = consumePersonalPronomen("ich", 0, text);
+        expect(countLine).toBe(1);
+        expectObjectEqual(flexion, expected);
+    });
+
+    test("consumePersonalPronomen.mir", () => {
+        let text = `{{Deutsch Pronomen Übersicht
+|Nominativ Singular=—
+|Nominativ Plural=—
+|Genitiv Singular=meiner
+|Genitiv Singular*=meine
+|Genitiv Singular**=meines
+|Genitiv Plural=unser
+|Genitiv Plural*=unsre
+|Genitiv Plural**=unsers
+|Dativ Singular=mir
+|Dativ Plural=uns
+|Akkusativ Singular=mich
+|Akkusativ Plural=uns
+}}`.split('\n');
+        let expected = {
+            nominativ: {
+                singular: [],
+                plural: []
+            },
+            genitiv: {
+                singular: ["meiner", "meine", "meines"],
+                plural: ["unser", "unsre", "unsers"]
+            },
+            dativ: {
+                singular: ["mir"],
+                plural: ["uns"]
+            },
+            akkusativ: {
+                singular: ["mich"],
+                plural: ["uns"]
+            }
+        };
+        let [countLine, flexion] = consumePersonalPronomen("ich", 0, text);
+        expect(countLine).toBe(text.length);
+        expectObjectEqual(flexion, expected);
+    });
+
+});
+
+
+describe("Toponym Flexion", () => {
+   test("consumeToponymFlexion.Polen", () =>{
+        let text =
+`{{Deutsch Toponym Übersicht
+|Bild 1=Flag of Poland.svg|250px|1|die Flagge ''Polens''
+|Bild 2=EU location POL.png|250px|1|die Lage ''Polens''
+}}`.split("\n");
+       let expected = {
+           nominativ: {
+               singular: ["Polen"],
+               plural: []
+           },
+           genitiv: {
+               singular: ["Polen", "Polens"],
+               plural: []
+           },
+           dativ: {
+               singular: ["Polen"],
+               plural: []
+           },
+           akkusativ: {
+               singular: ["Polen"],
+               plural: ["uns"]
+           }
+       };
+   });
 });
 
 
