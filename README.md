@@ -8,7 +8,25 @@ executable command of project `dxtionary-db`.
 This package is design to be used to prepare data for `dxtionary` Extension
 before it ready to be distributed. Therefore it is mostly used by developer.
 
+## Install
+
+This package uses the NodeJS-package `lib-expat` to parser XML files, which depends on 
+a C++ Compiler. So it works well on a linux with well-configured 
+[node-gyp](https://github.com/nodejs/node-gyp).
+Unfortunately I don't have time to test this package on others systems. 
+
 ## Usage
+
+1. Download the dump file from https://dumps.wikimedia.org/backup-index.html 
+   (Choose a Mirror) 
+   → `dumps/dewiki/` 
+   → some version this version is now referenced as `${version}`
+   → `dewiki-${version}-pages-articles.xml.bz2`)
+2. Extract the download pages somewhere, it takes app. > 1.3GB.
+3. Run `wikinary-eintopf dewiki-${version}-pages-articles.xml`. This command create a 
+   SQLite3 Database named `dewiki-${version}-pages-articles.xml.db` in the current 
+   working directory. This file contains only pages titled `{{Sprache|Deutsch}}`. 
+   You can use this file as a dictionary for the extension „dxtionary“. 
 
 Syntax:
 
@@ -43,3 +61,12 @@ id<separator>title<separator>text
 ```
 
 (TODO)
+
+## Limitation
+
+This package works *per-design* only with the German dump file. There are two reasons for
+this design:
+
+1. „dxtionary“ is designed to help me writing German text.
+2. Size is matter. „dxtionary“ is design to work offline, so it must access an offline database. 
+A big Database is –in my opinion– not a good deal by distributing an extension.
