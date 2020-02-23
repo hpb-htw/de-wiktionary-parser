@@ -138,12 +138,12 @@ statisticEventEmitter.addListener(INGORE_WORD, (word:string)=> {
 
 export function getStatistic(maximum:number = 5) {
     let result = {
-        [PARSE_WIKI_TEXT]: statisticCollect[PARSE_WIKI_TEXT],
-        [WIKI_OK] : statisticCollect[WIKI_OK] ,
-        [INGORE_WORD]: statisticCollect[INGORE_WORD],
-        [GENERAL_ERROR]: {},
-        [NO_CONSUME_FOR_BLOCK]:{},
-        [BAD_FLEXION]: {},
+        [PARSE_WIKI_TEXT.toString()]: statisticCollect[PARSE_WIKI_TEXT],
+        [WIKI_OK.toString()] : statisticCollect[WIKI_OK] ,
+        [INGORE_WORD.toString()]: statisticCollect[INGORE_WORD],
+        [GENERAL_ERROR.toString()]: {},
+        [NO_CONSUME_FOR_BLOCK.toString()]:{},
+        [BAD_FLEXION.toString()]: {},
     };
     function summaryLemma(statistic:any) { // structure: {count:number, lemma:[]}
         let lemma = statistic.lemma.slice(0, maximum).join(", ");
@@ -158,17 +158,17 @@ export function getStatistic(maximum:number = 5) {
     let badFlexionKeys = Object.keys( statisticCollect[BAD_FLEXION] ).slice(0, maximum);
     badFlexionKeys.forEach( (key)=>{
         // @ts-ignore
-        result[BAD_FLEXION][key] = summaryLemma( statisticCollect[BAD_FLEXION][key] );
+        result[BAD_FLEXION.toString()][key] = summaryLemma( statisticCollect[BAD_FLEXION][key] );
     });
     let noConsumerForBlockKeys = Object.keys( statisticCollect[NO_CONSUME_FOR_BLOCK] ).slice(0, maximum);
     noConsumerForBlockKeys.forEach( (key)=>{
         // @ts-ignore
-        result[NO_CONSUME_FOR_BLOCK][key] = summaryLemma( statisticCollect[NO_CONSUME_FOR_BLOCK][key] );
+        result[NO_CONSUME_FOR_BLOCK.toString()][key] = summaryLemma( statisticCollect[NO_CONSUME_FOR_BLOCK][key] );
     });
     let generalErrorKeys = Object.keys( statisticCollect[GENERAL_ERROR] ).slice(0, maximum);
     generalErrorKeys.forEach(key =>{
        // @ts-ignore
-       result[GENERAL_ERROR][key] = statisticCollect[GENERAL_ERROR][key];
+       result[GENERAL_ERROR.toString()][key] = statisticCollect[GENERAL_ERROR][key];
     });
     return result;
 }

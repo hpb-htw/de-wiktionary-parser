@@ -1,9 +1,8 @@
 #! /usr/bin/env node
 import * as path from "path";
 import {importDic, Entry, getStatistic} from "./wiktionary";
+import {writeFileSync} from "fs";
 
-
-const SEPARATOR = "<separator>";
 
 let count = 0;
 
@@ -38,23 +37,18 @@ if(argv.length !== 2) {
 let xmlPath = path.resolve(argv[0]);
 let delimiter = argv[1];
 let syncStdOutInsertEntriesFn = makeInsertEntriesFn(delimiter);
+let statisticFileName = 'statistic.json';
 
 // print header
 console.log(`id${delimiter}title${delimiter}text`);
-// print contens
+// print contents
 importDic(xmlPath, noOpFilterFN, syncStdOutInsertEntriesFn)
     .then( (countGermanWords) => {
         console.error({fileName: "index.ts", countGermanWords });
-        console.error(getStatistic(15) );
+        let statistics = JSON.stringify( getStatistic(50), null, 2 );
+        writeFileSync(statisticFileName, statistics, 'utf8');
         return countGermanWords;
     })
-    /*.then( () => {
-        return verify();
-    })
-    .then((verifyCount) => {
-        console.error({fileName: "index.ts", verifyCount });
-        console.error(getStatistic() );
-    })*/
     .catch((ex) => {
         console.error(ex);
     });
