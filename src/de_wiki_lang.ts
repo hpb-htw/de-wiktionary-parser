@@ -136,7 +136,7 @@ export const WikiSimpleTemplate = {
  * */
 export class WikiPage {
     title: Title;                  // everything from begin to the line begining with `== ` (Double Equal sign)
-    body: Body[] = [];             // everything from `=== ` to the line before the next line geginning with ` ===`
+    body: Body[] = [];             // everything from `=== ` to the line before the next line beginning with ` ===`
     constructor(title:Title) {
         this.title = title;
     }
