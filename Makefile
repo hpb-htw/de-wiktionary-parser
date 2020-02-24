@@ -1,11 +1,11 @@
 MAIN=lib/index.js
 SRC_TS=$(wildcard src/*.ts)
-RAW_CSV_GZ=../big-file/rawdata.csv.gz
+RAW_CSV_GZ=../big-file/dewiktionary.csv.gz
 WIKI_DUMP=../big-file/dewiktionary-20191020-pages-articles.xml
 CSV_DELIMITER="<separator>"
 
 .PHONY:all
-all: $(RAW_CSV_GZ)
+all: $(MAIN) $(RAW_CSV_GZ)
 
 
 .PHONY:main
