@@ -2,12 +2,12 @@
 	"name": "de-wiktionary-parser",
 	"version": "1.0.0",
 	"description": "parse XML wiki dump to importable file",
-	"main": "./lib/index.js",
+	"main": "./lib/main.js",
 	"bin": {
 		"de-wiktionary-parser": "./lib/index.js"
 	},
 	"scripts": {
-		"compile": "make main",
+		"compile": "make bin main",
 		"clean": "make clean",
 		"watch": "tsc -watch -p ./",
 		"refresh": "make refresh",

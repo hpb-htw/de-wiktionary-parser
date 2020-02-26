@@ -1,5 +1,3 @@
-import {ProseFormatter} from "tslint/lib/formatters";
-
 export enum Lang {
     en = "Englisch",
     de = "Deutsch"
@@ -125,7 +123,7 @@ export const WikiSimpleTemplate = {
 
 
 /**
- * One wiki text contain one or more pages. A page is a text from begin --or when it starts at the midle of a
+ * One wiki entry contain one or more pages. A page is a text from begin --or when it starts at the midle of a
  * multiple pages text-- from a line begin with `== ` to the line before the next line, which also begin
  * with `== `.
  *
@@ -134,6 +132,7 @@ export const WikiSimpleTemplate = {
  * (`=== `) and ends with the line before the next line beginning with Triple Equal. Line beginning with Triple Equal
  * are partOfSpeech.
  * */
+export type WikiEntry = WikiPage[];
 export class WikiPage {
     title: Title;                  // everything from begin to the line begining with `== ` (Double Equal sign)
     body: Body[] = [];             // everything from `=== ` to the line before the next line beginning with ` ===`

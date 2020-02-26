@@ -1,21 +1,27 @@
-MAIN=lib/index.js
+BIN=lib/index.js
+MAIN=lib/main.js
 SRC_TS=$(wildcard src/*.ts)
 RAW_CSV_GZ=../big-file/dewiktionary.csv.gz
 WIKI_DUMP=../big-file/dewiktionary-20191020-pages-articles.xml
 CSV_DELIMITER="<separator>"
 
-.PHONY:all
-all: $(MAIN) $(RAW_CSV_GZ)
 
+
+.PHONY:all
+all: $(BIN) $(RAW_CSV_GZ)
 
 .PHONY:main
 main: $(MAIN)
 
-$(MAIN): $(SRC_TS)
+
+.PHONY:bin
+bin: $(BIN)
+
+$(BIN) $(MAIN): $(SRC_TS)
 	tsc -p ./
 
 $(RAW_CSV_GZ): $(MAIN) $(WIKI_DUMP)
-	node $(MAIN) $(WIKI_DUMP) $(CSV_DELIMITER) | gzip -f - > $(RAW_CSV_GZ)
+	node $(BIN) $(WIKI_DUMP) $(CSV_DELIMITER) | gzip -f - > $(RAW_CSV_GZ)
 
 
 .PHONY:clean

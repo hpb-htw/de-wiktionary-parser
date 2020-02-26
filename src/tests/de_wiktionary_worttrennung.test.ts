@@ -77,6 +77,19 @@ describe("test consumeWorttrennung", () =>{
         expect(eisenbalkone).toStrictEqual(["Ei", "sen", "bal", "ko", "ne"]);
     });
 
+    test(":Ge·schoß·hö·hen", ()=>{
+        let wikiText = `{{Worttrennung}}
+:Ge·schoß·hö·hen`.split('\n');
+        let body:Body = new Body("Geschosshöhen", {
+            pos: ["Deklinierte Form"],
+            addition: []
+        });
+        consumeWorttrennung(body, wikiText);
+        let hyphens = body.hyphen;
+        let word = hyphens[0].syllable;
+        console.log(word);
+        expect(word).toHaveLength(4);
+    });
 });
 
 describe("test parseWorttrenungLine", () =>{
@@ -196,7 +209,7 @@ describe("Test Tokenize Wiki markup",  () => {
 });
 
 
-
+":Ge·schoß·hö·hen"
 
 
 

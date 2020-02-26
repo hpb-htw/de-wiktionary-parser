@@ -161,9 +161,19 @@ export namespace worttrennung {
         }
     }
 
+    /*
+    Char DEC    HEX
+    ß	 0223	00DF
+    ä	 0228	00E4
+    ö	 0246	00F6
+    ü	 0252	00FC
+    Ä	 0196	00C4
+    Ö	 0214	00D6
+    Ü	 0220	00DC
+    */
     export function parseHyphenPart(text: string): Hyphen {
         const TYPE_PATTERN = /\{\{[^}]*\}\}/;
-        const NON_ALPHA_SPACE_PATTERN = /[^(a-z\s\u00b7)]/i;
+        const NON_ALPHA_SPACE_PATTERN = /[^(a-z\s\u00b7\u00df\u00e4\u00f6\u00fc\u00c4\u00d6\u00d4)]/i;
         let foundForm = text.match(TYPE_PATTERN);
         let form: string | undefined = undefined;
         let hyphenBeginIdx = 0;
@@ -182,7 +192,7 @@ export namespace worttrennung {
         if (form !== undefined) {
             hyphen.form = form.trim();
         }
-        // everything before form and hyphen are addtional information
+        // everything before form and hyphen are additional information
         if (hyphenBeginIdx > 0 ) {
             let additionalEndIdx = 0;
             if (foundForm !== null) {
