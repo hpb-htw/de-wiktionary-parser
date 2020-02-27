@@ -1,4 +1,4 @@
-import {Body, Hyphen} from "./de_wiki_lang";
+import {Body, Hyphen} from "wikinary-eintopf/lib/de_wiki_lang";
 
 
 /**

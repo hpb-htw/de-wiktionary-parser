@@ -3,7 +3,7 @@ import {
     UEBERSETZUNGS_TABELL,
     WikiBlockName,
     WikiPage
-} from "./de_wiki_lang";
+} from "wikinary-eintopf/lib/de_wiki_lang";
 import {consumeWorttrennung} from "./de_wiktionary_worttrennung";
 import {
     BadWikiSyntax,

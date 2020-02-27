@@ -1,5 +1,5 @@
 // dirty solution:
-import {Body, Hyphen} from "../de_wiki_lang";
+import {Body, Hyphen} from "wikinary-eintopf/lib/de_wiki_lang";
 import {consumeWorttrennung, worttrennung} from "../de_wiktionary_worttrennung";
 import parseHyphenPart = worttrennung.parseHyphenPart;
 import parseWorttrenungLine = worttrennung.parseWorttrenungLine;

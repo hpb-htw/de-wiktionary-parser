@@ -7,7 +7,8 @@ import {
     Kasus, NOT_APPLICABLE_SIGN,
     PersonalpronomenFlexion,
     SubstantivFlexion, ToponymFlexion, VerbFlexion, VornameFlexion
-} from "./de_wiki_lang";
+} from "wikinary-eintopf/lib/de_wiki_lang";
+
 import {BAD_FLEXION, BadWikiSyntax, GENERAL_ERROR, statisticEventEmitter, stripCurly} from "./de_wiki_aux";
 
 /**

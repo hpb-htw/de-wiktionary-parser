@@ -5,9 +5,14 @@ import {
     consumeVerbFlexion,
     consumeVornameFlexion
 } from "../de_wiktionary_flexion";
-import {Body, SubstantivFlexion} from "../de_wiki_lang";
+import {WikiLang} from 'wikinary-eintopf';
+
+//type SubstantivFlexion = WikiLang.SubstantivFlexion;
+
+//import {Body, SubstantivFlexion} from "../de_wiki_lang";
 import {expectObjectEqual} from "./object_expect";
 import {BadWikiSyntax} from "../de_wiki_aux";
+import {VornameFlexion} from "wikinary-eintopf/lib/de_wiki_lang";
 
 describe("test flexion", () => {
     test("consumeFlexion.python (beginIdx = 0)", ()=>{
@@ -32,7 +37,7 @@ describe("test flexion", () => {
 |Akkusativ Plural=Pythons
 |Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
 }}`;
-        let body = new Body("Python", {
+        let body = new WikiLang.Body("Python", {
             pos:["Substantiv"], addition:[]
         });
         let [count, flexion]= consumeFlexion(body,0, wikitext.split("\n"));
@@ -69,7 +74,7 @@ describe("test flexion", () => {
 |Akkusativ Plural=Pythons
 |Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
 }}`;
-        let body = new Body("Python", {
+        let body = new WikiLang.Body("Python", {
             pos:["Substantiv"], addition:[]
         });
         let [count, flexion]= consumeFlexion(body,2, wikitext.split("\n"));
@@ -114,7 +119,7 @@ describe("Substantiv Flexion", ()=>{
 }}
 `;
         let [lastIdx, flexion] = consumeSubstantivFlexion("Wort",5, wikiText.split("\n"));
-        let expectedFlexion: SubstantivFlexion =  {
+        let expectedFlexion: WikiLang.SubstantivFlexion =  {
             genus: ['n'],
             nominativ: { singular: [ 'Wort' ],            plural: [ 'Wörter' ] },
             genitiv:   { singular: [ 'Worts', 'Wortes' ], plural: [ 'Wörter' ] },
@@ -268,6 +273,22 @@ describe("Vorname Flexion", () =>{
     });
 
 });
+
+
+describe("VornameFlexion", ()=>{
+    test("testFlexion '{{Deutsch Vorname Übersicht m'", () =>{
+        let title = "'{{Deutsch Vorname Übersicht m'";
+        let isFlexion = VornameFlexion.testFlexion(title);
+        expect(isFlexion).toStrictEqual(true);
+    });
+
+    test("testFlexion '{{Deutsch Vorname Übersicht f'", () =>{
+        let title = "'{{Deutsch Vorname Übersicht f'";
+        let isFlexion = VornameFlexion.testFlexion(title);
+        expect(isFlexion).toStrictEqual(true);
+    });
+});
+
 
 describe("PersonalPronomen", () => {
     test("ich-Person", () => {
