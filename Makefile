@@ -1,32 +1,40 @@
-BIN=lib/index.js
-MAIN=lib/main.js
-SRC_TS=$(wildcard src/*.ts)
-RAW_CSV_GZ=../big-file/dewiktionary.csv.gz
-WIKI_DUMP=../big-file/dewiktionary-20191020-pages-articles.xml
-CSV_DELIMITER="<separator>"
+BIN           = lib/index.js
+SRC_TS        = $(wildcard src/*.ts)
+RAW_CSV_GZ    = ../big-file/dewiktionary.csv.gz
+WIKI_DUMP     = ../big-file/dewiktionary-20191020-pages-articles.xml
+CSV_DELIMITER = "<separator>"
 
 
 
 .PHONY:all
-all: $(BIN) $(RAW_CSV_GZ)
+all: install $(BIN) coverage/lcov.info $(RAW_CSV_GZ)
 
-.PHONY:main
-main: $(MAIN)
 
+.PHONY:install
+install:
+	npm install
 
 .PHONY:bin
 bin: $(BIN)
 
-$(BIN) $(MAIN): $(SRC_TS)
+$(BIN) : $(SRC_TS)
 	tsc -p ./
 
-$(RAW_CSV_GZ): $(MAIN) $(WIKI_DUMP)
+$(RAW_CSV_GZ): $(BIN) $(WIKI_DUMP)
 	node $(BIN) $(WIKI_DUMP) $(CSV_DELIMITER) | gzip -f - > $(RAW_CSV_GZ)
+
+.PHONY:test
+test:
+	jest --config jest.config.js
+
+
+coverage/lcov.info:
+	jest --config jest-covery.config.js
 
 
 .PHONY:clean
 clean:
-	rm -rf lib
+	rm -rf lib coverage
 
 .PHONY:clean-all
 clean-all:

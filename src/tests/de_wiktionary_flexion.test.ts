@@ -1,9 +1,9 @@
 import {
     consumeAdjektivFlexion,
-    consumeFlexion, consumePersonalPronomen,
-    consumeSubstantivFlexion,
+    consumeFlexion, consumePersonalPronomen, consumePossessivpronomen,
+    consumeSubstantivFlexion, consumeToponymFlexion,
     consumeVerbFlexion,
-    consumeVornameFlexion
+    consumeVornameFlexion, FlexionRecognizer
 } from "../de_wiktionary_flexion";
 import {WikiLang} from 'wikinary-eintopf';
 
@@ -12,7 +12,7 @@ import {WikiLang} from 'wikinary-eintopf';
 //import {Body, SubstantivFlexion} from "../de_wiki_lang";
 import {expectObjectEqual} from "./object_expect";
 import {BadWikiSyntax} from "../de_wiki_aux";
-import {VornameFlexion} from "wikinary-eintopf/lib/de_wiki_lang";
+import {VornameFlexion, Possessivpronomen} from "wikinary-eintopf/lib/de_wiki_lang";
 
 describe("test flexion", () => {
     test("consumeFlexion.python (beginIdx = 0)", ()=>{
@@ -278,13 +278,13 @@ describe("Vorname Flexion", () =>{
 describe("VornameFlexion", ()=>{
     test("testFlexion '{{Deutsch Vorname Übersicht m'", () =>{
         let title = "'{{Deutsch Vorname Übersicht m'";
-        let isFlexion = VornameFlexion.testFlexion(title);
+        let isFlexion = FlexionRecognizer.isVorname(title);
         expect(isFlexion).toStrictEqual(true);
     });
 
     test("testFlexion '{{Deutsch Vorname Übersicht f'", () =>{
         let title = "'{{Deutsch Vorname Übersicht f'";
-        let isFlexion = VornameFlexion.testFlexion(title);
+        let isFlexion =  FlexionRecognizer.isVorname(title);
         expect(isFlexion).toStrictEqual(true);
     });
 });
@@ -358,6 +358,16 @@ describe("PersonalPronomen", () => {
 });
 
 
+describe("Possessivpronomen", () => {
+   test("consumePossessivpronomen", () => {
+        let text =[`{{Deutsch Possessivpronomen|mein}}`];
+        let expected = new Possessivpronomen('mein');
+        let [countLine, flexion] = consumePossessivpronomen("mein",0, text);
+        expectObjectEqual(flexion, expected);
+        expect(countLine).toBe(text.length);
+   });
+});
+
 describe("Toponym Flexion", () => {
    test("consumeToponymFlexion.Polen", () =>{
         let text =
@@ -383,6 +393,9 @@ describe("Toponym Flexion", () => {
                plural: ["uns"]
            }
        };
+       let [countLine, flexion] = consumeToponymFlexion("Polen",0, text);
+       expectObjectEqual(flexion, expected);
+       expect(countLine).toBe(text.length);
    });
 });
 

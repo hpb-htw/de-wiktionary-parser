@@ -2,23 +2,23 @@ import {
     AdjektivFlexion,
     Body,
     Flexion,
-    FlexionFixTemplate,
-    FlexionTemplate, GrammaticalPerson,
+    GrammaticalPerson,
     Kasus, NOT_APPLICABLE_SIGN,
-    PersonalpronomenFlexion,
+    PersonalpronomenFlexion, Possessivpronomen,
     SubstantivFlexion, ToponymFlexion, VerbFlexion, VornameFlexion
 } from "wikinary-eintopf/lib/de_wiki_lang";
 
 import {BAD_FLEXION, BadWikiSyntax, GENERAL_ERROR, statisticEventEmitter, stripCurly} from "./de_wiki_aux";
 
+
 /**
  * test if a single line string introduce a flexion block.
  * */
 export function isFlexion(body:Body, blockTitle:string):boolean {
-    if (FlexionFixTemplate.includes(blockTitle)) {
+    if (FlexionRecognizer.FlexionFixTemplate.includes(blockTitle)) {
         return true;
     }
-    if (FlexionTemplate.includes(blockTitle)) {
+    if (FlexionRecognizer.FlexionTemplate.includes(blockTitle)) {
         return true;
     }
     // if output of main programm shows something like a Flexion, for example
@@ -58,22 +58,25 @@ export function consumeFlexion(body:Body, beginIdx:number, wikiLines: string[]) 
         line = wikiLines[lineIdx];
     }
     let countConsumedLines = lineIdx - beginIdx;
-    if (SubstantivFlexion.testFlexion(line)) {
+    if (FlexionRecognizer.isSubtantiv(line)) {
         let [countFlexionLine, flexion] = consumeSubstantivFlexion(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
-    } else if (VornameFlexion.testFlexion(line)) {
+    } else if (FlexionRecognizer.isVorname(line)) {
         let [countFlexionLine, flexion] = consumeVornameFlexion(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
-    } else if (PersonalpronomenFlexion.testFlexion(line)) {
+    } else if (FlexionRecognizer.isPersonalpronomen(line)) {
         let [countFlexionLine, flexion] = consumePersonalPronomen(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
-    } else if(ToponymFlexion.testFlexion(line)) {
+    } else if (FlexionRecognizer.isPossessivpronomen(line)) {
+        let [countFlexionLine, flexion] = consumePossessivpronomen(body.lemma, lineIdx, wikiLines);
+        return [countConsumedLines + countFlexionLine, flexion];
+    }else if( FlexionRecognizer.isToponym(line) ) {
         let [countFlexionLine, flexion] = consumeToponymFlexion(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
-    }else if (VerbFlexion.testFlexion(line)) {
+    }else if ( FlexionRecognizer.isVerb(line) ) {
         let [countFlexionLine, flexion] = consumeVerbFlexion(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
-    } else if (AdjektivFlexion.testFlexion(line)) {
+    } else if ( FlexionRecognizer.isAdjektiv(line)) {
         let [countFlexionLine, flexion] = consumeAdjektivFlexion(body.lemma, lineIdx, wikiLines);
         return [countConsumedLines + countFlexionLine, flexion];
     } else {
@@ -281,7 +284,12 @@ function parsePersonalPronomenFlexion(lemma:string, title:string, lines:string[]
     return flexion;
 }
 
-
+export function consumePossessivpronomen(lemma:string, beginIdx:number, wikiLines:string[]): [number, Possessivpronomen] {
+    let token = stripCurly(wikiLines[0]).split(/\|/);
+    let person = token[1].trim();
+    let flexion = new Possessivpronomen(person);
+    return [1, flexion];
+}
 
 export function consumeToponymFlexion(lemma:string, lineIdx: number, wikiLines:string[]):[number, ToponymFlexion] {
     let [lineCount, cache] = collectFlexionToCache(lineIdx, wikiLines);
@@ -394,3 +402,67 @@ function ignoreableAdjektivFlexionParameter(parameter:string):boolean {
 
 
 
+export namespace FlexionRecognizer {
+
+    /**
+     * Flexion templates which have fixed content. This is just a merge from all Flexion
+     * with fixed template; for now is only Personal Pronomen
+     *
+     * */
+    export const FlexionFixTemplate:string[] =
+        PersonalpronomenFlexion.fixPersonalpromomen;
+
+    /**
+     * these flexions need an argument ???
+     * */
+    export const FlexionTemplate:string[] = ([
+        "{{Deutsch Possessivpronomen|…}}", // what the hell
+        "{{" + SubstantivFlexion.substantiv,
+        "{{" + PersonalpronomenFlexion.title,
+        //"{{" + SubstantivFlexion.substantiv_sch, //<< TODO
+        "{{" + VornameFlexion.title + " f",
+        "{{" + VornameFlexion.title + " m",
+        //"{{" + SubstantivFlexion.nachname,
+
+        "{{" + VerbFlexion.title,
+        "{{" + AdjektivFlexion.title,
+        "{{" + ToponymFlexion.title,
+        //(TODO:)
+        // ""
+    ]).concat(PersonalpronomenFlexion.fixPersonalpromomen)
+        .concat(Possessivpronomen.fixPossessivpronomen);
+
+    export function isSubtantiv(title:string):boolean {
+        for(let subtitle of SubstantivFlexion.possibleTitle) {
+            if (title.includes(subtitle)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    export function isVorname(title:string): boolean {
+        return title.includes(VornameFlexion.title);
+    }
+
+    export function isPersonalpronomen(title:string):boolean {
+        return PersonalpronomenFlexion.fixPersonalpromomen.includes(title.trim()) ||
+            title.trim().includes(PersonalpronomenFlexion.title);
+    }
+
+    export function isPossessivpronomen(title:string):boolean {
+        return Possessivpronomen.fixPossessivpronomen.includes(title.trim());
+    }
+    
+    export function isToponym(titleLine:string): boolean {
+        return titleLine.trim().includes(ToponymFlexion.title);
+    }
+
+    export function isVerb(title:string): boolean {
+        return title.includes((VerbFlexion.title));
+    }
+
+    export function isAdjektiv(title:string): boolean {
+        return title.includes((AdjektivFlexion.title));
+    }
+}
