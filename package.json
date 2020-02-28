@@ -32,7 +32,8 @@
 	"dependencies": {
 		"@types/event-stream": "^3.3.34",
 		"event-stream": "^4.0.1",
-		"xml-stream": "^0.4.5",
-		"wikinary-eintopf": "file://../wikinary-eintopf"
+		"wikinary-eintopf": "file://../wikinary-eintopf",
+		"wtf_wikipedia": "^7.8.1",
+		"xml-stream": "^0.4.5"
 	}
 }

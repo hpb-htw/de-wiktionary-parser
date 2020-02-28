@@ -10,7 +10,7 @@ import {
     INGORE_WORD,
     isGermanWord,
     NO_CONSUME_FOR_BLOCK,
-    PARSE_WIKI_TEXT,
+    PARSE_WIKI_TEXT, SENSE_HAS_DOMAIN, SENSE_INCONSISTENT, SENSE_IS_MULTILINE,
     WIKI_OK
 } from "./de_wiki_aux";
 import {statisticEventEmitter} from "./de_wiki_aux";
@@ -84,7 +84,13 @@ const statisticCollect = {
     [BAD_FLEXION]: { // syntax: „flexionName“: {count: number, lemma:string[] }
 
     },
+    [SENSE_INCONSISTENT]: [], // contains only lemmas
+    [SENSE_HAS_DOMAIN]: [//syntax: {lemma:string, domain:string}
 
+    ],
+    [SENSE_IS_MULTILINE]: [//syntax: {lemma, line}
+
+    ],
     /** count how many blocks, which are not consumed */
     [NO_CONSUME_FOR_BLOCK]: { // syntax: „blockName“: {count: number, lemma:string[] }
 
@@ -121,6 +127,21 @@ statisticEventEmitter.addListener(NO_CONSUME_FOR_BLOCK, (blockName:string, lemma
    statisticCollect[NO_CONSUME_FOR_BLOCK][blockName] = blockCount;
 });
 
+statisticEventEmitter.addListener(SENSE_INCONSISTENT, (lemma:string) => {
+    // @ts-ignore
+   statisticCollect[SENSE_INCONSISTENT].push(lemma);
+});
+
+statisticEventEmitter.addListener(SENSE_HAS_DOMAIN, (lemma, domain) => {
+    // @ts-ignore
+    statisticCollect[SENSE_HAS_DOMAIN].push({lemma, domain});
+});
+
+statisticEventEmitter.addListener(SENSE_IS_MULTILINE, (lemma, line) => {
+    // @ts-ignore
+    statisticCollect[SENSE_IS_MULTILINE].push({lemma, line});
+});
+
 statisticEventEmitter.addListener(GENERAL_ERROR, (error:Error) => {
     // @ts-ignore
     let errorCount = statisticCollect[GENERAL_ERROR][error.message] || 0;
@@ -143,7 +164,12 @@ export function getStatistic(maximum:number = 5) {
         [INGORE_WORD.toString()]: statisticCollect[INGORE_WORD],
         [GENERAL_ERROR.toString()]: {},
         [NO_CONSUME_FOR_BLOCK.toString()]:{},
+        // Flexion
         [BAD_FLEXION.toString()]: {},
+        // Bedeutung
+        [SENSE_INCONSISTENT.toString()]: statisticCollect[SENSE_INCONSISTENT].slice(0, maximum),
+        [SENSE_IS_MULTILINE.toString()]: statisticCollect[SENSE_IS_MULTILINE].slice(0, maximum),
+        [SENSE_HAS_DOMAIN.toString()]: statisticCollect[SENSE_HAS_DOMAIN].slice(0, maximum)
     };
     function summaryLemma(statistic:any) { // structure: {count:number, lemma:[]}
         let lemma = statistic.lemma.slice(0, maximum).join(", ");
@@ -170,6 +196,7 @@ export function getStatistic(maximum:number = 5) {
        // @ts-ignore
        result[GENERAL_ERROR.toString()][key] = statisticCollect[GENERAL_ERROR][key];
     });
+
     return result;
 }
 

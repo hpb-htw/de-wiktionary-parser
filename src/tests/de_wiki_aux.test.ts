@@ -1,6 +1,6 @@
 import {
     isGermanWord,
-    escape, removeHTMLComment, stripCurly,
+    escape, removeHTMLComment, stripCurly, stripWikiFormat,
 } from "../de_wiki_aux";
 
 describe('de_wiki_aux', () => {
@@ -62,7 +62,25 @@ describe('de_wiki_aux', () => {
         expect(stripped).toBe("Siehe auch|[[polen]]");
     });
 
+});
+
+
+describe("stripWikiFormat", () =>{
+    test("Anthropologie", () => {
+       let text = `„Das Wort ''Anthropologie'' kommt nicht aus dem klassischen Griechisch; insbesondere kann es nicht auf Aristoteles zurückgeführt werden.“ Wo dieser vom "ἀνθρωπολόγος" spricht, meint er einen Menschen, der unnötig viele Worte macht (englisch: gossip).<ref>{{Lit-Ritter: Historisches Lexikon der Philosophie|A=1}}, Band 1, Seite 362, Artikel „Anthropologie“</ref>`;
+        let plainText = stripWikiFormat(text);
+        console.log(plainText);
+        expect(plainText).toEqual('„Das Wort Anthropologie kommt nicht aus dem klassischen Griechisch; insbesondere kann es nicht auf Aristoteles zurückgeführt werden.“ Wo dieser vom "ἀνθρωπολόγος" spricht, meint er einen Menschen, der unnötig viele Worte macht (englisch: gossip).');
+    });
+
+    test("Linguistik", () => {
+        let text = `''[[Linguistik]]:'' zum Prädikat gehörend`;
+        let plainText = stripWikiFormat(text);
+        console.log(plainText);
+        expect(plainText).toEqual('Linguistik: zum Prädikat gehörend');
+    });
 
 });
+
 
 

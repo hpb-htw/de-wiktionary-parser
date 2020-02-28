@@ -1,5 +1,5 @@
 import {
-    Body, PartOfSpeech, Title,
+    Body, PartOfSpeech, Sense, Title,
     UEBERSETZUNGS_TABELL,
     WikiBlockName,
     WikiPage
@@ -10,9 +10,10 @@ import {
     INGORE_WORD,
     NO_CONSUME_FOR_BLOCK,
     removeHTMLComment,
-    statisticEventEmitter, stripCurly
+    statisticEventEmitter, stripCurly, stripWikiFormat
 } from "./de_wiki_aux";
 import {consumeFlexion, isFlexion} from "./de_wiktionary_flexion";
+import {consumeBedeutungBlock} from "./de_wiktionary_sense";
 
 export function parseDeWikiTextToObject(wikiText: string, selectLanguages:string[]=["Deutsch"]): WikiPage[] {
     //const GERMAN_WORD_INDICATOR = "({{Sprache|Deutsch}})";
@@ -169,7 +170,7 @@ function consumeBlock(body:Body, block:string[], blockPosition:number) {
     } else if (title === WikiBlockName.Grammatische_Merkmale) {
         consumeUnknownBlock(body, block);
     } else if (title === WikiBlockName.Bedeutungen) {
-        consumeUnknownBlock(body, block);
+        consumeBedeutungBlock(body, block);
     } else if (title === WikiBlockName.Abkuerzungen) {
         consumeUnknownBlock(body, block);
     } else if (title === WikiBlockName.Symbole) {
@@ -252,6 +253,8 @@ export function consumePartOfSpeech(lemma:string, beginIdx: number, wikiLines: s
         throw new BadWikiSyntax(`Cannot find a line with pattern '=== {{Wordart|...|...}} ===`, lemma);
     }
 }
+
+
 
 
 function parseWortart(thirdLevelHead: string): string[] {

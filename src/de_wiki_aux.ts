@@ -1,4 +1,5 @@
 import * as events from 'events';
+const wtf = require('wtf_wikipedia');
 
 export const statisticEventEmitter = new events.EventEmitter();
 export const PARSE_WIKI_TEXT = Symbol("countWikiText"),
@@ -10,10 +11,23 @@ export const PARSE_WIKI_TEXT = Symbol("countWikiText"),
      * the exeption.
      * */
     BAD_FLEXION = Symbol("badFlexion"),
-
+    /**
+     * this event is fired when the first line after {{Bedeutungen}} begins with more than one colons.
+     *
+     * */
+    SENSE_INCONSISTENT = Symbol("senseInconsistent"),
+    /**
+     * this event is fired when a line in block {{Bedeutungen}} begins with a start (*), which
+     * is not processed in this version
+     * */
+    SENSE_HAS_DOMAIN = Symbol("senseHasDomain"),
+    /**
+     * */
+    SENSE_IS_MULTILINE = Symbol("senseIsMultiline"),
     NO_CONSUME_FOR_BLOCK = Symbol("noConsumerForBlock"),
     GENERAL_ERROR = Symbol("parseWikiError"),
     INGORE_WORD = Symbol("ignoreWord")
+
 ;
 
 // Escapes text for XML.
@@ -52,4 +66,11 @@ export class BadWikiSyntax extends Error {
 
 export function stripCurly(text: string): string {
     return text.slice(0, text.length - 2).slice(2);
+}
+
+/**
+ * TODO: strip only link
+ * */
+export function stripWikiFormat(text:string): string {
+    return wtf(text).text();
 }
