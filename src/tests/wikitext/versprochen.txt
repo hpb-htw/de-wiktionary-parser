@@ -1,0 +1,55 @@
+== versprochen ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Adjektiv |Deutsch}} ===
+{{Deutsch Adjektiv Übersicht
+|Positiv=versprochen
+|Komparativ=–
+|Superlativ=–
+}}
+
+{{Worttrennung}}
+:ver·spro·chen , {{kSt.}}
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|fɛɐ̯ˈʃpʁɔxn̩}}
+:{{Hörbeispiele}} {{Audio|}}
+:{{Reime}} {{Reim|ɔxn̩|Deutsch}}
+
+{{Bedeutungen}}
+:[1]
+
+{{Beispiele}}
+:[?] „Und sie war ihm ''versprochen''.“<ref>{{Literatur | Autor=Nora Hamilton | Titel= Gefangene der Versuchung| Verlag= Edel | Jahr= 2013| Online=Zitiert nach {{GBS|NvabAwAAQBAJ|PT165|Hervorhebung="Und sie war ihm versprochen."}}}}.</ref>
+
+{{Sprichwörter}}
+:[[versprochen ist versprochen und wird nicht gebrochen|''Versprochen'' ist ''versprochen'' und wird nicht gebrochen.]]
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|promised}}
+*{{fr}}: [1] {{Ü|fr|promis}}
+|Ü-rechts=
+*{{it}}: [1] {{Ü|it|promesso}}
+*{{pt}}: [1] {{Ü|pt|prometido}}
+*{{es}}: [1] {{Ü|es|prometido}}
+}}
+
+{{Referenzen}}
+:[*] {{Ref-Canoo}}
+
+{{Quellen}}
+=== {{Wortart|Partizip II|Deutsch}} ===
+
+{{Worttrennung}}
+:ver·spro·chen
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|fɛɐ̯ˈʃpʁɔxn̩}}
+:{{Hörbeispiele}} {{Audio|}}
+:{{Reime}} {{Reim|ɔxn̩|Deutsch}}
+
+{{Grammatische Merkmale}}
+* Partizip Perfekt des Verbs '''[[versprechen]]'''
+
+{{Grundformverweis Konj|versprechen}}
+
+{{Ähnlichkeiten 1|Anagramme=[[vorpreschen]], [[vorsprechen]]}}

@@ -1,0 +1,61 @@
+== Morphemik ({{Sprache|Deutsch}}) ==  <!-- ggf. Sprache ändern -->
+=== {{Wortart|Substantiv|Deutsch}}, {{f}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus=f
+|Nominativ Singular=Morphemik
+|Nominativ Plural=—
+|Genitiv Singular=Morphemik
+|Genitiv Plural=—
+|Dativ Singular=Morphemik
+|Dativ Plural=—
+|Akkusativ Singular=Morphemik
+|Akkusativ Plural=—
+}}
+
+{{Worttrennung}}
+:Mor·phe·mik, {{kPl.}}
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|mɔʁˈfeːmɪk}}
+:{{Hörbeispiele}} {{Audio|}}
+:{{Reime}} {{Reim|eːmɪk|Deutsch}}
+
+{{Bedeutungen}}
+:[1] ''[[Linguistik]]:'' Teilgebiet der [[Grammatik]], das sich mit dem Aufbau von [[Wort|Wörtern]] aus [[Morphem]]en befasst, besonders mit [[Flexion]] und [[Wortbildung]]; oft werden auch die [[Wortarten]] eingeschlossen.
+
+{{Herkunft}}
+:[[Ableitung]] zu ''[[Morphem]]'' mit dem [[Derivatem]] ([[Ableitungsmorphem]]) ''[[-ik]]''; zugrunde liegen altgriechisch ''morphé'' „[[Gestalt]]“ und ''-em'' (Wortbildungsmorphem für „Sprachsystem“ [[langue]])
+
+{{Synonyme}}
+:[1] [[Formenlehre]], [[Morphematik]], [[Morphologie]], [[Pleremik]] ([[Glossematik]])
+
+{{Oberbegriffe}}
+:[1] [[Grammatik]], [[Sprache]]
+
+{{Beispiele}}
+:[1] Die ''Morphemik'' ist ein Teilgebiet der Grammatik.
+:[1] „Nach traditioneller Auffassung beschreibt die ''Morphemik'' die Arten und Formen der Wörter (…).“<ref> Heinrich Weber: ''Morphemik.'' In: ''Lexikon der germanistischen Linguistik.'' Band I. 2., vollständig neu bearbeitete und erweiterte Auflage. Hrsg. v. Hans Peter Althaus, Helmut Henne, Herbert Ernst Wiegand. Niemeyer, Tübingen 1980, Seite 159-169, Zitat Seite 159. ISBN 3-484-10389-2. Abkürzungen aufgelöst.</ref>
+:[1] „Die ''Morphemik'' hat die Aufgabe, die kleinsten Sprachzeichen, d.h. die kleinsten Einheiten mit Bedeutung, zu ermitteln und ihre strukturellen Eigenschaften anzugeben.“<ref>Hans Bühler und andere: ''Linguistik I. Lehr- und Übungsbuch zur Einführung in die Sprachwissenschaft.'' 3., durchgesehene Auflage. Niemeyer, Tübingen 1972, Seite 71.</ref>
+:[1] „Mit einer solchen Erklärung würden wir aber ausweichen in eine höhere Ebene sprachlicher Struktur, in die ''Morphemik''.“<ref>{{Literatur| Autor=Otmar Werner |Titel=Einführung in die strukturelle Beschreibung des Deutschen. Teil I |Auflage= 2., überarbeitete und erweiterte |Verlag= Niemeyer |Ort = Tübingen |Jahr= 1973| Seiten= 87. |ISBN= 3-484-25019-4}}</ref>
+
+{{Wortbildungen}}
+:[1] [[morphemisch]]
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|}}
+*{{fr}}: [1] {{Ü|fr|}}
+|Ü-rechts=
+*{{it}}: [1] {{Ü|it|}}
+*{{sv}}: [1] {{Ü|sv|morfemik}}
+}}
+
+{{Referenzen}}
+:[1] {{Wikipedia|Morphologie (Sprache)}}
+:[1] {{Ref-Canoo|Morphemik}}
+:[1] Hadumod Bußmann: ''Lexikon der Sprachwissenschaft.'' 3., aktualisierte und erweiterte Auflage. Kröner, Stuttgart 2002. Stichwort: „Morphemik“. ISBN 3-520-45203-0.
+:[1] Helmut Glück (Hrsg.), unter Mitarbeit von Friederike Schmöe: ''Metzler Lexikon Sprache.'' Dritte, neubearbeitete Auflage, Stichwort: „Morphemik“. Metzler, Stuttgart/ Weimar 2005. ISBN 978-3-476-02056-7.
+:[1] Theodor Lewandowski: ''Linguistisches Wörterbuch''. 4., neu bearbeitete Auflage Quelle & Meyer, Heidelberg 1985, Stichwort: „Morphemik“. ISBN 3-494-02050-7.
+
+{{Quellen}}

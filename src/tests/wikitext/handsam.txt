@@ -1,0 +1,47 @@
+== handsam ({{Sprache|Deutsch}}) ==
+{{erweitern|Bedeutungen, Beispiele|Deutsch}}
+=== {{Wortart|Adjektiv|Deutsch}} ===
+
+{{Deutsch Adjektiv Übersicht
+|Positiv=handsam
+|Komparativ=handsamer
+|Superlativ=handsamsten
+}}
+
+{{Worttrennung}}
+:hand·sam, {{Komp.}} hand·sa·mer, {{Sup.}} hand·sams·ten
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|ˈhantˌsam}}, {{Lautschrift|ˈhantˌzaːm}}
+:{{Hörbeispiele}} {{Audio|}}, {{Audio|De-handsam.ogg}}
+
+{{Bedeutungen}}
+:{{K|österr.|t1=, sonst|regional}}
+:[1] handlich, griffig, bequem handhabbar, praktisch, leicht
+:{{QS Bedeutungen|fehlen}}
+
+{{Herkunft}}
+:[[Derivation]] ([[Ableitung]]) des Substantivs ''[[Hand]]'' mit dem [[Suffix]] ''[[-sam]]''
+
+{{Synonyme}}
+:[1] [[handhabbar]], [[handlich]]
+
+{{Beispiele}}
+:[1] {{Beispiele fehlen}}
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|handy}}
+|Ü-rechts=
+*{{sv}}: [1] {{Ü|sv|behändig}}, {{Ü|sv|hanterlig}}
+}}
+
+{{Referenzen}}
+:[1] {{Ref-Grimm|handsam}}
+:[1] {{Ref-Duden|handsam}}
+:[*] {{Ref-Canoo|handsam}}
+
+:[1] {{Lit-Duden: Universalwörterbuch|A=6}} „handsam“, Seite 756
+
+{{Ähnlichkeiten 1|[[handzahm]]}}
+{{Ähnlichkeiten 2|[[handsome]]}}

@@ -1,0 +1,86 @@
+{{Siehe auch|[[Genesen]]}}
+== genesen ({{Sprache|Deutsch}}) ==
+{{Wortart fehlt|Adjektiv|anm={{Ref-Canoo|genesen}}}}
+==={{Wortart|Verb|Deutsch}}  ===
+
+{{Deutsch Verb Übersicht
+|Präsens_ich=genese
+|Präsens_du=genest
+|Präsens_er, sie, es=genest
+|Präteritum_ich=genas
+|Partizip II=genesen
+|Konjunktiv II_ich=genäse
+|Imperativ Singular=genese
+|Imperativ Plural=genest
+|Hilfsverb=sein
+}}
+
+{{Anmerkung}}
+:Im Gegensatz zu ähnlich konjugierten Verben wie [[lesen]] gibt es keine Singularform ''*geniest,'' offenbar um Verwechslungen mit [[genießen]] zu vermeiden.
+
+{{Worttrennung}}
+:ge·ne·sen, {{Prät.}} ge·nas, {{Part.}} ge·ne·sen
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|ɡəˈneːzn̩}}
+:{{Hörbeispiele}} {{Audio|De-genesen.ogg}}
+:{{Reime}} {{Reim|eːzn̩|Deutsch}}
+
+{{Bedeutungen}}
+:[1] [[wieder]] [[gesund]] werden
+
+{{Herkunft}}
+:[[mittelhochdeutsch]]: ''genesen,'' [[althochdeutsch]]: ''ginesan,'' selten ''nesan,''. Ursprüngliche Bedeutung: [[entkommen]], verwandt mit [[nähren]]. Vergleiche [[gotisch]] ''ganisan'' davonkommen, genesen, gerettet werden; ''nasjan'' erretten, [[altindisch]]: ''násatē'', ''nas-ē'' [[liebevoll]] [[herangehen]], sich gesellen zu und [[altgriechisch]] ''νέομαι''<ref>Gemoll, Wilhelm, ''Griechisch-deutsches Schul- und Handwörterbuch'', 9. Auflage, München , 1965, ISBN 3-486-13401-9 | „νέομαι“</ref> kommen, gehen; (davon redupliziert ''*νιν-σjομαι'':) ''νί(σ)σομαι'' gehen, schreiten<ref>{{Ref-DWDS|genesen}}</ref><ref>Schmidt, Johannes, ''Die Verwantschaftsverhältnisse der indogermanischen Sprachen'', 1. Auflage, Böhlau, 1872, ISBN 3743491974 | S.67; 65. „νέομαι, νίσσομαι“</ref>
+
+{{Synonyme}}
+:[1] [[gesunden]], sich [[erholen]]
+
+{{Gegenwörter}}
+:[1] [[erkranken]]
+
+{{Beispiele}}
+:[1] Nachdem er von seiner Krankheit ''genesen'' war, konnte er sich wieder dem Turnen widmen.
+:[1] Sie ''genas'' nach der erfolgreichen Operation sehr schnell.
+
+{{Charakteristische Wortkombinationen}}
+:[1] [[von]] einer [[Krankheit]] ''genesen''
+
+{{Wortbildungen}}
+:[[Genesung]]
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{eu}}: [1] {{Ü|eu|sendatu}}
+*{{zh-tw}}: [1] {{Üt|zh|復|fù}}, {{Üt|zh|恢復|huīfù}}
+*{{zh-cn}}: [1] {{Üt|zh|复|fù}}, {{Üt|zh|恢复|huīfù}}
+*{{en}}: [1] {{Ü|en|recover}}
+*{{eo}}: [1] {{Ü|eo|kuraci}}
+*{{fi}}: [1] {{Ü|fi|toipua}}, {{Ü|fi|tointua}}, {{Ü|fi|palautua}}
+*{{fr}}: [1] {{Ü|fr|guérir}}
+*{{gl}}: [1] {{Ü|gl|curar}}
+*{{it}}: [1] {{Ü|it|guarire}}
+*{{ja}}: [1] {{Üt|ja|治る|なおる, naoru}}; {{Üt|ja|癒える|いえる, ieru}}
+*{{ca}}: [1] {{Ü|ca|curar}}, {{Ü|ca|guarir}}
+|Ü-rechts=
+*{{lv}}: [1] {{Ü|lv|izveseļoties}}
+*{{no}}:
+**{{nb}}: [1] {{Ü|nb|bli}} {{Ü|nb|frisk}}
+*{{oc}}: [1] {{Ü|oc|garir}}
+*{{pl}}: [1] {{Ü|pl|wyzdrowieć}}
+*{{pt}}: [1] {{Ü|pt|curar}}
+*{{ro}}: [1] {{Ü|ro|vindeca}}
+*{{ru}}: [1] {{Üt|ru|выздоравливать|wysdoráwliwat}}
+*{{sv}}: [1] {{Ü|sv|tillfriskna}}, {{Ü|sv|läka}}
+*{{es}}: [1] {{Ü|es|curar}}; {{Ü|es|sanar}}
+*{{cs}}: [1] {{Ü|cs|uzdravit se}}
+}}
+
+{{Referenzen}}
+:[1] {{Ref-Grimm|genesen}}
+:[1] {{Ref-DWDS|genesen}}
+:[1] {{Ref-canoo|genesen}}
+:[1] {{Ref-UniLeipzig|genesen}}
+
+{{Quellen}}
+
+{{Ähnlichkeiten 1|[[Genese]], [[genießen]], [[gewesen]]}}

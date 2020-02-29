@@ -1,0 +1,283 @@
+{{Siehe auch|[[Sein]]}}
+{{Wort der Woche|6|2007}}
+== sein ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Verb|Deutsch}}, {{Wortart|Hilfsverb|Deutsch}} ===
+
+{{Deutsch Verb Übersicht
+|Präsens_ich=bin
+|Präsens_du=bist
+|Präsens_er, sie, es=ist
+|Präteritum_ich=war
+|Partizip II=gewesen
+|Konjunktiv II_ich=wäre
+|Imperativ Singular=sei
+|Imperativ Plural=seid
+|Hilfsverb=sein
+}}
+
+{{Nicht mehr gültige Schreibweisen}}
+:[[seyn]]
+:syn ([[frühneuhochdeutsch]], beispielsweise bei folgenden Autoren: [[w:Sebastian Brant|Sebastian Brant]], ''Das Narrenschiff'', 1494; [[w:Jakob Ruf|Jacob Ruff]], ''Adam und Heva'')
+
+{{Anmerkung}}
+:Verbindungen mit ''sein'' schreibt man nach neuer Rechtschreibung getrennt (da sein, weg sein, zusammen sein …, aber: das Verliebtsein).
+
+{{Worttrennung}}
+:sein, {{Prät.}} war, {{Part.}} ge·we·sen
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|zaɪ̯n}}
+:{{Hörbeispiele}} {{Audio|De-sein.ogg}}
+:{{Reime}} {{Reim|aɪ̯n|Deutsch}}
+
+{{Anmerkung}}
+:Das Zeitwort ''sein'' wird als Hilfszeitwort zur Bildung zusammengesetzter Zeiten bestimmter Verben verwendet.
+
+{{Bedeutungen}}
+:[1] Kopula, die dem Subjekt ein logisches Prädikat zuordnet
+:[2] ''zusammen mit einer Ortsangabe:'' sich am genannten Ort [[befinden]]
+:[3] [[existieren]]
+:[4] [[Hilfszeitwort]] zur Bildung zusammengesetzter Zeiten bestimmter Verben
+
+{{Herkunft}}
+:[[althochdeutsch|alt-]] und [[mittelhochdeutsch]] ''[[sīn]]'' und ''[[sein]]'',<ref name="wissen.de"/> die Form für Präteritum und Partizip II ist aus {{ahd.}} ''{{Ü|goh|wesan}}''<ref name="wissen.de">[[wikipedia:de:wissen.de|wissen.de]]/Wahrig Herkunftswörterbuch: [https://www.wissen.de/wortherkunft/sein Woher kommt sein]</ref> und die Form für Präsens 1. und 2. Person Singular aus dem proto-germanischen ''*biju-'' (sein, existieren, wachsen)<ref name="wissen.de"/><ref>[[wikipedia:en:Online Etymology Dictionary|Online Etymology Dictionary]]: [https://www.etymonline.com/word/be be (v.)]</ref>
+
+{{Synonyme}}
+:[2] sich [[befinden]], [[anwesend]] sein
+:[3] [[bestehen]], [[leben]]
+
+{{Beispiele}}
+:[1] Er ''ist'' 30 Jahre alt.
+:[1] Der Präsident ''ist'' schwarz.
+:[1] Sie ist früher eine Schönheit ''gewesen.''
+:[1] Das ''ist'' ein Problem, weil er ein Schürzenjäger ''ist.''
+:[1] Das Neue scheint interessant zu ''sein.''
+:[1] Die Konsequenzen der Wahrheit könnten unangenehm ''sein.''
+:[1] Ihr ''wart'' damals noch jung.
+:[1] Vergiss, was ''gewesen'' ist; jetzt ''ist'' es so.
+:[2] Wir ''waren'' in Paris.
+:[2] Wann kannst du zuhause ''sein?''
+:[2] ''Bist'' du gerade in der Schule?
+:[3] Gott ''war'' und ''ist.''
+:[3] Solange der Opa noch ''ist,'' können wir das Haus nicht verkaufen.
+:[3] Eine Kontrolle muss ''sein.''
+:[4] Ich ''bin'' gelaufen.
+:[4] Er ''ist'' der dritte König Schottlands gewesen.
+
+{{Redewendungen}}
+:[1] [[erste Sahne sein|erste Sahne ''sein'']], [[unter der Haube sein|unter der Haube ''sein'']] – [[verheiratet]] sein
+:[3] [[Sein oder Nichtsein, das ist hier die Frage|''Sein'' oder Nichtsein, das ist hier die Frage]]
+:[3] [[zu tun sein|zu tun ''sein'']] – etwas ist zu tun = etwas muss getan werden
+
+{{Charakteristische Wortkombinationen}}
+:''Alle Angaben hierzu im'' [[Verzeichnis:Deutsch/Verben/sein]]. ''Ergänzungen/Veränderungen bitte auch nur dort vornehmen.''
+
+{{Wortbildungen}}
+:[[Dasein]], [[Sein]], [[Seinsweise]], [[Verliebtsein]]
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{eu}}: [1] {{Ü|eu|izan}}, {{Ü|eu|egon}}
+*{{bg}}: [1–3] {{Üt|bg|съм|săm}}
+*{{zh}}: [1] {{Üt|zh|是|shì}}
+*{{en}}: [1, 2] {{Ü|en|be}}; [3] {{Ü|en|exist}}, {{Ü|en|be}}; [4] {{Ü|en|have}}; ''veraltet:'' {{Ü|en|be}}
+*{{eo}}: [1] {{Ü|eo|esti}}; [2] {{Ü|eo|troviĝi}}; [3] {{Ü|eo|ekzisti}}
+*{{et}}: [1] {{Ü|et|olema}}
+*{{fi}}: [1] {{Ü|fi|olla}}
+*{{fr}}: [1–4] {{Ü|fr|être}}; [4] {{Ü|fr|avoir}}
+*{{ka}}: [1] {{Üt|ka|ყოფნა|}}
+*{{el}}: [1–3] {{Üt|el|είμαι|íme}}
+*{{hi}}: [1, 2] {{Üt|hi|होना|}}
+*{{ia}}: [1–3] {{Ü|ia|esser}}; [3] {{Ü|ia|exister}}; [4] {{Ü|ia|haber}}
+*{{it}}: [1–3] {{Ü|it|essere}}; [2] {{Ü|it|trovarsi}}; [3] {{Ü|it|esistere}}
+*{{ja}}: [1] {{Üt|ja|だ|da}}, {{Üt|ja|です|desu}}, {{Üt|ja|である|dearu}} [2] {{Üt|ja|有る|ある, aru}}, {{Üt|ja|居る|いる, iru}}; [3] {{Üt|ja|存在する|そんざいする, sonzai suru}}
+*{{ca}}: [1–3] {{Ü|ca|ésser}}, {{Ü|ca|ser}}, {{Ü|ca|estar}}
+*{{ko}}: [1] {{Üt|ko|이다|ida}}; ''verneint:'' {{Üt|ko|아니다|anida}}
+*{{ku}}:
+**{{kmr}}: [1] {{Ü|kmr|bûn}}
+*{{la}}: [1–3] {{Ü|la|esse}}
+*{{lv}}: [1] {{Ü|lv|būt}}
+*{{lt}}: [1] {{Ü|lt|būti}}
+*{{lb}}: [1–3] {{Ü|lb|sinn}}
+|Ü-rechts=
+*{{lus}}: [1] {{Ü|lus|ni}}; [2, 3] {{Ü|lus|awm}}
+*{{nds}}: [1] {{Ü|nds|ween}}; [1–3] {{Ü|nds|wesen}}, {{Ü|nds|ween}}, {{Ü|nds|sien}}; [2] {{Ü|nds|sien}}; [3] {{Ü|nds|wesen}}
+*{{nl}}: [1–3] {{Ü|nl|zijn}}
+*{{se}}: [1] {{Ü|se|leat}}
+*{{no}}: [1–3] {{Ü|no|være}}
+*{{oc}}: [1] {{Ü|oc|èsser}}, {{Ü|oc|èstre}}
+*{{ps}}: [1] {{Üt|ps|اوسېدل، موجوديت درلودل |}}
+*{{fa}}: [1, 2] {{Üt|fa|بودن|budæn}}
+*{{pdt}}: [1] {{Ü|pdt|sennen}}
+*{{pl}}: [1–3] {{Ü|pl|być}}
+*{{pt}}: [1, 3] {{Ü|pt|ser}}, {{Ü|pt|estar}}
+*{{ro}}: [1–3] {{Ü|ro|a fi}}
+*{{ru}}: [1, 2] {{Üt|ru|быть|byt'}}; [3] {{Üt|ru|существовать|suščestvovát'}}
+*{{sv}}: [1–3] {{Ü|sv|vara}}
+*{{sr}}: [1] {{Üt|sr|бити|biti}}
+*{{sk}}: [1, 2] {{Ü|sk|byť}}
+*{{sl}}: [1–3] {{Ü|sl|biti}}
+*{{es}}: [1, 2] {{Ü|es|estar}}, {{Ü|es|ser}}
+*{{cs}}: [1–3] {{Ü|cs|být}}; [1, 2] {{Ü|cs|bývat}}
+*{{tr}}: [1] {{Ü|tr|olmak}}
+*{{hu}}: [1] {{Ü|hu|lenni}}
+*{{be}}: [1] {{Üt|be|быць|}}
+|Dialekttabelle=
+*Mitteldeutsch:
+**Ripuarisch:
+***{{ksh}}: {{Ü|ksh|sinn}} (sinn, bės, ės, sinn, sėtt, sinn)
+**Rheinfränkisch:
+***{{pfl}}:{{Lautschrift|zɑɪ}}, {{Lautschrift|zɑ̃ɪ̃}} {{Lautschrift|zɒɪ}}, {{Lautschrift|zɒ̃ɪ̃}}, {{Lautschrift|zɪn}}
+***Hessisch: ''soi (soi, birst, irs, soi, seid, soi)''
+*Holzbüttgener Platt: [1, 2] ''sin''
+|D-rechts=
+*Oberdeutsch:
+**{{als}}:si, {{Part.}} g’si
+***Schwäbisch:
+****Ostschwäbisch: séi/soi, bin/ben, bisch, isch, sinn/senn/sind/send, séid(s)/soid(s), g’wesa(r)/g'wesn/g’wäa, wär
+****Südschwäbisch: sei, bee, bisch, isch, send, gsei
+**{{bar}}: sei/sa (bin, bist, is, han/san, hats/heits/sads, wàr, gwen/gwesn)
+}}
+
+{{Referenzen}}
+:[1–3] {{Wikipedia|Sein (Sprachlogik)}}
+:[1] {{Wikipedia|Kopula}}
+:[1–3] {{Ref-VerbixDE}}
+:[1] {{Ref-Grimm}}
+:[1] {{Ref-DWDS}}
+:[1–3] {{Ref-Duden|sein_Verb_Vollverb}}
+:[5] {{Ref-Duden|sein_Hilfsverb}}
+:[1] {{Ref-Canoo}}
+:[1] {{Ref-UniLeipzig}}
+:[1] {{Ref-FreeDictionary}}
+
+{{Referenzen prüfen|Deutsch}}
+
+=== {{Wortart|Possessivpronomen|Deutsch}} ===
+
+{{Deutsch Possessivpronomen|sein}}
+
+{{Anmerkung}}
+:Die Flexion des Possessivpronomens richtet sich wie beim Adjektiv ausschließlich nach dem Bezugswort, das heißt inhaltlich nach dem besessenen Objekt (und nicht nach dem Besitzer).
+
+{{Worttrennung}}
+:sein, {{Pl.}} sei·ne <small>(mehrere besessene Objekte)</small>, ihr <small>(mehrere Besitzer)</small>
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|zaɪ̯n}}
+:{{Hörbeispiele}} {{Audio|}}
+:{{Reime}} {{Reim|aɪ̯n|Deutsch}}
+
+{{Bedeutungen}}
+:[1] ''maskulines Possessivpronomen der 3. Person Singular – der Besitzer ist grammatisch männlich:'' zu der genannten, grammatisch männlichen Person oder Sache [[gehörig]]; der genannten, grammatisch männlichen Person [[gehören]]d; der genannten, grammatisch männlichen Person oder Sache [[eigen]]; für die genannte, grammatisch männliche Person oder Sache [[charakteristisch]]; von der genannten, grammatisch männlichen Person [[verantworten|verantwortet]], von der genannten, grammatisch männlichen Person [[schaffen|geschaffen]]; die genannte, grammatisch männliche Person oder Sache [[betreffend]]; der genannten, grammatisch männlichen Person oder Sache [[zuordnen|zugeordnet]]
+:[2] ''neutrales Possessivpronomen der 3. Person Singular – der Besitzer ist grammatisch sächlich:'' zu der genannten, grammatisch sächlichen Person oder Sache [[gehörig]]; der genannten, grammatisch sächlichen Person [[gehören]]d; der genannten, grammatisch sächlichen Person oder Sache [[eigen]]; für die genannte, grammatisch sächliche Person oder Sache [[charakteristisch]]; von der genannten, grammatisch sächlichen Person [[verantworten|verantwortet]], von der genannten, grammatisch sächlichen Person [[schaffen|geschaffen]]; die genannte, grammatisch sächliche Person oder Sache [[betreffend]]; der genannten, grammatisch sächlichen Person oder Sache [[zuordnen|zugeordnet]]
+
+{{Herkunft}}
+:germanisch ''*[[sīna-]]'' „sein“, alt- und mittelhochdeutsch ''[[sīn]]''; der indogermanische Pronominalstamm ''*[[sei-]]'' ist um ein Suffix ''*-no-'' erweitert {{QS Herkunft|unbelegt}}
+
+{{Synonyme}}
+:[1, 2] ''umgangssprachlich:'' [[von]] [[ihm]]
+
+{{Gegenwörter}}
+:[1, 2] [[mein]], [[unser]], [[dein]], [[euer]], [[ihr]], [[Ihr]],
+
+{{Weibliche Wortformen}}
+:[1, 2] ''Besitzer ist grammatisch weiblich:'' [[ihr]]
+
+{{Beispiele}}
+:[1] Ein Mann und ''sein'' Auto, das ist ja bekanntlich eine Sache für sich.
+:[1] Ja, dies hier ist ''seins.''
+:[1] Das ist ''sein'' eigenes Fahrrad, das andere ist nur geliehen.
+:[1] Ich höre immer ''seins!'' Das ist das Haus seiner Mutter!
+:[2] Wie schön das Kind doch mit ''seinen'' Bauklötzen spielt!
+:[2] Das Pferd ist an ''seinen'' gewohnten Platz im Stall getrottet.
+
+{{Charakteristische Wortkombinationen}}
+:[1, 2] ''sein'' [[eigen]]
+
+{{Wortbildungen}}
+:das [[Seine]]
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|his}}; [2] {{Ü|en|its}}
+*{{eo}}: [1] {{Ü|eo|sia}} (eigen); {{Ü|eo|lia}}; {{Ü|eo|ŝia}}; {{Ü|eo|ĝia}}; Plural: {{Ü|eo|siaj}} (eigene); {{Ü|eo|liaj}}; {{Ü|eo|ŝiaj}}; {{Ü|eo|ĝiaj}}
+*{{ia}}: [1, 2] {{Ü|ia|su}}
+*{{it}}: [1, 2] {{Ü|it|suo}}
+*{{ja}}: [1] {{Üt|ja|彼の|かれの, kare no}}
+*{{ca}}: [1] {{Ü|ca|el seu}}
+*{{lv}}: [1] {{Ü|lv|viņa}}
+*{{lb}}: [1] {{Ü|lb|säin}}
+*{{mk}}: [1, 2] {{Üt|mk|његовo|njegovo}}
+*{{nds}}: {{Ü|nds|sien}}
+|Ü-rechts=
+*{{nl}}: [1] {{Ü|nl|zijn}}
+*{{pl}}: [1, 2] {{Ü|pl|jego}}; {{Ü|pl|jej}}, ''reflexiv:'' {{Ü|pl|swój}}
+*{{pt}}: [1] {{Ü|pt|seu}}, {{Ü|pt|dele}}
+*{{ru}}: [1] {{Üt|ru|его|egó}}, {{Üt|ru|свой|svoj}}
+*{{sv}}: [1] {{Ü|sv|hans}}; {{Ü|sv|hennes}}; {{Ü|sv|dess}}
+*{{sr}}: [1] {{Üt|sr|његов|njegov}}; [2] {{Üt|sr|његовo|njegovo}}
+*{{es}}: [1, 2] {{Ü|es|su}}
+*{{tr}}: [1] {{Ü|tr|onun}}
+*{{hu}}: [1] {{Ü|hu|-ja}}, {{Ü|hu|-je}} als Suffix (Nachsilbe) zum Substantiv, auf das sich die Besitzanzeige bezieht
+|Dialekttabelle=
+*Ripuarisch:
+**{{ksh}}: {{Ü|ksh|sing}}, {{Ü|ksh|singe}}
+|D-rechts=
+}}
+
+{{Referenzen}}
+:[1, 2] {{Ref-DWDS}}
+:[1, 2] {{Ref-Canoo}}
+:[*] {{Ref-UniLeipzig}}
+:[*] {{Ref-FreeDictionary}}
+:[1, 2] {{Ref-Duden|sein_Pronomen}}
+
+{{Ähnlichkeiten 1|Anagramme=[[eins]], [[Eins]], [[Ines]], [[nies]]}}
+
+== sein ({{Sprache|Französisch}}) ==
+=== {{Wortart|Substantiv|Französisch}}, {{m}} ===
+
+{{Französisch Substantiv Übersicht
+|Genus=m
+|Singular=sein
+|Plural=seins
+}}
+
+{{Worttrennung}}
+:sein, {{Pl.}} seins
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|sɛ̃}}
+:{{Hörbeispiele}} {{Audio|Fr-sein.ogg|au sein}}, {{Pl.}} {{Audio|Fr-seins.ogg|les seins}}
+
+{{Bedeutungen}}
+:[1] ''veraltet oder literarisch:'' [[Brust]] als vorderer Oberkörper
+:[2] befindliches äußeres, weibliches [[Geschlechtsmerkmal]], [[Milchdrüse]]
+
+{{Synonyme}}
+:[1] [[torse]]
+:[2] ''umgangssprachlich:'' [[nichon]], [[nibard]]
+
+{{Oberbegriffe}}
+:[1] [[partie]] du [[corps]]
+:[2] [[organe]]
+
+{{Beispiele}}
+:[1] Il pressa son enfant contre son ''sein.''
+::Er drückte sein Kind an seine ''Brust.''
+:[2] L'enfant tète le ''sein'' de sa mère.
+::Das Kind saugt an der ''Brust'' seiner Mutter.
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{de}}: [1, 2] [[Brust]]
+|Ü-rechts=
+*{{en}}: [1] {{Ü|en|}}
+}}
+
+{{Referenzen}}
+:[1, 2] {{Ref-CNRTL|sein}}
+:[1, 2] {{Ref-Pons|fr|sein}}
+
+{{Ähnlichkeiten 1|[[Bein]], [[ceint]], [[cinq]], [[ein]], [[fein]], [[kein]], [[Lein]], [[Nein]], [[Pein]], [[Rein]], [[rein]], [[sain]], [[saint]], [[Seen]], [[Seil]], [[Seim]], [[seing]], [[seit]], [[sin]], [[Stein]], [[Tein]], [[Wein]], [[Zein]]|Anagramme=[[eins]], [[Eins]], [[nies]]}}

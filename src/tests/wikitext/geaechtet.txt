@@ -1,0 +1,71 @@
+{{Siehe auch|[[geachtet]]}}
+== geächtet ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Adjektiv|Deutsch}} ===
+{{Worttrennung}}
+:ge·äch·tet
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|ɡəˈʔɛçtət}}
+:{{Hörbeispiele}} {{Audio|De-geächtet.ogg}}
+:{{Reime}} {{Reim|ɛçtət|Deutsch}}
+
+{{Bedeutungen}}
+:[1] von etwas [[total]] [[ausschließen|ausgeschlossen]], beispielsweise ein [[Person]] oder eine [[Gruppe]] von Personen
+:[2] {{K|veraltet}} mit einer [[Reichsacht]], beispielsweise durch den [[Kaiser]], [[versehen]], was meist zur Folge hatte, dass man das Land [[verlassen]] musste
+:[3] etwas als nicht [[akzeptabel]] [[erklären|erklärt]] oder sogar durch [[Gesetz]]e/ [[Vertrag|Verträge]] [[verboten]]
+
+{{QS Herkunft|fehlt}}
+
+{{Sinnverwandte Wörter}}
+:[1] [[boykottiert]], [[verbannt]], [[verdammt]]
+:[2] [[verfemt]], [[vogelfrei]]
+
+{{Gegenwörter}}
+:[1] [[akzeptiert]], [[aufgenommen]], [[geachtet]], [[respektiert]]
+:[3] [[akzeptiert]], [[respektiert]]
+
+{{Beispiele}}
+:[1] [Anm.: April 1933:] „Die eben noch geachtete Arztfamilie war plötzlich ''geächtet.'' [Anm.: Die jüdische Ärztin] Lilli Jahn durfte ihren Beruf nicht weiter ausüben und zog sich ganz auf die Familie zurück.“<ref>{{Per-Deutschlandradio | Online=https://www.deutschlandfunk.de/vor-75-jahren-in-auschwitz-der-tod-der-juedischen-aerztin.871.de.html?dram:article_id=451632 | Autor=Volker Ullrich | Titel=Vor 75 Jahren in Auschwitz – Der Tod der jüdischen Ärztin Lilli Jahn | TitelErg= | Tag=19 | Monat=06 | Jahr=2019 | Zugriff=2019-06-19 | Kommentar=Deutschlandfunk / Köln, Sendereihe: Kalenderblatt, Text und Audio, hörbar nur bis 19.12.2019 wegen des deutschen ([[w:Telemediengesetz|Telemediengesetzes]] (TMG) in Verbindung mit dem [[w:Rundfunkstaatsvertrag|Rundfunkstaatsvertrag]] in der Fassung der 22. Änderung }}</ref>
+:[2] {{Beispiele fehlen|spr=de}}
+:[3] {{Beispiele fehlen|spr=de}}
+
+{{Charakteristische Wortkombinationen}}
+:[1] ''mit [[Substantiv]]:'' ''geächteter'' [[Staat]], ''geächtete'' [[Terrororganisation]], ''geächteter'' [[Verräter]]
+:[3] ''mit [[Substantiv]]:'' ''geächtete'' [[Chemiewaffen]], [[Folter]], [[Kinderarbeit]], [[Kinderpornographie]], [[Landmine]]n
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|ostracized}}<ref>{{Ref-Collins|ostracized|ostracized}}</ref>, {{Ü|en|outlawed}}<ref>{{Ref-Oxford|outlawed|outlawed}}</ref>, [2] {{Ü|en|}}, [3] {{Ü|en|}}
+|Ü-rechts=
+*{{es}}: [1] {{Ü|es|}}, [2] {{Ü|es|}}, [3] {{Ü|es|}}
+}}
+
+{{Referenzen}}
+:[1–3] {{Ref-DWDS|geächtet}}
+:[2] vergleiche: {{Wikipedia|Ächtung}}
+:[*] {{Ref-Canoo|geächtet}}
+:[*] {{Ref-UniLeipzig|geächtet}}
+:[*] {{Ref-OWID|elexiko|146057|geächtet}}
+:[*] {{Wikipedia-Suche|geächtet}}
+:[1] {{Ref-Pons|geächtet}}
+:[1] {{Ref-FreeDictionary|geächtet}}
+:[1] {{Ref-Duden|geächtet}}
+:[*] {{Ref-wissen.de|Synonym|geächtet}}
+
+{{Quellen}}
+
+
+=== {{Wortart|Partizip II|Deutsch}} ===
+
+{{Worttrennung}}
+:ge·äch·tet
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|ɡəˈʔɛçtət}}
+:{{Hörbeispiele}} {{Audio|De-geächtet.ogg}}
+:{{Reime}} {{Reim|ɛçtət|Deutsch}}
+
+{{Grammatische Merkmale}}
+*Partizip Perfekt des Verbs '''[[ächten]]'''
+
+{{Grundformverweis Konj|ächten}}
