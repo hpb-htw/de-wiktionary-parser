@@ -1,9 +1,14 @@
-import {consumePartOfSpeech, consumeTitle, parseDeWikiTextToObject} from "../de_wiktionary_text";
+import {
+    lineIntroducesABody,
+    lineIntroducesAPage, lineIntroducesASection,
+    parseDeWikiTextToObject,
+    tokenizeWikiText
+} from "../de_wiktionary_text";
 import * as path from "path";
 import * as fs from "fs";
 import {expectObjectEqual} from "./object_expect";
 import {Flexion, WikiPage} from "wikinary-eintopf/lib/de_wiki_lang";
-
+import  * as Ast from "../de_wiki_ast";
 /**
  * implicit condition: a wiki text contains at least one page.
  * */
@@ -40,71 +45,6 @@ describe("parseDeWikiTextToObject : Parsing a complete wiki text", () =>{
 
 
 describe("Single parts of a wiki text", ()=> {
-
-    test("consumeTitle.singen", () => {
-        let wikiText =
-            `{{Siehe auch|[[Singen]]}}
-== singen ({{Sprache|Deutsch}}) ==
-=== {{Wortart|Verb|Deutsch}} ===`;
-        let [index, title] = consumeTitle(0, wikiText.split("\n"));
-        expect(index).toBe(2);
-        let expectedTitle = {
-            lemma:"singen",
-            language:"Deutsch"
-        };
-        expectObjectEqual(title, expectedTitle);
-    });
-    test("consumeTitle.ich", () => {
-        let wikiText =
-            `{{Siehe auch|[[Ich]], [[ICH]]}}
-{{Wort der Woche|29|2017}}
-== ich ({{Sprache|Deutsch}}) ==
-=== {{Wortart|Personalpronomen|Deutsch}} ===
-
-{{Deutsch Personalpronomen 1}}
-
-{{Anmerkung}}`;
-        let [index, title] = consumeTitle(2, wikiText.split("\n"));
-        expect(index).toBe(1);
-        let expectedTitle = {
-            lemma:"ich",
-            language:"Deutsch"
-        };
-        expectObjectEqual(title, expectedTitle);
-    });
-
-
-    test("consumeTitle.python", () => {
-        let wikiText =
-            `== Python ({{Sprache|Deutsch}}) ==
-=== {{Wortart|Substantiv|Deutsch}}, {{m}}, {{f}} ===
-
-{{Deutsch Substantiv Übersicht
-|Genus 1=m
-|Genus 2=f
-|Nominativ Singular 1=Python
-|Nominativ Singular 2=Python
-|Nominativ Plural=Pythons
-|Genitiv Singular 1=Pythons
-|Genitiv Singular 2=Python
-|Genitiv Plural=Pythons
-|Dativ Singular 1=Python
-|Dativ Singular 2=Python
-|Dativ Plural=Pythons
-|Akkusativ Singular 1=Python
-|Akkusativ Singular 2=Python
-|Akkusativ Plural=Pythons
-|Bild=Morelia viridis 1.jpg|230px|1|ein ''Python'' der Gattung Morelia
-}}`;
-        let [index, title] = consumeTitle(0, wikiText.split("\n"));
-        expect(index).toBe(1);
-        let expectedTitle = {
-            lemma:"Python",
-            language:"Deutsch"
-        };
-        expectObjectEqual(title, expectedTitle);
-    });
-
     test("parse Helium", () => {
        let text = `== Helium ({{Sprache|Deutsch}}) ==
 === {{Wortart|Substantiv|Deutsch}}, {{n}} ===
@@ -127,40 +67,117 @@ describe("Single parts of a wiki text", ()=> {
 
     });
 
-    test("consumePartOfSpeech.multiple_variants", ()=>{
-        let testData = [
-            [
-                "=== {{Wortart|Substantiv|Deutsch}}, {{mf}}, {{Wortart|Nachname|Deutsch}} ==="
-            ],
-            [
-                "=== {{Wortart|Substantiv|Deutsch}}, {{f}} ==="
-            ],
-            [
-                "=== {{Wortart|Verb|Deutsch}} ==="
-            ],
-            [
-                "=== {{Wortart|Wortverbindung|Deutsch}}, {{Wortart|Interjektion|Deutsch}} ==="
-            ],
-            [
-                "=== {{Wortart|Abkürzung|Deutsch}}, {{Wortart|Substantiv|Deutsch}}, {{f}} ==="
-            ]
-        ];
-        let expected = [
-            ["Substantiv", "Nachname"],
-            ["Substantiv"],
-            ["Verb"],
-            ["Wortverbindung", "Interjektion"],
-            ["Abkürzung", "Substantiv"]
-        ];
-        testData.forEach( (data,idx)=>{
-            let [count, pos] = consumePartOfSpeech("Python",0,data);
-            expect(count).toBe(1);
-            expect(pos.pos).toStrictEqual(expected[idx]);
-        });
+
+});
+
+//// new parser
+describe("tokenizeWikiText", ()=> {
+   test("tokenizeWikiText.sein", () => {
+      let text = readWikiTextFile("sein");
+      let wiki:Ast.WikiText = tokenizeWikiText(text);
+      expect(wiki.pages.length).toEqual(2);
+      let deutschPage:Ast.Page = wiki.pages[0];
+      expect(deutschPage.bodies.length).toEqual(2);
+      expect(deutschPage.lemma).toEqual("sein");
+      expect(deutschPage.language).toEqual("Deutsch");
+      let verb:Ast.Body = deutschPage.bodies[0];
+      expect(verb.lemma).toEqual("sein");
+   });
+
+    test("tokenizeWikiText.handsam", () => {
+        let text = readWikiTextFile("handsam");
+        let wiki:Ast.WikiText = tokenizeWikiText(text);
+        expect(wiki.pages.length).toEqual(1);
+        expect(wiki.extraLines.length).toEqual(1);
+        let deutschPage:Ast.Page = wiki.pages[0];
+        expect(deutschPage.bodies.length).toEqual(1);
+        let sections = deutschPage.bodies[0].sections;
+        expect(sections.length).toEqual(2);
+        let mainSection = sections[0];
+        expect(mainSection.blocks.length).toEqual(10);
+    });
+
+    test("tokenizeWikiText.genesen", () => {
+        let text = readWikiTextFile("genesen");
+        let wiki:Ast.WikiText = tokenizeWikiText(text);
+        //Todo: write assert
+    });
+
+    test("tokenizeWikiText.morphemik", () => {
+        let text = readWikiTextFile("morphemik");
+        let wiki:Ast.WikiText = tokenizeWikiText(text);
+        //Todo: write assert
+    });
+
+    test("tokenizeWikiText.versprochen", () => {
+        let text = readWikiTextFile("versprochen");
+        let wiki:Ast.WikiText = tokenizeWikiText(text);
+        //Todo: write assert
+    });
+    test("tokenizeWikiText.geaechtet", () => {
+        let text = readWikiTextFile("geaechtet");
+        let wiki:Ast.WikiText = tokenizeWikiText(text);
+        //Todo: write assert
     });
 });
 
+describe("regtest", ()=>{
+   test("lineIntroducesAPage", ()=>{
+       let data = [
+           {line: "== genesen ({{Sprache|Deutsch}}) ==", expected:true},
+           {line: "==={{Wortart|Verb|Deutsch}}  ===", expected:false},
+           {line: "==== {{Übersetzungen}} ====", expected:false},
+       ];
+       data.forEach(d => {
+          expect( lineIntroducesAPage(d.line) ).toEqual(d.expected);
+       });
+   });
 
+    test("lineIntroducesABody", ()=>{
+        let data = [
+            {line: "== genesen ({{Sprache|Deutsch}}) ==", expected:false},
+            {line: "== genesen ({{Sprache|Deutsch}})===", expected:false},
+
+            {line: "==={{Wortart|Verb|Deutsch}}  ===", expected:true},
+            {line: "==={{Wortart|Verb|Deutsch}}===", expected:true},
+            {line: "=== {{Wortart|Verb|Deutsch}}  ===", expected:true},
+            {line: "=== {{Wortart|Verb|Deutsch}} ===", expected:true},
+
+            {line: "=== {{Wortart|Verb|Deutsch}} ==", expected:false},
+            {line: "== {{Wortart|Verb|Deutsch}} ===", expected:false},
+
+            {line: "==== {{Übersetzungen}} ====", expected:false},
+        ];
+        data.forEach(d => {
+            console.log(d);
+            expect( lineIntroducesABody(d.line) ).toEqual(d.expected);
+        });
+    });
+
+    test("lineIntroducesASection", ()=>{
+        let data = [
+            {line: "== genesen ({{Sprache|Deutsch}}) ==", expected:false},
+            {line: "== genesen ({{Sprache|Deutsch}})===", expected:false},
+
+            {line: "==={{Wortart|Verb|Deutsch}}  ===", expected:false},
+            {line: "==={{Wortart|Verb|Deutsch}}===", expected:false},
+            {line: "=== {{Wortart|Verb|Deutsch}}  ===", expected:false},
+            {line: "=== {{Wortart|Verb|Deutsch}} ===", expected:false},
+
+            {line: "=== {{Wortart|Verb|Deutsch}} ==", expected:false},
+            {line: "== {{Wortart|Verb|Deutsch}} ===", expected:false},
+
+            {line: "==== {{Übersetzungen}} ====", expected:true},
+            {line: "===={{Übersetzungen}} ====", expected:true},
+            {line: "===={{Übersetzungen}}====", expected:true},
+            {line: "==== {{Übersetzungen}}====", expected:true},
+        ];
+        data.forEach(d => {
+            console.log(d);
+            expect( lineIntroducesASection(d.line) ).toEqual(d.expected);
+        });
+    });
+});
 
 function readWikiTextFile(wikiname:string):string {
     let pathName = path.resolve(__dirname, `wikitext/${wikiname}.txt`);

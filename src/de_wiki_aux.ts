@@ -69,6 +69,22 @@ export function stripCurly(text: string): string {
 }
 
 /**
+ * parse something like:
+ *
+ *  + `{{parameter|value}}`
+ *  + `{{parameter}}
+ *
+ * */
+export function parseSimpleTemplate(template:string): {parameter:string, value:string|undefined} {
+    let plaintext = stripCurly(template).split('|');
+    if (plaintext.length < 3) {
+        return {parameter: plaintext[0], value: plaintext[1]};
+    }else {
+        throw new Error(`Too much '|' for a simple template: '${template}'`);
+    }
+}
+
+/**
  * TODO: strip only link
  * */
 export function stripWikiFormat(text:string): string {

@@ -142,10 +142,12 @@ statisticEventEmitter.addListener(SENSE_IS_MULTILINE, (lemma, line) => {
     statisticCollect[SENSE_IS_MULTILINE].push({lemma, line});
 });
 
-statisticEventEmitter.addListener(GENERAL_ERROR, (error:Error) => {
+statisticEventEmitter.addListener(GENERAL_ERROR, (error:Error, extra:string) => {
     // @ts-ignore
-    let errorCount = statisticCollect[GENERAL_ERROR][error.message] || 0;
-    errorCount += 1;
+    let errorCount = statisticCollect[GENERAL_ERROR][error.message] || {count:0, trace:[], extra:[]};
+    errorCount.count += 1;
+    errorCount.trace.push(error.stack);
+    errorCount.extra.push(extra);
     // @ts-ignore
     statisticCollect[GENERAL_ERROR][error.message] = errorCount;
 });
@@ -270,7 +272,9 @@ function prepareWikiJson(wikitext:string):string {
         statisticEventEmitter.emit(WIKI_OK);
         return json;
     } catch (e) {
-        statisticEventEmitter.emit(GENERAL_ERROR, e);
+        let extraText = wikitext.split("\n").slice(0, 3).join("<newline>");
+        console.error(extraText);
+        statisticEventEmitter.emit(GENERAL_ERROR, e, extraText);
         return JSON.stringify(wikitext);
     }
 }
