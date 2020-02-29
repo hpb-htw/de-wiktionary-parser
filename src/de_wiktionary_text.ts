@@ -90,10 +90,21 @@ export function consumeBody(page: WikiPage, beginIdx:number, wikiLines:string[])
     let nextLine = wikiLines[lineIdx + 1];
     let block:string[] = [];
     let blockPosition = 0;
+    const isBlockEnd = (currentLine:string, nextLine:string): boolean => {
+        if (nextLine !== undefined && nextLine.startsWith('{{')) {
+            return true;
+        } else {
+            if (currentLine !== undefined) {
+                return currentLine.trim() === "";
+            } else {
+                return true;
+            }
+        }
+    };
     do {
         if (currentLine !== undefined) {
             currentLine = currentLine.trim();
-            if (currentLine !== "") {
+            if ( /*currentLine !== ""*/ !isBlockEnd(currentLine,nextLine) ) {
                 if (! (currentLine.startsWith("=== ") || currentLine.startsWith("==== ") )) {
                     block.push(currentLine);
                 } else if (currentLine.startsWith("==== ")) { // because of "Übersetzung"

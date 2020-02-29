@@ -9,7 +9,7 @@ import {
 
 export function consumeBedeutungBlock(body:Body, block:string[]) {
     let category:string|undefined = undefined;
-    const listToken = /:\[\s*\d+\s*\]\s*/;
+    const listToken = /\[\s*\d+\s*\w*\]\s*/;
     const domainToken = '*';
     let senseBlock = block.slice(1);
     let sense:Sense[] = body.sense;
@@ -34,6 +34,8 @@ export function consumeBedeutungBlock(body:Body, block:string[]) {
                 }
             }
             if (consistentState) {
+                cachedLine = cachedLine.replace(listToken, '');
+                cachedLine = stripWikiFormat(cachedLine);
                 currentLevel.push(new Sense(cachedLine));
             }
         } else if ( line.startsWith(domainToken) ) {
