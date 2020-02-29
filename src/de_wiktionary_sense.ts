@@ -39,9 +39,9 @@ export function consumeBedeutungBlock(body:Body, block:string[]) {
                 currentLevel.push(new Sense(cachedLine));
             }
         } else if ( line.startsWith(domainToken) ) {
-            statisticEventEmitter.emit(SENSE_HAS_DOMAIN, body.lemma, line);
+            statisticEventEmitter.emit(SENSE_HAS_DOMAIN, body.lemma, `${idx}: ${line}`);
         } else { // line is a continue of text above => ignore it
-            statisticEventEmitter.emit(SENSE_IS_MULTILINE, body.lemma, line);
+            statisticEventEmitter.emit(SENSE_IS_MULTILINE, body.lemma, `${idx}: ${line}`);
         }
 
         /*

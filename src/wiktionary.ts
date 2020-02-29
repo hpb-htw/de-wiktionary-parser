@@ -81,7 +81,7 @@ const statisticCollect = {
     /**  count how many bad Flextion
      *
      * */
-    [BAD_FLEXION]: { // syntax: „flexionName“: {count: number, lemma:string[] }
+    [BAD_FLEXION]: { // syntax: „flexionName“: {count: number, lemma:[{lemma:string, context:string}} }
 
     },
     [SENSE_INCONSISTENT]: [], // contains only lemmas
@@ -109,11 +109,11 @@ statisticEventEmitter.addListener(WIKI_OK, () =>{
    statisticCollect[WIKI_OK] += 1;
 });
 
-statisticEventEmitter.addListener(BAD_FLEXION, (flexionName:string, lemma:string)=>{
+statisticEventEmitter.addListener(BAD_FLEXION, (flexionName:string, context:string, lemma:string)=>{
    // @ts-ignore
     let flexion = statisticCollect[BAD_FLEXION][flexionName] || {count:0, lemma: []};
     flexion.count +=1;
-    flexion.lemma.push(lemma);
+    flexion.lemma.push({lemma:lemma, context: context});
     // @ts-ignore
     statisticCollect[BAD_FLEXION][flexionName] = flexion;
 });
@@ -171,10 +171,21 @@ export function getStatistic(maximum:number = 5) {
         [SENSE_IS_MULTILINE.toString()]: statisticCollect[SENSE_IS_MULTILINE].slice(0, maximum),
         [SENSE_HAS_DOMAIN.toString()]: statisticCollect[SENSE_HAS_DOMAIN].slice(0, maximum)
     };
-    function summaryLemma(statistic:any) { // structure: {count:number, lemma:[]}
-        let lemma = statistic.lemma.slice(0, maximum).join(", ");
+    let groupBy = function(collection:any[], key:string|number, transform:(item:any)=>any) {
+        return collection.reduce(function(container, item) {
+            container[item[key]] = container[item[key]] || [];
+            if( container[item[key]].length < maximum ) {
+                container[item[key]].push(transform(item));
+            } else if (container[item[key]].length === maximum ) {
+                container[item[key]].push( '...' );
+            }
+            return container;
+        }, {});
+    };
+    function summaryBadFlexion(statistic:any) { // structure: {count:number, lemma:[{lemma, context}]}
+        let lemma = groupBy( statistic.lemma, 'context',(item)=>item.lemma);
         if (maximum < statistic.count) {
-            lemma += ", ...";
+            lemma['...'] = {};
         }
         return {
             count: statistic.count,
@@ -184,12 +195,22 @@ export function getStatistic(maximum:number = 5) {
     let badFlexionKeys = Object.keys( statisticCollect[BAD_FLEXION] ).slice(0, maximum);
     badFlexionKeys.forEach( (key)=>{
         // @ts-ignore
-        result[BAD_FLEXION.toString()][key] = summaryLemma( statisticCollect[BAD_FLEXION][key] );
+        result[BAD_FLEXION.toString()][key] = summaryBadFlexion( statisticCollect[BAD_FLEXION][key] );
     });
+    function summaryNoConsume(statistic:any) { // structure: {count:number, lemma:[]}
+        let lemma = statistic.lemma.slice(0, maximum).join(", ");
+        if (maximum < statistic.count) {
+            lemma += ", ...";
+        }
+        return {
+            count: statistic.count,
+            lemma: lemma
+        };
+    }
     let noConsumerForBlockKeys = Object.keys( statisticCollect[NO_CONSUME_FOR_BLOCK] ).slice(0, maximum);
     noConsumerForBlockKeys.forEach( (key)=>{
         // @ts-ignore
-        result[NO_CONSUME_FOR_BLOCK.toString()][key] = summaryLemma( statisticCollect[NO_CONSUME_FOR_BLOCK][key] );
+        result[NO_CONSUME_FOR_BLOCK.toString()][key] = summaryNoConsume( statisticCollect[NO_CONSUME_FOR_BLOCK][key] );
     });
     let generalErrorKeys = Object.keys( statisticCollect[GENERAL_ERROR] ).slice(0, maximum);
     generalErrorKeys.forEach(key =>{

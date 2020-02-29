@@ -3,7 +3,9 @@ SRC_TS        = $(wildcard src/*.ts)
 RAW_CSV_GZ    = ../big-file/dewiktionary.csv.gz
 WIKI_DUMP     = ../big-file/dewiktionary-20191020-pages-articles.xml
 CSV_DELIMITER = "<separator>"
-
+# runable
+NPM           = npm
+INSTALL       = install --no-optional
 
 
 .PHONY:all
@@ -12,7 +14,7 @@ all: install $(BIN) coverage/lcov.info $(RAW_CSV_GZ)
 
 .PHONY:install
 install:
-	npm install
+	$(NPM) $(INSTALL)
 
 .PHONY:bin
 bin: $(BIN)
@@ -44,4 +46,4 @@ clean-all:
 .PHONY: refresh
 refresh:
 	rm -rf ./node_modules ./package-lock.json 
-	npm install
+	$(NPM) $(INSTALL)

@@ -2,6 +2,7 @@ import {consumePartOfSpeech, consumeTitle, parseDeWikiTextToObject} from "../de_
 import * as path from "path";
 import * as fs from "fs";
 import {expectObjectEqual} from "./object_expect";
+import {Flexion, WikiPage} from "wikinary-eintopf/lib/de_wiki_lang";
 
 /**
  * implicit condition: a wiki text contains at least one page.
@@ -102,6 +103,28 @@ describe("Single parts of a wiki text", ()=> {
             language:"Deutsch"
         };
         expectObjectEqual(title, expectedTitle);
+    });
+
+    test("parse Helium", () => {
+       let text = `== Helium ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{n}} ===
+{{Elemente|He|Wasserstoff|H|Lithium|Li}}
+{{Deutsch Substantiv Übersicht
+|Genus=n
+|Nominativ Singular=Helium
+|Nominativ Plural=—
+|Genitiv Singular=Heliums
+|Genitiv Plural=—
+|Dativ Singular=Helium
+|Dativ Plural=—
+|Akkusativ Singular=Helium
+|Akkusativ Plural=—
+|Bild 1=Electron shell 002 Helium.svg|mini|1|Schematische Darstellung der Elektronenhülle von ''Helium''
+|Bild 2=Edelgase in Entladungsroehren.jpg|mini|1|Edelgase in Entladungsröhren (von links nach rechts): ''Helium'', [[Neon]], [[Argon]], [[Krypton]] und [[Xenon]]
+}}`;
+        let page:WikiPage[] = parseDeWikiTextToObject(text);
+        let flexion:Flexion|undefined = page[0].body[0].flexion;
+
     });
 
     test("consumePartOfSpeech.multiple_variants", ()=>{

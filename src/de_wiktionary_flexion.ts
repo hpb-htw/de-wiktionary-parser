@@ -27,7 +27,7 @@ export function isFlexion(body:Body, blockTitle:string):boolean {
     // ....
     // look here first
     if (blockTitle.startsWith("{{") && !blockTitle.endsWith("}}")) {
-        statisticEventEmitter.emit(BAD_FLEXION, `Look like flexion but not found consumer '${blockTitle}'`, body.lemma);
+        statisticEventEmitter.emit(BAD_FLEXION, 'Look like flexion but not found consumer', blockTitle, body.lemma);
     }
     /*
     if (blockTitle.startsWith("{{") && blockTitle.endsWith("}}")) {
@@ -243,9 +243,9 @@ function parseVornameFlexion(lemma:string ,title:string, lines:string[]):Vorname
                         flexion.genitiv.singular.push(lemma + "s"); // << Not sure about it!
                         flexion.dativ.singular.push(lemma);
                         flexion.akkusativ.singular.push(lemma);
-                        statisticEventEmitter.emit(BAD_FLEXION, `Not sure about Vorname Genitiv Form`, lemma);
+                        statisticEventEmitter.emit(BAD_FLEXION, `Not sure about Vorname Genitiv Form`, 'lemma', lemma+'-s');
                     } else {
-                        statisticEventEmitter.emit(BAD_FLEXION, `Expected an applicable value for Plural Form for Parameter ${key}`, lemma);
+                        statisticEventEmitter.emit(BAD_FLEXION, `Expected an applicable value for Plural Form for Parameter`, key, lemma);
                     }
                 }
             }
@@ -311,7 +311,7 @@ function parseVerbFlexion(lemma:string, title:string, lines:string[]):VerbFlexio
         let [key, value] = line.split("=");
         if (!ignoreableVerbFlexionParameter(key)) {
             if (key.startsWith(VerbFlexion.WEITERE_KONJUGATIONEN)) {
-                statisticEventEmitter.emit(BAD_FLEXION, `Not support ${key} of ${line} for now`, lemma);
+                statisticEventEmitter.emit(BAD_FLEXION, `Not support key for now`, `${key} of ${line} `, lemma);
             }else {
                 value = normalizedValueOfFlexion(lemma, line, key, value);
                 if (key.startsWith(VerbFlexion.PRAESENS_ICH)) {
@@ -333,7 +333,7 @@ function parseVerbFlexion(lemma:string, title:string, lines:string[]):VerbFlexio
                 } else if (key.startsWith(VerbFlexion.HILF_VERB)) {
                     flexion.hilfverb.push(value);
                 } else {
-                    statisticEventEmitter.emit(BAD_FLEXION, `Unknown VerbFlexion parameter '${key}' of line: ${line}`, lemma);
+                    statisticEventEmitter.emit(BAD_FLEXION, 'Unknown VerbFlexion', `'${key}' of '${line}'`, lemma);
                 }
             }
         }
@@ -384,10 +384,10 @@ function parseAdjektivFlexion(lemma:string, title:string, lines:string[]):Adjekt
                 } else if (value === "nein") {
                     flexion.moreForm = false;
                 } else {
-                    statisticEventEmitter.emit(BAD_FLEXION, `Unknown value ${value} of AdjektivFlexion parameter ${key}`, lemma);
+                    statisticEventEmitter.emit(BAD_FLEXION, `Unknown value of AdjektivFlexion parameter`, `${value} of ${key}` , lemma);
                 }
             }else {
-                statisticEventEmitter.emit(BAD_FLEXION, `Unknown AdjektivFlexion parameter '${key}'`, lemma);
+                statisticEventEmitter.emit(BAD_FLEXION, `Unknown AdjektivFlexion parameter`,`${key}`, lemma);
             }
         }
     }
