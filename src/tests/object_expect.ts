@@ -1,6 +1,6 @@
 import {
     BAD_FLEXION,
-    GENERAL_ERROR, INGORE_WORD,
+    GENERAL_ERROR, IGNORE_WORD,
     NO_CONSUME_FOR_BLOCK,
     PARSE_WIKI_TEXT,
     statisticEventEmitter,
@@ -34,6 +34,6 @@ statisticEventEmitter.addListener(GENERAL_ERROR, (error:Error) => {
     throw error;
 });
 
-statisticEventEmitter.addListener(INGORE_WORD, (word:string)=> {
+statisticEventEmitter.addListener(IGNORE_WORD, (word:string)=> {
     //Nothing
 });

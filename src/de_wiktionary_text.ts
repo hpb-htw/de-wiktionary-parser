@@ -7,7 +7,7 @@ import {
 import {consumeWorttrennung} from "./de_wiktionary_worttrennung";
 import {
     BadWikiSyntax,
-    INGORE_WORD,
+    IGNORE_WORD, IGNORE_WORD_INSIDE,
     NO_CONSUME_FOR_BLOCK,
     removeHTMLComment,
     statisticEventEmitter, stripCurly, stripWikiFormat
@@ -15,7 +15,7 @@ import {
 import {consumeFlexion, isFlexion} from "./de_wiktionary_flexion";
 import {consumeBedeutungBlock} from "./de_wiktionary_sense";
 import * as Ast from "./de_wiki_ast";
-import {Block} from "./de_wiki_ast";
+
 
 export function parseDeWikiTextToObject(wikiText: string, selectLanguages:string[]=["Deutsch"]): WikiPage[] {
     let wiki:Ast.WikiText;
@@ -129,15 +129,19 @@ function nextLineStartABody(line:string, nextLine:string|undefined) {
 }
 
 function nextLineStartAPage(line:string, nextLine:string|undefined) {
-    return (nextLine !== undefined) && lineIntroducesAPage(line); // == sein ({{Sprache|Französisch}}) ==
+    return (nextLine !== undefined) && lineIntroducesAPage(nextLine); // == sein ({{Sprache|Französisch}}) ==
 }
 
 
 function consumeWiki(wiki: Ast.WikiText, selectLanguages:string[]):WikiPage[] {
     let pages:WikiPage[] = [];
     for (let astPage of wiki.pages) {
-        if (selectLanguages.includes(astPage.language)) {
+        let lang = astPage.language;
+        if (selectLanguages.includes(lang)) {
             pages.push(consumePage(astPage));
+        }else {
+            statisticEventEmitter.emit(IGNORE_WORD_INSIDE, astPage.lemma);
+            console.error(`     Drop page in ${lang} of lemma '${astPage.lemma}'`);
         }
     }
     return pages;
@@ -223,7 +227,7 @@ function appendBlockToBody(astblock:Ast.Block, body:Body) {
         consumeUnknownBlock(body, block);
     } else if (title === WikiBlockName.Gegenwoerter) {
         consumeUnknownBlock(body, block);
-    } else { // TODO: extend this part
+    } else {
         consumeUnknownBlock(body, block);
     }
 }

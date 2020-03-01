@@ -1,9 +1,10 @@
-import {Body, PartOfSpeech, Sense} from "wikinary-eintopf/lib/de_wiki_lang";
+import {Body, PartOfSpeech, Sense, ListItem} from "wikinary-eintopf/lib/de_wiki_lang";
 import {consumeBedeutungBlock} from "../de_wiktionary_sense";
 
 
+
 describe("consumeBedeutungBlock", () =>{
-    test("Anthropologie", () => {
+    test("durchaus", () => {
         let text =
 `{{Bedeutungen}}
 :[1] unter allen denkbaren Umständen und besonders auch gegen Widerstand; [[unbedingt]]
@@ -13,15 +14,14 @@ describe("consumeBedeutungBlock", () =>{
         pos.pos=['Adverb'];
         let body:Body = new Body('durchaus', pos);
         consumeBedeutungBlock(body, text);
-        let sense:Sense[] = body.sense;
-        console.log(sense);
-        expect(sense).toHaveLength(text.length - 1);
-        let s1 = sense[0].text;
-        expect(s1).toEqual('unter allen denkbaren Umständen und besonders auch gegen Widerstand; unbedingt');
-        let s2 = sense[1].text;
-        expect(s2).toEqual('nach Abwägung oder Erfahrung denkbar und möglich, oder alles in allem machbar; schon');
-        let s3 = sense[2].text;
-        expect(s3).toEqual('zu hundert Prozent sicher');
+        let sense:Sense = body.sense;
+        expect(sense.introText).toEqual(undefined);
+        let a:ListItem[] = sense.ambiguity;
+        expect(a).toHaveLength(text.length - 1);
+        expect(a[0].text).toEqual('unter allen denkbaren Umständen und besonders auch gegen Widerstand; unbedingt');
+        expect(a[1].text).toEqual('nach Abwägung oder Erfahrung denkbar und möglich, oder alles in allem machbar; schon');
+        expect(a[3].text).toEqual('zu hundert Prozent sicher');
+
     });
 
     test("Baum", () => {
@@ -34,14 +34,16 @@ describe("consumeBedeutungBlock", () =>{
 :[4] {{K|umgangssprachlich}} [[Weihnachtsbaum]]
 :[5] [[waagerecht]]e [[Stange]] am (meist unteren) [[Ende]] eines [[Segel]]s`.split('\n');
         let pos = new PartOfSpeech();
-        pos.pos=['Adverb'];
+        pos.pos=['Substantiv'];
         let body:Body = new Body('Baum', pos);
         consumeBedeutungBlock(body, text);
-        let sense:Sense[] = body.sense;
-        console.log(sense);
-        expect(sense).toHaveLength(text.length - 1 - 1);
-        let thirdSense = sense[2];
-        console.log(thirdSense);
+        let sense:Sense = body.sense;
+        expect(sense.introText).toEqual(undefined);
+        let a:ListItem[] = sense.ambiguity;
+        expect(a).toHaveLength(text.length - 1 - 1);
+        let a2:ListItem[] = a[2].items!;
+        expect(a2).toHaveLength(1);
+        expect(a2[0].text).toEqual('[3a] {{K|Graphentheorie}} kreisfreier, zusammenhängender [[Graph]]');
     });
 
     test('folgen', () =>{
@@ -85,5 +87,23 @@ describe("consumeBedeutungBlock", () =>{
 :[8] {{K|Essen|t1=_|kinderspr.}} Fußball spielen`;
     });
 
+    test('ach', () => {
+       let text = `{{Bedeutungen}}
+Es ist einer der variabelsten Ausrufe der deutschen Sprache und drückt je nach Länge und Betonung Unterschiedliches aus:
+:[1] (kurz, ansteigend) drückt [[Verwunderung]] aus
+:[2] (langgezogen, stöhnend) drückt [[Leiden]] aus
+:[3] (langgezogen, ansteigend) drückt [[Aufmerksamkeit]] oder [[Interesse]] aus
+:[4] (kurzab, wegwerfend) [[Belanglosigkeit]] oder [[Desinteresse]] aus
+:[5] (hochtonig, abgerissen) drückt [[Fassungslosigkeit]] aus
+:[6] verstärkt ein darauf folgendes Wort
+
+`.split('\n');
+        let pos = new PartOfSpeech();
+        pos.pos=['XXXXXXX'];
+        let body:Body = new Body('Baum', pos);
+        consumeBedeutungBlock(body, text);
+        let sense:Sense = body.sense;
+        expect(sense.introText).toEqual(text[1]);
+    });
 
 });

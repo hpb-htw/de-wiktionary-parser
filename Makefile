@@ -2,6 +2,8 @@ BIN           = lib/index.js
 SRC_TS        = $(wildcard src/*.ts)
 RAW_CSV_GZ    = ../big-file/dewiktionary.csv.gz
 WIKI_DUMP     = ../big-file/dewiktionary-20200220-pages-articles.xml
+#../big-file/small-dewiktionary-20191020-pages-articles.xml
+
 CSV_DELIMITER = "<separator>"
 # runable
 NPM           = npm

@@ -1,0 +1,88 @@
+== humide ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Adjektiv|Deutsch}} ===
+
+{{Deutsch Adjektiv Übersicht
+|Positiv=humide
+|Komparativ=humider
+|Superlativ=humidesten
+}}
+
+{{Nebenformen}}
+:''häufiger:'' [[humid]]
+
+{{Worttrennung}}
+:hu·mi·de, {{Komp.}} hu·mi·der, {{Sup.}} am hu·mi·des·ten
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|huˈmiːdə}}
+:{{Hörbeispiele}} {{Audio|De-humide.ogg}}
+:{{Reime}} {{Reim|iːdə|Deutsch}}
+
+{{Bedeutungen}}
+:[1] ''vom Klima oder einer Landschaft:''  so, dass im jährlichen Durchschnitt die Niederschlagsmenge höher als die Verdunstung ist
+
+{{Beispiele}}
+:[1] Der brasilianische Regenwald hat ein sehr ''humides'' Klima.
+
+{{Lemmaverweis|humid}}
+
+{{Referenzen}}
+:[1] {{Ref-DWDS|humide}}
+:[1] {{Ref-Canoo|humide}}
+:[1] {{Ref-UniLeipzig|humide}}
+
+== humide ({{Sprache|Französisch}}) ==
+=== {{Wortart|Adjektiv|Französisch}} ===
+
+{{Französisch Adjektiv Übersicht
+|Maskulinum Singular=humide
+|Femininum Singular=humide
+|Maskulinum Plural=humides
+|Femininum Plural=humides
+}}
+
+{{Worttrennung}}
+:hu·mide
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|y.mid}}
+:{{Hörbeispiele}} {{Audio|Fr-humide.ogg}}, {{Pl.}} {{Audio|}}
+
+{{Bedeutungen}}
+:[1] feucht, nass
+
+{{Gegenwörter}}
+:[1] [[sec]], [[aride]]
+
+{{Beispiele}}
+:[1] {{Beispiele fehlen|spr=fr}}
+
+{{Charakteristische Wortkombinationen}}
+:[1] [[air]], [[chambre]], [[lieu]], [[linge]], [[pays]], [[température]], [[temps]], [[terre]] ''humide(s) ''
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{da}}: [1] {{Ü|da|humid}}
+*{{de}}: [1] [[feucht]], [[humid#humid (Deutsch)|humid]], [[nass]]
+*{{en}}: [1] {{Ü|en|damp}}, {{Ü|en|humid}}, {{Ü|en|moist}}
+*{{fi}}: [1] {{Ü|fi|kostea}}
+*{{it}}: [1] {{Ü|it|umido}}
+*{{el}}: [1] {{Üt|el|υγρός|ygrós}}
+*{{hr}}: [1] {{Ü|hr|vlažan}}
+*{{nl}}: [1] {{Ü|nl|vochtig}}
+|Ü-rechts=
+*{{pl}}: [1] {{Ü|pl|mokry}}
+*{{pt}}: [1] {{Ü|pt|húmido}}
+*{{ro}}: [1] {{Ü|ro|umed}}
+*{{ru}}: [1] {{Üt|ru|влажный|wlashnyj}}
+*{{sv}}: [1] {{Ü|sv|fuktig}}
+*{{sk}}: [1] {{Ü|sk|vlhký}}
+*{{es}}: [1] {{Ü|es|húmedo}}
+*{{cs}}: [1] {{Ü|cs|vlhký}}
+}}
+
+{{Referenzen}}
+:[1] {{Wikipedia|spr=fr|humide}}
+:[1] {{Ref-Pons|fr|humide}}
+:[1] {{Ref-CNRTL|humide}}
+:[1] {{Ref-Leo|fr|humide}}

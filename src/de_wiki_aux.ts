@@ -3,31 +3,39 @@ const wtf = require('wtf_wikipedia');
 
 export const statisticEventEmitter = new events.EventEmitter();
 export const PARSE_WIKI_TEXT = Symbol("countWikiText"),
-    WIKI_OK = Symbol("wikiTextOK"),
+    WIKI_OK = Symbol("WIKI_OK"),
     /**
      * if a block title lexical looks like a flexion, but cannot be reconized as a flexion.
      * This is differ from Error `Unknown lexion`: this error indicates that there is a
      * consumer of the flexion. But the consumer cannot consume the flexion and therefore throws
      * the exeption.
      * */
-    BAD_FLEXION = Symbol("badFlexion"),
+    BAD_FLEXION = Symbol("BAD_FLEXION"),
     /**
      * this event is fired when the first line after {{Bedeutungen}} begins with more than one colons.
      *
      * */
-    SENSE_INCONSISTENT = Symbol("senseInconsistent"),
+    SENSE_INCONSISTENT = Symbol("SENSE_INCONSISTENT"),
     /**
      * this event is fired when a line in block {{Bedeutungen}} begins with a start (*), which
      * is not processed in this version
      * */
-    SENSE_HAS_DOMAIN = Symbol("senseHasDomain"),
+    SENSE_HAS_DOMAIN = Symbol("SENSE_HAS_DOMAIN"),
     /**
      * */
-    SENSE_IS_MULTILINE = Symbol("senseIsMultiline"),
-    NO_CONSUME_FOR_BLOCK = Symbol("noConsumerForBlock"),
-    GENERAL_ERROR = Symbol("parseWikiError"),
-    INGORE_WORD = Symbol("ignoreWord")
+    SENSE_IS_MULTILINE = Symbol("SENSE_IS_MULTILINE"),
 
+    /**
+     * blocks, which can not be processed for now, go here!
+     * */
+    NO_CONSUME_FOR_BLOCK = Symbol("NO_CONSUME_FOR_BLOCK"),
+
+    /**
+     * non-categorized problems
+     * */
+    GENERAL_ERROR = Symbol("GENERAL_ERROR"),
+    IGNORE_WORD = Symbol("IGNORE_WORD"),
+    IGNORE_WORD_INSIDE = Symbol("IGNORE_WORD_INSIDE")
 ;
 
 // Escapes text for XML.

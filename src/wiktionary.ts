@@ -7,7 +7,7 @@ import * as fs from "fs";
 import {
     BAD_FLEXION,
     GENERAL_ERROR,
-    INGORE_WORD,
+    IGNORE_WORD, IGNORE_WORD_INSIDE,
     isGermanWord,
     NO_CONSUME_FOR_BLOCK,
     PARSE_WIKI_TEXT, SENSE_HAS_DOMAIN, SENSE_INCONSISTENT, SENSE_IS_MULTILINE,
@@ -78,6 +78,7 @@ const statisticCollect = {
     [PARSE_WIKI_TEXT]: 0,
     /** count how many wikiText are parsed without any exception thrown */
     [WIKI_OK] : 0,
+
     /**  count how many bad Flextion
      *
      * */
@@ -98,7 +99,10 @@ const statisticCollect = {
     [GENERAL_ERROR]: {
 
     },
-    [INGORE_WORD]: 0
+    [IGNORE_WORD]: 0,
+    [IGNORE_WORD_INSIDE]: {
+        count:0, lemma:[]
+    }
 };
 
 statisticEventEmitter.addListener(PARSE_WIKI_TEXT,() => {
@@ -152,18 +156,28 @@ statisticEventEmitter.addListener(GENERAL_ERROR, (error:Error, extra:string) => 
     statisticCollect[GENERAL_ERROR][error.message] = errorCount;
 });
 
-statisticEventEmitter.addListener(INGORE_WORD, (word:string)=> {
-    statisticCollect[INGORE_WORD] += 1;
-    if (statisticCollect[INGORE_WORD] % 1000 === 0) {
-        console.error(`    ignore word ${statisticCollect[INGORE_WORD]} last ignored word is ${word}`);
+statisticEventEmitter.addListener(IGNORE_WORD, (word:string)=> {
+    statisticCollect[IGNORE_WORD] += 1;
+    if (statisticCollect[IGNORE_WORD] % 1000 === 0) {
+        console.error(`    ignore word ${statisticCollect[IGNORE_WORD]} last ignored word is ${word}`);
     }
+});
+
+statisticEventEmitter.addListener(IGNORE_WORD_INSIDE, (word:string)=>{
+    statisticCollect[IGNORE_WORD_INSIDE].count += 1;
+    // @ts-ignore
+    statisticCollect[IGNORE_WORD_INSIDE].lemma.push(word);
 });
 
 export function getStatistic(maximum:number = 5) {
     let result = {
         [PARSE_WIKI_TEXT.toString()]: statisticCollect[PARSE_WIKI_TEXT],
         [WIKI_OK.toString()] : statisticCollect[WIKI_OK] ,
-        [INGORE_WORD.toString()]: statisticCollect[INGORE_WORD],
+        [IGNORE_WORD.toString()]: statisticCollect[IGNORE_WORD],
+        [IGNORE_WORD_INSIDE.toString()]: {
+            count: statisticCollect[IGNORE_WORD_INSIDE].count,
+            lemma: statisticCollect[IGNORE_WORD_INSIDE].lemma.slice(0, maximum)
+        },
         [GENERAL_ERROR.toString()]: {},
         [NO_CONSUME_FOR_BLOCK.toString()]:{},
         // Flexion
@@ -177,7 +191,7 @@ export function getStatistic(maximum:number = 5) {
         return collection.reduce(function(container, item) {
             container[item[key]] = container[item[key]] || [];
             if( container[item[key]].length < maximum ) {
-                container[item[key]].push(transform(item));
+                container[item[key]].push( transform(item) );
             } else if (container[item[key]].length === maximum ) {
                 container[item[key]].push( '...' );
             }
@@ -186,12 +200,24 @@ export function getStatistic(maximum:number = 5) {
     };
     function summaryBadFlexion(statistic:any) { // structure: {count:number, lemma:[{lemma, context}]}
         let lemma = groupBy( statistic.lemma, 'context',(item)=>item.lemma);
-        if (maximum < statistic.count) {
-            lemma['...'] = {};
+        let newLemma = {};
+        for( let [context,lemmas] of Object.entries(lemma) ) {
+            // @ts-ignore
+            let text = (lemmas.slice(0, maximum)).join(", ");
+            // @ts-ignore
+            if (lemmas.length > maximum) {
+                text += ", ...";
+            }
+            // @ts-ignore
+            newLemma[context] = {
+                // @ts-ignore
+                count: lemmas.length,
+                lemma: text
+            };
         }
         return {
             count: statistic.count,
-            lemma: lemma
+            template: newLemma
         };
     }
     let badFlexionKeys = Object.keys( statisticCollect[BAD_FLEXION] ).slice(0, maximum);
@@ -247,7 +273,7 @@ export function importDic(
                 }
             }
         } else {
-            statisticEventEmitter.emit(INGORE_WORD, entry["title"]);
+            statisticEventEmitter.emit(IGNORE_WORD, entry["title"]);
             // console.error( `ignore word ${entry["title"]}`);
         }
     }
@@ -268,7 +294,7 @@ export function importDic(
 function prepareWikiJson(wikitext:string):string {
     try{
         statisticEventEmitter.emit(PARSE_WIKI_TEXT);
-        let json = JSON.stringify( parseDeWikiTextToObject(wikitext) );
+        let json = JSON.stringify( parseDeWikiTextToObject(wikitext, ["Deutsch"]) );
         statisticEventEmitter.emit(WIKI_OK);
         return json;
     } catch (e) {

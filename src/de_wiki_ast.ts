@@ -1,6 +1,6 @@
 /* Abbildung von Wiki Text in AST */
 
-//export namespace Ast {
+
 import {parseSimpleTemplate, stripCurly} from "./de_wiki_aux";
 
 /**
@@ -81,11 +81,11 @@ export class Body {
 export class Section {
 
     name:string;
-    lema:string;
+    lemma:string;
     blocks: Block[] = [];
     constructor(name:string, parent:Body) {
         this.name = name;
-        this.lema = parent.lemma;
+        this.lemma = parent.lemma;
     }
 }
 
@@ -103,9 +103,6 @@ export class Block {
         return Array.from(this.text);
     }
 }
-
-//}
-
 
 
 function stripEqualMark(headLine: string): string {
