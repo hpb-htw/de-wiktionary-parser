@@ -1,5 +1,5 @@
 import {
-    Body, PartOfSpeech, Sense, Title,
+    Body, PartOfSpeech, Title,
     UEBERSETZUNGS_TABELL,
     WikiBlockName,
     WikiPage
