@@ -98,6 +98,33 @@ describe("test parseWorttrenungLine", () =>{
         let h = parseWorttrenungLine(line);
         expect(h).toHaveLength(line.split(",").length - 1);
    });
+   test("", () =>{
+       let line = ":Ma·ya-Ka·len·der, {{Pl.}} Ma·ya-Ka·len·der";
+       let h = parseWorttrenungLine(line);
+       let expected = [
+           {
+               "additionalInformation": [],
+               "form": "",
+               "syllable": [
+                   "Ma",
+                   "ya-Ka",
+                   "len",
+                   "der"
+               ]
+           },
+           {
+               "additionalInformation": [],
+               "form": "{{Pl.}}",
+               "syllable": [
+                   "Ma",
+                   "ya-Ka",
+                   "len",
+                   "der"
+               ]
+           }
+       ];
+       expect( JSON.parse( JSON.stringify(h) )).toStrictEqual(expected);
+   });
 });
 
 
@@ -210,7 +237,8 @@ describe("Test Tokenize Wiki markup",  () => {
 
 
 ":Ge·schoß·hö·hen"
-
+"{{Worttrennung}}\n" +
+":Ma·ya-Ka·len·der, {{Pl.}} Ma·ya-Ka·len·der"
 
 
 

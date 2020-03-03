@@ -173,7 +173,7 @@ export namespace worttrennung {
     */
     export function parseHyphenPart(text: string): Hyphen {
         const TYPE_PATTERN = /\{\{[^}]*\}\}/;
-        const NON_ALPHA_SPACE_PATTERN = /[^(a-z\s\u00b7\u00df\u00e4\u00f6\u00fc\u00c4\u00d6\u00d4)]/i;
+        const NON_ALPHA_SPACE_PATTERN = /[^(a-z\s\u00b7\u00df\u00e4\u00f6\u00fc\u00c4\u00d6\u00d4\-)]/i;
         let foundForm = text.match(TYPE_PATTERN);
         let form: string | undefined = undefined;
         let hyphenBeginIdx = 0;
