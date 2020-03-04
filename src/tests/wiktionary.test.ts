@@ -1,10 +1,6 @@
 import * as path from "path";
 import {parseWikiXml, importDic, Entry } from "../wiktionary";
 
-const bigDumpXML = "../../big-file/dewiktionary-20191020-pages-articles.xml";
-//const smallDumpXML = "../../../big-file/small-dewiktionary-20191020-pages-articles.xml";
-//const nsZeroPageCountInSmallDumpXML = 6;
-
 const halloPageDict = {
     path: "../../../big-file/hallo-page.xml",
     lineOfPage: 56,
@@ -13,7 +9,7 @@ const halloPageDict = {
 };
 
 const smallDumpXML = {
-    path:  "../../../big-file/small-dewiktionary-20191020-pages-articles.xml",
+    path:  "wikitext/small-dewiktionary-20191020-pages-articles.xml",
     nsZeroPageCount: 6
 };
 
