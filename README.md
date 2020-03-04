@@ -1,5 +1,9 @@
 # De Wiktionary Parser
 
+[![Build status](https://ci.appveyor.com/api/projects/status/3l5ja20lgqkl2eex?svg=true)](https://ci.appveyor.com/project/hpb-htw/de-wiktionary-parser)
+[![codecov](https://codecov.io/gh/hpb-htw/de-wiktionary-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/hpb-htw/de-wiktionary-parser)
+
+
 This package provides a CLI command to convert the dump file (from 
 https://dumps.wikimedia.org/backup-index.html) to a CSV file.
 The CSV file can the be imported to a SQLite3 by 
