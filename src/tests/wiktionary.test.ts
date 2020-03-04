@@ -2,7 +2,7 @@ import * as path from "path";
 import {parseWikiXml, importDic, Entry } from "../wiktionary";
 
 const halloPageDict = {
-    path: "../../../big-file/hallo-page.xml",
+    path: "wikitext/hallo-page.xml",
     lineOfPage: 56,
     firstLine: '{{Siehe auch|[[hallo]], [[halló]]}}',
     lastLine: '{{Ähnlichkeiten 1|[[Hall]], [[Halle]], [[halle]], [[Halo]], [[holla]], [[Holle]]}}'

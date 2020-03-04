@@ -1,0 +1,157 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.10/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.10/ http://www.mediawiki.org/xml/export-0.10.xsd" version="0.10" xml:lang="de">
+<siteinfo>
+    <sitename>Wiktionary</sitename>
+    <dbname>dewiktionary</dbname>
+    <base>https://de.wiktionary.org/wiki/Wiktionary:Hauptseite</base>
+    <generator>MediaWiki 1.35.0-wmf.2</generator>
+    <case>case-sensitive</case>
+    <namespaces>
+      <namespace key="-2" case="case-sensitive">Medium</namespace>
+      <namespace key="-1" case="first-letter">Spezial</namespace>
+      <namespace key="0" case="case-sensitive" />
+      <namespace key="1" case="case-sensitive">Diskussion</namespace>
+      <namespace key="2" case="first-letter">Benutzer</namespace>
+      <namespace key="3" case="first-letter">Benutzer Diskussion</namespace>
+      <namespace key="4" case="case-sensitive">Wiktionary</namespace>
+      <namespace key="5" case="case-sensitive">Wiktionary Diskussion</namespace>
+      <namespace key="6" case="case-sensitive">Datei</namespace>
+      <namespace key="7" case="case-sensitive">Datei Diskussion</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki Diskussion</namespace>
+      <namespace key="10" case="case-sensitive">Vorlage</namespace>
+      <namespace key="11" case="case-sensitive">Vorlage Diskussion</namespace>
+      <namespace key="12" case="case-sensitive">Hilfe</namespace>
+      <namespace key="13" case="case-sensitive">Hilfe Diskussion</namespace>
+      <namespace key="14" case="case-sensitive">Kategorie</namespace>
+      <namespace key="15" case="case-sensitive">Kategorie Diskussion</namespace>
+      <namespace key="102" case="case-sensitive">Verzeichnis</namespace>
+      <namespace key="103" case="case-sensitive">Verzeichnis Diskussion</namespace>
+      <namespace key="104" case="case-sensitive">Thesaurus</namespace>
+      <namespace key="105" case="case-sensitive">Thesaurus Diskussion</namespace>
+      <namespace key="106" case="case-sensitive">Reim</namespace>
+      <namespace key="107" case="case-sensitive">Reim Diskussion</namespace>
+      <namespace key="108" case="case-sensitive">Flexion</namespace>
+      <namespace key="109" case="case-sensitive">Flexion Diskussion</namespace>
+      <namespace key="828" case="case-sensitive">Modul</namespace>
+      <namespace key="829" case="case-sensitive">Modul Diskussion</namespace>
+      <namespace key="2300" case="case-sensitive">Gadget</namespace>
+      <namespace key="2301" case="case-sensitive">Gadget Diskussion</namespace>
+      <namespace key="2302" case="case-sensitive">Gadget-Definition</namespace>
+      <namespace key="2303" case="case-sensitive">Gadget-Definition Diskussion</namespace>
+    </namespaces>
+</siteinfo>
+
+<page>
+    <title>MediaWiki:Linktrail</title>
+    <ns>8</ns>
+    <id>6</id>
+    <revision>
+      <id>65608</id>
+      <parentid>2297</parentid>
+      <timestamp>2004-06-05T22:14:21Z</timestamp>
+      <contributor>
+        <username>SteffenB</username>
+        <id>12</id>
+      </contributor>
+      <comment>Sonderzeichenreparatur;</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">/^([ä|ö|ü|ß|a-z]+)(.*)$/sD</text>
+      <sha1>lvzebpgyfmspl8mjm8nzz40amu8o683</sha1>
+    </revision>
+  </page>
+ <page>
+    <title>MediaWiki:Aboutpage</title>
+    <ns>8</ns>
+    <id>11</id>
+    <revision>
+      <id>362899</id>
+      <parentid>65613</parentid>
+      <timestamp>2006-08-23T15:20:06Z</timestamp>
+      <contributor>
+        <username>Pajz</username>
+        <id>1390</id>
+      </contributor>
+      <minor />
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">Wiktionary:Über das Wiktionary</text>
+      <sha1>9lzo5vbgtwzwfgldjdc1jpr1c17u4j2</sha1>
+    </revision>
+  </page>
+<page>
+    <title>Hallo</title>
+    <ns>0</ns>
+    <id>555</id>
+    <revision>
+      <id>6400792</id>
+      <parentid>6395169</parentid>
+      <timestamp>2018-06-22T16:43:25Z</timestamp>
+      <contributor>
+        <username>Instance of Bot</username>
+        <id>153371</id>
+      </contributor>
+      <minor />
+      <comment>Siehe auch ergänzt (IoB 1.03)</comment>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text xml:space="preserve">{{Siehe auch|[[hallo]], [[halló]]}}
+== Hallo ({{Sprache|Deutsch}}) ==
+=== {{Wortart|Substantiv|Deutsch}}, {{n}} ===
+
+{{Deutsch Substantiv Übersicht
+|Genus=n
+|Nominativ Singular=Hallo
+|Nominativ Plural=Hallos
+|Genitiv Singular=Hallos
+|Genitiv Plural=Hallos
+|Dativ Singular=Hallo
+|Dativ Plural=Hallos
+|Akkusativ Singular=Hallo
+|Akkusativ Plural=Hallos
+}}
+
+{{Worttrennung}}
+:Hal·lo, {{Pl.}} Hal·los
+
+{{Aussprache}}
+:{{IPA}} {{Lautschrift|haˈloː}}
+:{{Hörbeispiele}} {{Audio|De-Hallo.ogg}}
+:{{Reime}} {{Reim|oː|Deutsch}}
+
+{{Bedeutungen}}
+:[1] lautes Rufen; fröhliches, lautes Durcheinander
+
+{{Herkunft}}
+:Substantivierung des Grußworts [[hallo]]
+
+{{Synonyme}}
+:[1] [[Gejohle]]
+
+{{Beispiele}}
+:[1] Als er die Treppe hinaufkam, wurde er mit großem ''Hallo'' empfangen.
+:[1] „Da gab es keine Möglichkeit, mich von vielen Leuten (…) zu verabschieden. Deswegen wird es jetzt ein Tag des großen ''Hallos'' und des offiziellen Abschieds werden.“&lt;ref&gt;Marc Heinrich (Interviewer): [http://www.faz.net/aktuell/rhein-main/sport/eintracht-frankfurt/im-gespraech-armin-reutershahn-der-tag-des-hallos-und-des-abschieds-1843358.html ''Im Gespräch: Armin Reutershahn. „Der Tag des Hallos und des Abschieds“''] auf www.faz.net vom 15. August 2009&lt;/ref&gt;
+:[1] „Es macht puff und die Kühe fallen um und die kleinen Häuser und Bäume. Da ist dann immer ein großes ''Hallo'' und viel Spaß.“&lt;ref&gt;{{Wikipedia|Evelyn Hamann}} als Verkäuferin in LORIOT VI (auch bekannt unter dem Namen „{{Wikipedia|Weihnachten bei Hoppenstedts}}“)&lt;/ref&gt;
+
+{{Charakteristische Wortkombinationen}}
+:[1] großes ''Hallo''
+
+==== {{Übersetzungen}} ====
+{{Ü-Tabelle|Ü-links=
+*{{en}}: [1] {{Ü|en|hallo}}
+|Ü-rechts=
+*{{cs}}: [1] {{Ü|cs|haló}} {{n}}
+}}
+
+{{Referenzen}}
+:[1] {{Ref-Duden|Hallo}}
+:[1] {{Ref-DWDS|Hallo}}
+:[1] {{Ref-UniLeipzig|Hallo}}
+
+{{Quellen}}
+
+{{Ähnlichkeiten 1|[[Hall]], [[Halle]], [[halle]], [[Halo]], [[holla]], [[Holle]]}}</text>
+      <sha1>cwdelmuevl1miamlz67om2yajzpl63y</sha1>
+    </revision>
+  </page>
+</mediawiki>
