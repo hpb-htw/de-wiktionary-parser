@@ -9,7 +9,7 @@ install:
   - npm install -g typescript
   - git clone https://github.com/hpb-htw/wikinary-eintopf.git ../wikinary-eintopf
   - CWD=`pwd`
-  - cd ../wikinary-eintopf && make all
+  - cd ../wikinary-eintopf && make refresh main
   - cd $CWD
 
 build:
