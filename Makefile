@@ -22,7 +22,7 @@ install:
 bin: $(BIN)
 
 $(BIN) : $(SRC_TS)
-	tsc -p ./
+	npx tsc -p ./
 
 $(RAW_CSV_GZ): $(BIN) $(WIKI_DUMP)
 	node $(BIN) $(WIKI_DUMP) $(CSV_DELIMITER) | gzip -f - > $(RAW_CSV_GZ)
