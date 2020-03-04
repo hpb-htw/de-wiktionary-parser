@@ -5,17 +5,12 @@ branches:
   only:
     - master
 
+install:
+  - git clone https://github.com/hpb-htw/wikinary-eintopf.git ../wikinary-eintopf
+  - ls ../wikinary-eintopf
+
 build:
   verbosity: detailed
-
-install:
-  - cwd=`pwd`
-  - cd ..
-  - git clone https://github.com/hpb-htw/wikinary-eintopf.git
-  - echo $cwd
-  - cd $cwd
-  - ls ../wikinary-eintopf.git
-
 
 build_script:
   - make refresh install bin
