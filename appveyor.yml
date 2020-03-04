@@ -9,7 +9,8 @@ build:
   verbosity: detailed
 
 install:
-  - echo 'Install phase'
+  - cd ..
+  - git clone https://github.com/hpb-htw/wikinary-eintopf.git
 
 
 build_script:
