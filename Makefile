@@ -29,11 +29,11 @@ $(RAW_CSV_GZ): $(BIN) $(WIKI_DUMP)
 
 .PHONY:test
 test:
-	jest --config jest.config.js
+	npx jest --config jest.config.js
 
 
 coverage/lcov.info:
-	jest --config jest-covery.config.js
+	npx jest --config jest-covery.config.js
 
 
 .PHONY:clean

@@ -12,7 +12,9 @@ install:
   - cwd=`pwd`
   - cd ..
   - git clone https://github.com/hpb-htw/wikinary-eintopf.git
+  - echo $cwd
   - cd $cwd
+  - ls ../wikinary-eintopf.git
 
 
 build_script:
