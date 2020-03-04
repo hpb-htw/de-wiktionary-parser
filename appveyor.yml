@@ -1,0 +1,26 @@
+image:
+  - Ubuntu1804
+
+branches:
+  only:
+    - master
+
+build:
+  verbosity: detailed
+
+install:
+  - echo 'Install phase'
+
+
+build_script:
+  - make refresh install bin
+
+on_success:
+  - echo "Done"
+  - pwd
+  - make coverage/lcov.info
+  - ls coverage
+  - bash <(curl -s https://codecov.io/bash) -f  coverage/lcov.info
+
+
+

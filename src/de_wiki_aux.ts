@@ -2,7 +2,7 @@ import * as events from 'events';
 const wtf = require('wtf_wikipedia');
 
 export const statisticEventEmitter = new events.EventEmitter();
-export const PARSE_WIKI_TEXT = Symbol("countWikiText"),
+export const PARSE_WIKI_TEXT = Symbol("PARSE_WIKI_TEXT"),
     WIKI_OK = Symbol("WIKI_OK"),
     /**
      * if a block title lexical looks like a flexion, but cannot be reconized as a flexion.

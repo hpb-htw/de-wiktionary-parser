@@ -42,6 +42,8 @@ describe("parseDeWikiTextToObject : Parsing a complete wiki text", () => {
         let wikiPage = parseDeWikiTextToObject(wikitext, selectLanguages);
         expect(wikiPage).toHaveLength(6);
     });
+
+
 });
 
 
@@ -78,7 +80,7 @@ describe("Single parts of a wiki text", () => {
 
 });
 
-//// new parser
+
 describe("tokenizeWikiText", () => {
     test("tokenizeWikiText.sein", () => {
         let text = readWikiTextFile("sein");

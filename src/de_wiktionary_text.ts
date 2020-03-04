@@ -172,6 +172,7 @@ function consumeBody(body:Ast.Body ): Body {
 
 function appendBlockToBody(astblock:Ast.Block, body:Body) {
     let title = astblock.name;
+    title = dropRefTag(title);
     if(title === undefined){
         throw new BadWikiSyntax(`Programming error, a block cannot contain only empty strings`, body.lemma);
     }
@@ -232,6 +233,14 @@ function appendBlockToBody(astblock:Ast.Block, body:Body) {
     }
 }
 
+function dropRefTag(blockTitle:string):string {
+    let refTagIndex = blockTitle.search('}}');
+    if (refTagIndex >= 0) {
+        return blockTitle.slice(0, refTagIndex+2);
+    } else {
+        return blockTitle;
+    }
+}
 
 function consumeUnknownBlock(body:Body, block:string[]) {
     statisticEventEmitter.emit(NO_CONSUME_FOR_BLOCK, block[0], body.lemma);

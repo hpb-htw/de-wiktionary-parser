@@ -73,8 +73,20 @@ export class Body {
      * */
     constructor(lemma: string, title: string) {
         this.lemma = lemma;
-        this.partOfSpeech = parseWortart(title);
+        this.partOfSpeech = Body.parseWortart(title);
         this.sections.push(new Section(Body.defaultSectionName, this));
+    }
+
+    static parseWortart(thirdLevelHead: string): string[] {
+        return stripEqualMark(thirdLevelHead)
+            .split(/,\s+/)
+            .map(stripCurly)
+            .map(Body.wikiWordartToWordArt).filter(x => x !== "");
+    }
+
+    static wikiWordartToWordArt(wikitext: string): string {
+        let parts = wikitext.split("|");
+        return parts.length > 1 ? parts[1] : "";
     }
 }
 
@@ -123,14 +135,5 @@ function stripEqualMark(headLine: string): string {
     return headLine.slice(countMark, headLine.length - countMark);
 }
 
-function parseWortart(thirdLevelHead: string): string[] {
-    return stripEqualMark(thirdLevelHead)
-        .split(/,\s+/)
-        .map(stripCurly)
-        .map(wikiWordartToWordArt).filter(x => x !== "");
-}
 
-function wikiWordartToWordArt(wikitext: string): string {
-    let parts = wikitext.split("|");
-    return parts.length > 1 ? parts[1] : "";
-}
+
