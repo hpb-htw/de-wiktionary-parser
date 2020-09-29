@@ -21,7 +21,7 @@ Unfortunately I don't have time to test this package on others systems.
 
 ## Build
 
-This projects `pacakge.json` delegates build tasks to Makefile to keep scripting manageable. To build
+This project's `packgae.json` delegates build tasks to Makefile to keep scripting manageable. To build
 necessary files just run: 
 
 ```bash
